@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:better_breaks/ui/widgets/app_buttons.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -142,44 +143,20 @@ class _OnboardingViewState extends State<OnboardingView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min, // Use minimum space
                       children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              NavigationService.pushNamed(AppRoutes.signUp);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: _pages[_currentPage].backgroundColor,
-                              padding: EdgeInsets.symmetric(vertical: 14.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.r),
-                              ),
-                            ),
-                            child: Text(
-                              'Sign Up',
-                              style: AppTextStyle.satoshiRegular20.copyWith(
-                                color: _pages[_currentPage].backgroundColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
+                        AppButton(
+                          text: 'Sign Up',
+                          backgroundColor: Colors.white,
+                          textColor: _pages[_currentPage].backgroundColor,
+                          isOutlined: true,
+                          onPressed: () {
+                            NavigationService.pushNamed(AppRoutes.signUp);
+                          },
                         ),
                         SizedBox(height: 12.h),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 2.0), // Add margin below the button
-                          child: TextButton(
-                            onPressed: _navigateToLogin,
-                            child: Text(
-                              'Sign In',
-                              style: AppTextStyle.satoshiRegular20.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
+                        AppTextButton(
+                          text: 'Sign In',
+                          textColor: Colors.white,
+                          onPressed: _navigateToLogin,
                         ),
                       ],
                     ),
