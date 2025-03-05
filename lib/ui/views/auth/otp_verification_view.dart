@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:better_breaks/ui/views/auth/create_new_password_view.dart';
+import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:better_breaks/shared/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_otp_input.dart';
+import 'package:better_breaks/ui/widgets/app_toast.dart';
 
 class OtpVerificationView extends StatefulWidget {
   final String email;
@@ -86,6 +88,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
     }
   }
 
+  // Add this getter to check if all OTP fields are filled
+  bool get _isOtpComplete {
+    return _controllers.every((controller) => controller.text.isNotEmpty);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,50 +149,44 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
               ),
               SizedBox(height: 24.h),
 
-              // Verify button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CreateNewPasswordView(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightBlue,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.r),
+              // Replace the existing Verify button with AppButton
+              AppButton(
+                text: 'Verify',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateNewPasswordView(),
                     ),
-                  ),
-                  child: Text(
-                    'Verify',
-                    style: AppTextStyle.satoshiRegular20.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ),
+                  );
+                },
+                enabled: _isOtpComplete,
               ),
               SizedBox(height: 24.h),
 
               // Resend code
               Center(
-                child: RichText(
-                  text: TextSpan(
-                    text: "Didn't receive code? ",
-                    style: AppTextStyle.satoshiRegular20.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14.sp,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Didn't receive code? ",
+                      style: AppTextStyle.satoshiRegular20.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
+                      ),
                     ),
-                    children: [
-                      TextSpan(
-                        text: _countdown > 0
+                    GestureDetector(
+                      onTap: _countdown == 0 ? () {
+                        setState(() {
+                          _countdown = 60; // Reset countdown
+                          startTimer(); // Restart timer
+                        });
+                        AppToast.showSuccessToast('OTP code has been resent successfully');
+                      } : null,
+                      child: Text(
+                        _countdown > 0
                             ? 'Tap to resend in ${_countdown}s'
                             : 'Tap to resend',
                         style: AppTextStyle.satoshiRegular20.copyWith(
@@ -193,11 +194,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           fontSize: 14.sp,
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w600,
+                          decorationColor: AppColors.orange100,
                         ),
-                        // Add GestureRecognizer here if needed
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
