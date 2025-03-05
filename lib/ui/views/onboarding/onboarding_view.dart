@@ -75,7 +75,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.45,
+              height: MediaQuery.of(context).size.height * 0.43,
               decoration: BoxDecoration(
                 color: _pages[_currentPage].backgroundColor,
                 borderRadius: BorderRadius.only(
@@ -168,7 +168,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                         ),
                         SizedBox(height: 12.h),
                         Padding(
-                          padding: EdgeInsets.only(bottom: 10.0), // Add margin below the button
+                          padding: EdgeInsets.only(bottom: 2.0), // Add margin below the button
                           child: TextButton(
                             onPressed: _navigateToLogin,
                             child: Text(
