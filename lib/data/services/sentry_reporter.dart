@@ -1,39 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:better_breaks/app/flavor_config.dart';
-import 'package:better_breaks/app/locator.dart';
 
+/// A basic error reporter that logs exceptions to the console
+/// This class replaces the Sentry implementation with a lightweight alternative
+/// that doesn't require external dependencies
 class SentryReporter {
+  /// Setup method - doesn't do anything special now, but kept for API compatibility
   Future<void> setup(Widget app) async {
-    final config = locator<AppFlavorConfig>();
-    
-    if (config.sentryDsn.isEmpty) {
-      // If no Sentry DSN is provided, just run the app without Sentry
-      runApp(app);
-      return;
-    }
-    
-    await SentryFlutter.init(
-      (options) {
-        options.dsn = config.sentryDsn;
-        options.tracesSampleRate = 1.0; // Capture 100% of transactions
-        options.environment = config.name;
-        options.enableAutoSessionTracking = true;
-      },
-      appRunner: () => runApp(app),
-    );
+    // Simply run the app without any error reporting setup
+    runApp(app);
   }
   
+  /// Logs exceptions to the console
   Future<void> captureException(dynamic exception, {dynamic stackTrace}) async {
-    final config = locator<AppFlavorConfig>();
+    // Simply log the exception and stack trace to console
+    debugPrint('------------------------');
+    debugPrint('❌ EXCEPTION CAPTURED:');
+    debugPrint('$exception');
     
-    if (config.sentryDsn.isEmpty) {
-      // Just print the exception if Sentry is not configured
-      debugPrint('Exception: $exception');
-      debugPrint('StackTrace: $stackTrace');
-      return;
+    if (stackTrace != null) {
+      debugPrint('STACK TRACE:');
+      debugPrint('$stackTrace');
     }
-    
-    await Sentry.captureException(exception, stackTrace: stackTrace);
+    debugPrint('------------------------');
+  }
+  
+  /// Logs a message to the console
+  Future<void> captureMessage(String message, {String? category}) async {
+    debugPrint('------------------------');
+    debugPrint('📝 ${category != null ? "[$category]" : ""} $message');
+    debugPrint('------------------------');
   }
 } 
