@@ -6,6 +6,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:better_breaks/ui/widgets/app_otp_input.dart';
 
 class OtpVerificationView extends StatefulWidget {
   final String email;
@@ -133,61 +134,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
               SizedBox(height: 32.h),
 
               // OTP input fields
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  6,
-                  (index) => SizedBox(
-                    width: 48.w,
-                    height: 48.w,
-                    child: RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (event) => _handleKeyPress(index, event),
-                      child: TextField(
-                        controller: _controllers[index],
-                        focusNode: _focusNodes[index],
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(1),
-                        ],
-                        onChanged: (value) => _onOtpDigitChanged(index, value),
-                        style: AppTextStyle.satoshiRegular20.copyWith(
-                          color: AppColors.lightBlue,
-                          fontSize: 24.sp,
-                        ),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: _focusNodes[index].hasFocus
-                                  ? AppColors.lightBlue
-                                  : AppColors.grey,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: _controllers[index].text.isNotEmpty
-                                  ? AppColors.lightBlue
-                                  : AppColors.grey,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: AppColors.lightBlue,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              AppOtpInput(
+                controllers: _controllers,
+                focusNodes: _focusNodes,
+                onChanged: _onOtpDigitChanged,
+                onKeyPress: _handleKeyPress,
               ),
               SizedBox(height: 24.h),
 
