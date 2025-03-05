@@ -23,7 +23,7 @@ class AppColors {
 
   // Success Colors
   static const Color green100 = Color(0xFF198754);
-  static const Color bgGreen100 = Color(0xFFF1F9F5);
+  static const Color bgGreen = Color(0xFFF1F9F5);
   static const Color lightGreen200 = Color(0xFFD1E7DD);
   
   // Grey shades
