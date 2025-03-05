@@ -51,7 +51,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   void _navigateToLogin() {
-    NavigationService.pushReplacementNamed(AppRoutes.signIn);
+    NavigationService.pushNamed(AppRoutes.signIn);
   }
 
   @override
