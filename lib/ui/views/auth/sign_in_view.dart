@@ -1,4 +1,3 @@
-import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
@@ -24,6 +23,12 @@ class _SignInViewState extends State<SignInView> {
     super.dispose();
   }
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +40,11 @@ class _SignInViewState extends State<SignInView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Back button
-              GestureDetector(
-                onTap: () => NavigationService.goBack(),
-                child: AppIcons(
-                  icon: AppIconData.back,
-                  size: 14.r,
-                  color: AppColors.lightBlack,
-                ),
+              AppIcons(
+                icon: AppIconData.back,
+                size: 14.r,
+                color: AppColors.lightBlack,
+                onPressed: () => Navigator.pop(context),
               ),
               SizedBox(height: 24.h),
               
@@ -84,58 +87,78 @@ class _SignInViewState extends State<SignInView> {
               ),
               SizedBox(height: 32.h),
 
-              // Email field
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'Email Address',
-                  hintStyle: AppTextStyle.satoshiRegular20.copyWith(
-                    color: AppColors.grey600,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.sp,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.grey),
-                  ),
+              // Combined input fields container
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: AppColors.grey),
                 ),
-              ),
-              SizedBox(height: 16.h),
-
-              // Password field
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  hintStyle: AppTextStyle.satoshiRegular20.copyWith(
-                    color: AppColors.grey600,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.sp,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.grey),
-                  ),
-                  suffixText: 'Show',
-                  suffixStyle: AppTextStyle.satoshiRegular20.copyWith(
-                    color: AppColors.lightBlack,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                  ),
+                child: Column(
+                  children: [
+                    // Email field
+                    SizedBox(
+                      height: 56.h, // Fixed height for input field
+                      child: TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          hintText: 'Email Address',
+                          hintStyle: AppTextStyle.satoshiRegular20.copyWith(
+                            color: AppColors.grey600,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    // Divider
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: AppColors.grey,
+                    ),
+                    // Password field
+                    SizedBox(
+                      height: 56.h, // Fixed height for input field
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: AppTextStyle.satoshiRegular20.copyWith(
+                            color: AppColors.grey600,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          border: InputBorder.none,
+                          suffixIcon: GestureDetector(
+                            onTap: _togglePasswordVisibility,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                              child: Text(
+                                _obscurePassword ? 'Show' : 'Hide',
+                                style: AppTextStyle.satoshiRegular20.copyWith(
+                                  color: AppColors.lightBlack,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 16.h),
