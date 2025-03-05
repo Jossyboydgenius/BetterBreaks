@@ -7,6 +7,8 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/utils/form_validators.dart';
+import 'package:better_breaks/ui/widgets/app_toast.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -16,20 +18,66 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  String? _nameError;
+  String? _emailError;
+  String? _passwordError;
+  String? _confirmPasswordError;
 
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
+  bool get _isFormValid =>
+      _fullNameController.text.isNotEmpty &&
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _confirmPasswordController.text.isNotEmpty &&
+      _nameError == null &&
+      _emailError == null &&
+      _passwordError == null &&
+      _confirmPasswordError == null;
+
+  void _validateName(String value) {
+    setState(() {
+      _nameError = FormValidators.isNameValid(value);
+    });
+  }
+
+  void _validateEmail(String value) {
+    setState(() {
+      _emailError = FormValidators.validateEmail(value);
+    });
+  }
+
+  void _validatePassword(String value) {
+    setState(() {
+      _passwordError = FormValidators.validatePassword(value);
+      if (_confirmPasswordController.text.isNotEmpty) {
+        _validateConfirmPassword(_confirmPasswordController.text);
+      }
+    });
+  }
+
+  void _validateConfirmPassword(String value) {
+    setState(() {
+      _confirmPasswordError = FormValidators.checkIfPasswordSame(
+        _passwordController.text,
+        value,
+      );
+    });
+  }
+
+  void _handleSignUp() {
+    if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        AppToast.showErrorToast('Passwords do not match');
+        return;
+      }
+      // Handle successful sign up
+    }
   }
 
   void _togglePasswordVisibility() {
@@ -45,166 +93,192 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Back button
-              AppIcons(
-                icon: AppIconData.back,
-                size: 14.r,
-                color: AppColors.lightBlack,
-                onPressed: () => Navigator.pop(context),
-              ),
-              SizedBox(height: 24.h),
-              
-              // Welcome text
-              Text(
-                'Welcome',
-                style: AppTextStyle.ralewayExtraBold48.copyWith(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Back button
+                AppIcons(
+                  icon: AppIconData.back,
+                  size: 14.r,
                   color: AppColors.lightBlack,
-                  height: 1.1,
-                  fontSize: 24.sp,
+                  onPressed: () => Navigator.pop(context),
                 ),
-              ),
-              SizedBox(height: 8.h),
-              
-              // Sign in link
-              Row(
-                children: [
-                  Text(
-                    "Already have an account? ",
-                    style: AppTextStyle.satoshiRegular20.copyWith(
-                      color: AppColors.lightGrey,
-                      fontSize: 16.sp,
-                    ),
+                SizedBox(height: 24.h),
+                
+                // Welcome text
+                Text(
+                  'Welcome',
+                  style: AppTextStyle.ralewayExtraBold48.copyWith(
+                    color: AppColors.lightBlack,
+                    height: 1.1,
+                    fontSize: 24.sp,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigationService.pushNamed(AppRoutes.signIn);
-                    },
-                    child: Text(
-                      "Sign in",
+                ),
+                SizedBox(height: 8.h),
+                
+                // Sign in link
+                Row(
+                  children: [
+                    Text(
+                      "Already have an account? ",
                       style: AppTextStyle.satoshiRegular20.copyWith(
-                        color: AppColors.lightBlack,
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.w700,
+                        color: AppColors.lightGrey,
                         fontSize: 16.sp,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 32.h),
+                    GestureDetector(
+                      onTap: () {
+                        NavigationService.pushNamed(AppRoutes.signIn);
+                      },
+                      child: Text(
+                        "Sign in",
+                        style: AppTextStyle.satoshiRegular20.copyWith(
+                          color: AppColors.lightBlack,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 32.h),
 
-              // Replace the old container with AppCombinedInput
-              AppCombinedInput(
-                fields: [
-                  AppInputField(
-                    controller: _fullNameController,
-                    hintText: 'Full Name',
-                  ),
-                  AppInputField(
-                    controller: _emailController,
-                    hintText: 'Email Address',
-                  ),
-                  AppInputField(
-                    controller: _passwordController,
-                    hintText: 'Password',
-                    obscureText: _obscurePassword,
-                    suffix: GestureDetector(
-                      onTap: _togglePasswordVisibility,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 16.w, top: 10.h),
-                        child: Text(
-                          _obscurePassword ? 'Show' : 'Hide',
-                          style: AppTextStyle.satoshiRegular20.copyWith(
-                            color: AppColors.lightBlack,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
+                // Replace the old container with AppCombinedInput
+                AppCombinedInput(
+                  fields: [
+                    AppInputField(
+                      controller: _fullNameController,
+                      hintText: 'Full Name',
+                      validator: FormValidators.isNameValid,
+                      onChanged: _validateName,
+                      errorText: _nameError,
+                    ),
+                    AppInputField(
+                      controller: _emailController,
+                      hintText: 'Email Address',
+                      validator: FormValidators.validateEmail,
+                      onChanged: _validateEmail,
+                      errorText: _emailError,
+                    ),
+                    AppInputField(
+                      controller: _passwordController,
+                      hintText: 'Password',
+                      obscureText: _obscurePassword,
+                      validator: FormValidators.validatePassword,
+                      onChanged: _validatePassword,
+                      errorText: _passwordError,
+                      suffix: GestureDetector(
+                        onTap: _togglePasswordVisibility,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                          child: Text(
+                            _obscurePassword ? 'Show' : 'Hide',
+                            style: AppTextStyle.satoshiRegular20.copyWith(
+                              color: AppColors.lightBlack,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.sp,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  AppInputField(
-                    controller: _confirmPasswordController,
-                    hintText: 'Confirm Password',
-                    obscureText: _obscureConfirmPassword,
-                    suffix: GestureDetector(
-                      onTap: _toggleConfirmPasswordVisibility,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 16.w, top: 10.h),
-                        child: Text(
-                          _obscureConfirmPassword ? 'Show' : 'Hide',
-                          style: AppTextStyle.satoshiRegular20.copyWith(
-                            color: AppColors.lightBlack,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp,
+                    AppInputField(
+                      controller: _confirmPasswordController,
+                      hintText: 'Confirm Password',
+                      obscureText: _obscureConfirmPassword,
+                      validator: (value) => FormValidators.checkIfPasswordSame(
+                        _passwordController.text,
+                        value,
+                      ),
+                      onChanged: _validateConfirmPassword,
+                      errorText: _confirmPasswordError,
+                      suffix: GestureDetector(
+                        onTap: _toggleConfirmPasswordVisibility,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                          child: Text(
+                            _obscureConfirmPassword ? 'Show' : 'Hide',
+                            style: AppTextStyle.satoshiRegular20.copyWith(
+                              color: AppColors.lightBlack,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.sp,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24.h),
+                  ],
+                ),
+                SizedBox(height: 24.h),
 
-              // Replace the old button with AppButton
-              AppButton(
-                text: 'Sign Up',
-                onPressed: () {
-                  // Handle sign up
-                },
-              ),
-              SizedBox(height: 24.h),
+                // Replace the old button with AppButton
+                AppButton(
+                  text: 'Sign Up',
+                  onPressed: _handleSignUp,
+                  enabled: _isFormValid,
+                ),
+                SizedBox(height: 24.h),
 
-              // Or divider
-              Row(
-                children: [
-                  Expanded(child: Divider(color: AppColors.grey)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Text(
-                      'Or',
-                      style: AppTextStyle.satoshiRegular20.copyWith(
-                        color: AppColors.grey600,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14.sp,
+                // Or divider
+                Row(
+                  children: [
+                    Expanded(child: Divider(color: AppColors.grey)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Text(
+                        'Or',
+                        style: AppTextStyle.satoshiRegular20.copyWith(
+                          color: AppColors.grey600,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(child: Divider(color: AppColors.grey)),
-                ],
-              ),
-              SizedBox(height: 24.h),
+                    Expanded(child: Divider(color: AppColors.grey)),
+                  ],
+                ),
+                SizedBox(height: 24.h),
 
-              // Social buttons
-              _socialButton(
-                icon: AppIconData.google,
-                text: 'Continue with Google',
-                onTap: () {},
-              ),
-              SizedBox(height: 16.h),
-              _socialButton(
-                icon: AppIconData.facebook,
-                text: 'Continue with Facebook',
-                onTap: () {},
-              ),
-              SizedBox(height: 16.h),
-              _socialButton(
-                icon: AppIconData.apple,
-                text: 'Continue with Twitter',
-                onTap: () {},
-              ),
-            ],
+                // Social buttons
+                _socialButton(
+                  icon: AppIconData.google,
+                  text: 'Continue with Google',
+                  onTap: () {},
+                ),
+                SizedBox(height: 16.h),
+                _socialButton(
+                  icon: AppIconData.facebook,
+                  text: 'Continue with Facebook',
+                  onTap: () {},
+                ),
+                SizedBox(height: 16.h),
+                _socialButton(
+                  icon: AppIconData.apple,
+                  text: 'Continue with Twitter',
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
         ),
       ),
