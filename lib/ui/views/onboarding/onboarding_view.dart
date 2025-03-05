@@ -51,7 +51,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   void _navigateToLogin() {
-    NavigationService.pushReplacementNamed(AppRoutes.login);
+    NavigationService.pushReplacementNamed(AppRoutes.signIn);
   }
 
   @override
@@ -75,7 +75,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.46,
+              height: MediaQuery.of(context).size.height * 0.45,
               decoration: BoxDecoration(
                 color: _pages[_currentPage].backgroundColor,
                 borderRadius: BorderRadius.only(
@@ -149,7 +149,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: _pages[_currentPage].backgroundColor,
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              padding: EdgeInsets.symmetric(vertical: 14.h),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.r),
                               ),
@@ -158,6 +158,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                               'Sign Up',
                               style: AppTextStyle.satoshiRegular20.copyWith(
                                 color: _pages[_currentPage].backgroundColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ),
@@ -171,6 +173,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                               'Sign In',
                               style: AppTextStyle.satoshiRegular20.copyWith(
                                 color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ),
