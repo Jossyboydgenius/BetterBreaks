@@ -4,9 +4,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppIconData {
-  static const String _basePath = 'assets/svgs/';
-  static const String google = '${_basePath}google.svg';
-}
+  static const String _base = 'assets/svgs';
+  
+  // Social icons
+  static const String facebook = '$_base/facebook.svg';
+  static const String google = '$_base/google.svg';
+  static const String apple = '$_base/x.svg';
+
+  // Navigation icons
+  static const String back = '$_base/back.svg';
+  static const String dashboard = '$_base/dashboard-square.svg';
+  static const String settings = '$_base/settings.svg';
+  static const String logout = '$_base/logout.svg';
+  
+  // Feature icons
+  static const String calendar = '$_base/calendar.svg';
+  static const String card = '$_base/card.svg';
+  static const String checkList = '$_base/check-list.svg';
+  static const String checkmarkBadge = '$_base/checkmark-badge.svg';
+  static const String crown = '$_base/crown.svg';
+  static const String favourite = '$_base/favourite.svg';
+  static const String heavyRain = '$_base/heavy-rain.svg';
+  static const String location = '$_base/location.svg';
+  static const String location01 = '$_base/location-01.svg';
+  static const String lockPassword = '$_base/lock-password.svg';
+  static const String lock = '$_base/lock.svg';
+  static const String mail = '$_base/mail.svg';
+  static const String medal = '$_base/medal.svg';
+  static const String notification = '$_base/notification.svg';
+  static const String party = '$_base/party.svg';
+  static const String pencilEdit = '$_base/pencil-edit.svg';
+  static const String search = '$_base/search.svg';
+  static const String share = '$_base/share.svg';
+  static const String sidebarTop = '$_base/sidebar-top.svg';
+  static const String sidebarTop01 = '$_base/sidebar-top-01.svg';
+  static const String snow = '$_base/snow.svg';
+  static const String sun = '$_base/sun.svg';
+  static const String sunny = '$_base/sunny.svg';
+  static const String updown = '$_base/updown.svg';
+  static const String user = '$_base/user.svg';
+  static const String work = '$_base/work.svg';
+  static const String zap = '$_base/zap.svg';
+  static const String zapFilled = '$_base/zap-filled.svg';
+} 
 
 class AppIcons extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -33,4 +73,4 @@ class AppIcons extends StatelessWidget {
       ),
     );
   }
-} 
+}
