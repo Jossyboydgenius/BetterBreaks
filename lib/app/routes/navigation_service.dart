@@ -12,23 +12,19 @@ extension NavigatorStateX on NavigatorState {
 }
 
 class NavigationService {
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static Future<dynamic> removeUntill(String routeName) async {
     return navigatorKey.currentState
         ?.popUntil((route) => route.settings.name == routeName);
   }
 
-  static Future<dynamic> pushNamed(String routeName,
-      {dynamic arguments}) async {
-    return navigatorKey.currentState
-        ?.pushNamed(routeName, arguments: arguments);
+  static Future<dynamic> pushNamed(String routeName) {
+    return navigatorKey.currentState!.pushNamed(routeName);
   }
 
-  static Future<dynamic> pushReplacementNamed(String routeName,
-      {dynamic arguments}) async {
-    return navigatorKey.currentState
-        ?.pushReplacementNamed(routeName, arguments: arguments);
+  static Future<dynamic> pushReplacementNamed(String routeName) {
+    return navigatorKey.currentState!.pushReplacementNamed(routeName);
   }
 
   static bool canPop() {
@@ -39,8 +35,8 @@ class NavigationService {
     return NavigationService.navigatorKey.currentState?.currentRouteName;
   }
 
-  static void goBack() {
-    return navigatorKey.currentState?.pop();
+  static void pop() {
+    return navigatorKey.currentState!.pop();
   }
 
   static Future<dynamic> pushNamedAndRemoveUntil(String routeName,
