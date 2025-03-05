@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:better_breaks/app/routes/navigation_service.dart';
 
 class InActivityDetector extends StatefulWidget {
   final Widget child;
