@@ -39,6 +39,9 @@ class AppInputField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final Widget? suffix;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final String? errorText;
 
   const AppInputField({
     super.key,
@@ -46,30 +49,58 @@ class AppInputField extends StatelessWidget {
     required this.hintText,
     this.obscureText = false,
     this.suffix,
+    this.validator,
+    this.onChanged,
+    this.errorText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 56.h,
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: AppTextStyle.satoshiRegular20.copyWith(
-            color: AppColors.grey600,
-            fontWeight: FontWeight.w400,
-            fontSize: 16.sp,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 48.h,
+          child: TextFormField(
+            controller: controller,
+            obscureText: obscureText,
+            onChanged: onChanged,
+            validator: validator,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: AppTextStyle.satoshiRegular20.copyWith(
+                color: AppColors.grey600,
+                fontWeight: FontWeight.w400,
+                fontSize: 16.sp,
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 12.h,
+              ),
+              border: InputBorder.none,
+              suffixIcon: suffix,
+              errorStyle: const TextStyle(height: 0),
+            ),
           ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-            vertical: 16.h,
-          ),
-          border: InputBorder.none,
-          suffixIcon: suffix,
         ),
-      ),
+        if (errorText != null) ...[
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16.w,
+              top: 4.h,
+              bottom: 8.h,
+            ),
+            child: Text(
+              errorText!,
+              style: AppTextStyle.satoshiRegular20.copyWith(
+                color: AppColors.red,
+                fontSize: 12.sp,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
-} 
+}
