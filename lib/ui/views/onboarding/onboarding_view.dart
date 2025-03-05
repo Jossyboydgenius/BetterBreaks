@@ -19,21 +19,21 @@ class _OnboardingViewState extends State<OnboardingView> {
   
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      title: 'Smart Holiday\nPlanning',
+      title: 'Smart Holiday Planning',
       description: 'Maximize your time off with personalized holiday recommendations',
       image: AppImageData.onboarding1,
       backgroundColor: AppColors.primary,
     ),
     OnboardingPage(
-      title: 'Analytics &\nInsights',
+      title: 'Analytics & Insights',
       description: 'Track your holiday usage and understand how to reduce stress',
-      image: AppImageData.onboarding2,
+      image: AppImageData.onboarding3,
       backgroundColor: AppColors.orange,
     ),
     OnboardingPage(
-      title: 'Seamless\nIntegration',
+      title: 'Seamless Integration',
       description: 'Sync with your calendar, customize preferences, and set blackout dates',
-      image: AppImageData.onboarding3,
+      image: AppImageData.onboarding2,
       backgroundColor: AppColors.lightGreen,
     ),
   ];
@@ -75,7 +75,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.45,
+              height: MediaQuery.of(context).size.height * 0.46,
               decoration: BoxDecoration(
                 color: _pages[_currentPage].backgroundColor,
                 borderRadius: BorderRadius.only(
@@ -113,6 +113,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       style: AppTextStyle.ralewayExtraBold48.copyWith(
                         color: Colors.white,
                         height: 1.1, // Reduced line height for title
+                        fontWeight: FontWeight.w900,
                       ),
                       textAlign: TextAlign.left,
                     ),
@@ -161,13 +162,16 @@ class _OnboardingViewState extends State<OnboardingView> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 12.h), // Reduced spacing
-                        TextButton(
-                          onPressed: _navigateToLogin,
-                          child: Text(
-                            'Sign In',
-                            style: AppTextStyle.satoshiRegular20.copyWith(
-                              color: Colors.white,
+                        SizedBox(height: 12.h),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.0), // Add margin below the button
+                          child: TextButton(
+                            onPressed: _navigateToLogin,
+                            child: Text(
+                              'Sign In',
+                              style: AppTextStyle.satoshiRegular20.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -196,4 +200,4 @@ class OnboardingPage {
     required this.image,
     required this.backgroundColor,
   });
-} 
+}
