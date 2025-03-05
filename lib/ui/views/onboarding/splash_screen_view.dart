@@ -37,14 +37,15 @@ class _SplashScreenViewState extends State<SplashScreenView> {
           children: [
             Image.asset(
               AppImageData.logo,
-              width: 80,
-              height: 80,
+              width: 70,
+              height: 70,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 6),
             Text(
               'BetterBreaks',
               style: AppTextStyle.redRoseBold32.copyWith(
                 color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
