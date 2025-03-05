@@ -1,3 +1,5 @@
+import 'package:better_breaks/app/routes/app_routes.dart';
+import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
@@ -71,7 +73,7 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to sign up screen
+                      NavigationService.pushNamed(AppRoutes.signUp);
                     },
                     child: Text(
                       "Sign up",
