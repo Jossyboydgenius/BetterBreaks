@@ -14,6 +14,17 @@ class AppColors {
   
   // Green shades
   static const Color lightGreen100 = Color(0xFFDCFCE7);
+
+
+  // Error/Failure Colors
+  static const Color red100 = Color(0xFFDC3545);
+  static const Color bgRed100 = Color(0xFFFDF4F5);
+  static const Color lightRed100 = Color(0xFFFFE5E7);
+
+  // Success Colors
+  static const Color green100 = Color(0xFF198754);
+  static const Color bgGreen100 = Color(0xFFF1F9F5);
+  static const Color lightGreen200 = Color(0xFFD1E7DD);
   
   // Grey shades
   static const Color lightGrey = Color(0xFFA3A3A3);
@@ -41,7 +52,9 @@ class AppColors {
   static const Color indigo = Color(0xFF607BFF);
   static const Color lavender = Color(0xFFEEEAFE);
   static const Color deepPurple = Color(0xFF2E1E98);
-  static const Color red = Color(0xFFB32E2B);
+  static const Color red = Color(0xFFCB1A14);
+  static const Color bgRed = Color(0xFFFBEAE9);
+  static const Color lightRed = Color(0xFFF2BCBA);
   static const Color pink = Color(0xFFFFE6EE);
   static const Color amber = Color(0xFFDF9943);
   static const Color cream = Color(0xFFFFF0E1);
