@@ -54,7 +54,7 @@ class MainApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.initialRoute,
           routes: AppRoutes.routes,
-          theme: AppThemes.lightTheme,
+          theme: AppTheme.lightTheme,
           builder: (context, child) {
             return ConnectionWidget(
               dismissOfflineBanner: false,
@@ -81,7 +81,7 @@ class MainApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: AppRoutes.initialRoute,
             routes: AppRoutes.routes,
-            theme: AppThemes.lightTheme,
+            theme: AppTheme.lightTheme,
             builder: (context, child) {
               return ConnectionWidget(
                 dismissOfflineBanner: false,
