@@ -10,6 +10,7 @@ class AppButton extends StatelessWidget {
   final Color? textColor;
   final bool isOutlined;
   final bool loading;
+  final bool enabled;
 
   const AppButton({
     super.key,
@@ -19,16 +20,21 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.isOutlined = false,
     this.loading = false,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = !enabled || loading;
+    
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: loading ? null : onPressed,
+        onPressed: isDisabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isOutlined ? Colors.white : (backgroundColor ?? AppColors.lightBlue),
+          backgroundColor: isDisabled
+              ? AppColors.grey
+              : (isOutlined ? Colors.white : (backgroundColor ?? AppColors.lightBlue)),
           padding: EdgeInsets.symmetric(vertical: 14.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.r),
