@@ -59,28 +59,40 @@ class _OnboardingViewState extends State<OnboardingView> {
     return Scaffold(
       body: Stack(
         children: [
+          // Full screen PageView for images
           PageView.builder(
             controller: _pageController,
             itemCount: _pages.length,
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {
-              return _buildPage(_pages[index]);
+              return Image.asset(
+                _pages[index].image,
+                fit: BoxFit.cover,
+              );
             },
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
+          // Bottom sheet content
+          Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
-              padding: EdgeInsets.all(24.r),
+              height: MediaQuery.of(context).size.height * 0.45,
+              decoration: BoxDecoration(
+                color: _pages[_currentPage].backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.r),
+                  topRight: Radius.circular(30.r),
+                ),
+              ),
               child: Column(
                 children: [
+                  SizedBox(height: 24.h),
+                  // Centered page indicator
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center, // Center the dots
                     children: List.generate(
                       _pages.length,
                       (index) => Container(
-                        margin: EdgeInsets.symmetric(horizontal: 4.r),
+                        margin: EdgeInsets.only(right: 8.w),
                         width: 8.r,
                         height: 8.r,
                         decoration: BoxDecoration(
@@ -92,77 +104,80 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 32.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _navigateToLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: _pages[_currentPage].backgroundColor,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.r),
-                        ),
+                  SizedBox(height: 20.h), // Reduced spacing
+                  // Title with reduced line spacing
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Text(
+                      _pages[_currentPage].title,
+                      style: AppTextStyle.ralewayExtraBold48.copyWith(
+                        color: Colors.white,
+                        height: 1.1, // Reduced line height for title
                       ),
-                      child: Text(
-                        'Sign Up',
-                        style: AppTextStyle.satoshiRegular20.copyWith(
-                          color: _pages[_currentPage].backgroundColor,
-                        ),
-                      ),
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                  SizedBox(height: 16.h),
-                  TextButton(
-                    onPressed: _navigateToLogin,
+                  SizedBox(height: 12.h), // Reduced spacing
+                  // Description
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: Text(
-                      'Sign In',
+                      _pages[_currentPage].description,
                       style: AppTextStyle.satoshiRegular20.copyWith(
                         color: Colors.white,
                       ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const Spacer(),
+                  // Buttons
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 24.r,
+                      right: 24.r,
+                      bottom: 24.r,
+                      top: 12.r, // Reduced top padding
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, // Use minimum space
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _navigateToLogin,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: _pages[_currentPage].backgroundColor,
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                            ),
+                            child: Text(
+                              'Sign Up',
+                              style: AppTextStyle.satoshiRegular20.copyWith(
+                                color: _pages[_currentPage].backgroundColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 12.h), // Reduced spacing
+                        TextButton(
+                          onPressed: _navigateToLogin,
+                          child: Text(
+                            'Sign In',
+                            style: AppTextStyle.satoshiRegular20.copyWith(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPage(OnboardingPage page) {
-    return Container(
-      color: page.backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 24.r),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          Image.asset(
-            page.image,
-            height: 300.h,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(height: 40.h),
-          Text(
-            page.title,
-            style: AppTextStyle.ralewayExtraBold48.copyWith(
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            page.description,
-            style: AppTextStyle.satoshiRegular20.copyWith(
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Spacer(),
-          SizedBox(height: 150.h), // Space for bottom buttons
         ],
       ),
     );
