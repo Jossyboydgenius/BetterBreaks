@@ -12,7 +12,6 @@ import 'package:better_breaks/app/routes/app_routes.dart';
 import 'package:better_breaks/app/themes.dart';
 import 'package:better_breaks/data/services/connection_status.dart';
 import 'package:better_breaks/data/services/in_activity_detector.dart';
-import 'package:better_breaks/data/services/sentry_reporter.dart';
 import 'package:better_breaks/shared/app_sizer.dart';
 
 Future<void> main() async {
@@ -32,7 +31,7 @@ Future<void> main() async {
     mixpanelToken: dotenv.env['MIXPANEL_TOKEN_PROD'] ?? '',
   ));
 
-  await SentryReporter().setup(const MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
