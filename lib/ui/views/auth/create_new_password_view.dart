@@ -3,6 +3,8 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:better_breaks/ui/widgets/app_combined_input.dart';
+import 'package:better_breaks/ui/widgets/app_buttons.dart';
 
 class CreateNewPasswordView extends StatefulWidget {
   const CreateNewPasswordView({super.key});
@@ -76,120 +78,62 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
               ),
               SizedBox(height: 32.h),
 
-              // Password fields container
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.grey),
-                ),
-                child: Column(
-                  children: [
-                    // New Password field
-                    SizedBox(
-                      height: 56.h,
-                      child: TextField(
-                        controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          hintText: 'New Password',
-                          hintStyle: AppTextStyle.satoshiRegular20.copyWith(
-                            color: AppColors.grey600,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 16.h,
-                          ),
-                          border: InputBorder.none,
-                          suffixIcon: GestureDetector(
-                            onTap: _togglePasswordVisibility,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 16.w, top: 10.h),
-                              child: Text(
-                                _obscurePassword ? 'Show' : 'Hide',
-                                style: AppTextStyle.satoshiRegular20.copyWith(
-                                  color: AppColors.lightBlack,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ),
+              // Replace the old container with AppCombinedInput
+              AppCombinedInput(
+                fields: [
+                  AppInputField(
+                    controller: _passwordController,
+                    hintText: 'New Password',
+                    obscureText: _obscurePassword,
+                    suffix: GestureDetector(
+                      onTap: _togglePasswordVisibility,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                        child: Text(
+                          _obscurePassword ? 'Show' : 'Hide',
+                          style: AppTextStyle.satoshiRegular20.copyWith(
+                            color: AppColors.lightBlack,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
                     ),
-                    Divider(height: 1, thickness: 1, color: AppColors.grey),
-                    // Confirm Password field
-                    SizedBox(
-                      height: 56.h,
-                      child: TextField(
-                        controller: _confirmPasswordController,
-                        obscureText: _obscureConfirmPassword,
-                        decoration: InputDecoration(
-                          hintText: 'Confirm Password',
-                          hintStyle: AppTextStyle.satoshiRegular20.copyWith(
-                            color: AppColors.grey600,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 16.h,
-                          ),
-                          border: InputBorder.none,
-                          suffixIcon: GestureDetector(
-                            onTap: _toggleConfirmPasswordVisibility,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 16.w, top: 10.h),
-                              child: Text(
-                                _obscureConfirmPassword ? 'Show' : 'Hide',
-                                style: AppTextStyle.satoshiRegular20.copyWith(
-                                  color: AppColors.lightBlack,
-                                  decoration: TextDecoration.underline,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ),
+                  ),
+                  AppInputField(
+                    controller: _confirmPasswordController,
+                    hintText: 'Confirm Password',
+                    obscureText: _obscureConfirmPassword,
+                    suffix: GestureDetector(
+                      onTap: _toggleConfirmPasswordVisibility,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                        child: Text(
+                          _obscureConfirmPassword ? 'Show' : 'Hide',
+                          style: AppTextStyle.satoshiRegular20.copyWith(
+                            color: AppColors.lightBlack,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               SizedBox(height: 24.h),
 
-              // Reset Password button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle password reset and navigation
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/sign-in',
-                      (route) => false,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightBlue,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                  ),
-                  child: Text(
-                    'Reset Password',
-                    style: AppTextStyle.satoshiRegular20.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ),
+              // Replace the old button with AppButton
+              AppButton(
+                text: 'Reset Password',
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/sign-in',
+                    (route) => false,
+                  );
+                },
               ),
             ],
           ),
