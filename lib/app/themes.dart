@@ -64,7 +64,7 @@ class AppThemes {
         fontSize: 14,
       ),
     ),
-    fontFamily: 'Plus Jakarta Sans',
+    fontFamily: 'Raleway',
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -130,6 +130,6 @@ class AppThemes {
         fontSize: 14,
       ),
     ),
-    fontFamily: 'Plus Jakarta Sans',
+    fontFamily: 'Raleway',
   );
 } 
