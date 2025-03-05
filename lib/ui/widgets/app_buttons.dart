@@ -1,114 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
-import 'package:better_breaks/shared/app_spacing.dart';
+import 'package:better_breaks/shared/app_textstyle.dart';
 
 class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  final String? text;
-  final double radius;
-  final double height;
-  final double? elevation;
-  final Widget? suffix;
-  final Color? borderColor;
+  final String text;
   final Color? backgroundColor;
   final Color? textColor;
-  final TextStyle? style;
-  final bool enabled;
+  final bool isOutlined;
   final bool loading;
-  final TextAlign? textAlign;
-  final EdgeInsets? margin;
+
   const AppButton({
     super.key,
+    required this.text,
     this.onPressed,
-    this.margin,
-    this.text,
-    this.radius = 8,
-    this.height = 50,
-    this.elevation,
-    this.suffix,
-    this.borderColor,
     this.backgroundColor,
     this.textColor,
-    this.style,
-    this.enabled = true,
+    this.isOutlined = false,
     this.loading = false,
-    this.textAlign,
   });
 
-  factory AppButton.icon({
-    required VoidCallback? onPressed,
-    required Widget suffix,
-    String? text,
-    double? radius,
-    double? height,
-    Color? backgroundColor = AppColors.grey400,
-    Color? textColor = Colors.black,
-    TextStyle? style,
-  }) {
-    return AppButton(
-      suffix: suffix,
-      onPressed: onPressed,
-      radius: radius ?? 8,
-      height: height ?? 56,
-      text: text,
-      backgroundColor: backgroundColor,
-      textColor: textColor,
-      style: style,
-    );
-  }
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      height: height.h,
-      margin: margin ?? EdgeInsets.zero,
       child: ElevatedButton(
-        onPressed: loading || !enabled ? null : onPressed,
+        onPressed: loading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          elevation: elevation,
-          backgroundColor: backgroundColor ?? AppColors.primary,
+          backgroundColor: isOutlined ? Colors.white : (backgroundColor ?? AppColors.lightBlue),
+          padding: EdgeInsets.symmetric(vertical: 14.h),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius),
-              side: borderColor == null
-                  ? BorderSide.none
-                  : BorderSide(
-                      color: borderColor!,
-                    )),
+            borderRadius: BorderRadius.circular(30.r),
+            side: isOutlined ? BorderSide(color: backgroundColor ?? AppColors.grey) : BorderSide.none,
+          ),
         ),
         child: loading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(),
-              )
-            : suffix != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      suffix!,
-                      AppSpacing.h16(),
-                      Text(
-                        text!,
-                        style: style ??
-                            Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: textColor,
-                                  fontSize: 14,
-                                ),
-                      ),
-                    ],
-                  )
-                : Text(
-                    text!,
-                    textAlign: textAlign,
-                    style: style ??
-                        Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: textColor ?? Colors.white,
-                              fontSize: 14,
-                            ),
+            ? SizedBox(
+                height: 20.h,
+                width: 20.h,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    isOutlined ? (backgroundColor ?? AppColors.lightBlue) : Colors.white,
                   ),
+                ),
+              )
+            : Text(
+                text,
+                style: AppTextStyle.satoshiRegular20.copyWith(
+                  color: isOutlined
+                      ? (textColor ?? backgroundColor ?? AppColors.lightBlue)
+                      : (textColor ?? Colors.white),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14.sp,
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class AppTextButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final Color? textColor;
+
+  const AppTextButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: AppTextStyle.satoshiRegular20.copyWith(
+          color: textColor ?? Colors.white,
+          fontWeight: FontWeight.w500,
+          fontSize: 14.sp,
+        ),
       ),
     );
   }
