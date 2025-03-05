@@ -1,50 +1,79 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF244AD0);
-  static const Color mainBlue = Color(0xffE9EDFA);
-  static const Color lightBlack = Color(0xFF1E232C);
-  static const Color lightBlue = Color(0xFF4869DF);
-  static const Color lightBlue1 = Color(0xFF5F62AB);
-  static const Color deepBlue = Color(0xFF1535A9);
-  static const Color red = Color(0xFFD53916);
-  static const Color white = Color(0xFFFFFFFF);
-  static const Color lightBlue100 = Color(0xFFEDF0F9);
-  static const Color purple = Color(0xFF5F62AB);
-  static const Color purple100 = Color(0xFF6C57B1);
-  static const Color purple200 = Color(0xFF1535A9);
-  static const Color purple300 = Color(0xFF6F45E9);
-  static const Color red100 = Color(0xFFDB1F31);
-  static const Color red200 = Color(0xFFF7CFCF);
-  static const Color orange = Color(0xFFFB9C45);
-  static const Color orange100 = Color(0xFFFFF8EC);
-  static const Color orange200 = Color(0xFFF7D9A4);
-  static const Color orange300 = Color(0xFFF87054);
-  static const Color green = Color(0xFF40F13C);
-  static const Color green100 = Color(0xFF339933);
-  static const Color green200 = Color(0xFF48C79F);
-  //Primaries
-
-  static const Color primary50 = Color(0xFFFAFAFA);
-
-  //Grey
+  // Main colors
+  static const Color primary = Color(0xFF009AD6);
+  static const Color orange = Color(0xFFFF9A6D);
+  static const Color lightGreen = Color(0xFFB3D069);
+  static const Color green = Color(0xFF16A34A);
+  
+  // Orange shades
+  static const Color orange100 = Color(0xFFFE8D6B);
+  static const Color orange200 = Color(0xFFFFDBD0);
+  static const Color orange300 = Color(0xFFFF3B30);
+  
+  // Green shades
+  static const Color lightGreen100 = Color(0xFFDCFCE7);
+  
+  // Grey shades
+  static const Color lightGrey = Color(0xFFA3A3A3);
+  static const Color grey = Color(0xFFE2E2E2);
   static const Color grey100 = Color(0xFFF7F8F9);
   static const Color grey200 = Color(0xFFE8ECF4);
   static const Color grey300 = Color(0xFF8391A1);
   static const Color grey400 = Color(0xFFE4E7EB);
-  static const Color grey800 = Color(0xFF999DA3);
-  static const Color grey900 = Color(0xFFF7F7F7);
-  static const Color grey1000 = Color(0xFFEBEDF0);
-  static const Color grey1100 = Color(0xFF9FA3AD);
-  static const Color grey1200 = Color(0xFF9095A0);
-  static const Color grey1300 = Color(0xFFD9DADE);
-  static const Color grey1400 = Color(0xFF6C727E);
-  static const Color grey1500 = Color(0xFF8F8F8F);
-  static const Color grey1600 = Color(0xFFFDFDFD);
-  static const Color grey1700 = Color(0xFFF0F0F0);
-  static const Color grey1800 = Color(0xFF78838D);
-  static const Color grey1900 = Color(0xFFFDFCFC);
-  static const Color grey2000 = Color(0xFFBAC2C7);
-  static const Color grey2100 = Color(0xFF656A76);
-  static const Color black = Color(0xFF454545);
+  static const Color grey500 = Color(0xFF999DA3);
+  static const Color grey600 = Color(0xFF595D62);
+  
+  // Black shades
+  static const Color lightBlack = Color(0xFF1E232C);
+  
+  // Background colors
+  static const Color background = Color(0xFFCFF7FF);
+  
+  // Purple shades
+  static const Color lightPurple = Color(0xFF7092F2);
+  static const Color lightPurple100 = Color(0xFFDEE7FF);
+  
+  // Additional colors
+  static const Color lightBlue = Color(0xFF00BBFF);
+  static const Color blue = Color(0xFF007AFF);
+  static const Color indigo = Color(0xFF607BFF);
+  static const Color lavender = Color(0xFFEEEAFE);
+  static const Color deepPurple = Color(0xFF2E1E98);
+  static const Color red = Color(0xFFB32E2B);
+  static const Color pink = Color(0xFFFFE6EE);
+  static const Color amber = Color(0xFFDF9943);
+  static const Color cream = Color(0xFFFFF0E1);
+  static const Color royalBlue = Color(0xFF306CB0);
+  static const Color paleBlue = Color(0xFFF4F5FF);
+
+  // Gradients
+  static const LinearGradient primaryGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0x99009AD6), // 60% opacity
+      Color(0x66009AD6), // 40% opacity
+    ],
+  );
+
+  static const LinearGradient blueGradient = LinearGradient(
+    begin: Alignment(-0.5, 0.5),
+    end: Alignment(1, 1),
+    colors: [
+      Color(0xFF009AD6),
+      Color(0xFF6DFFFA),
+    ],
+    stops: [0.4455, 0.9496],
+  );
+
+  // Box shadow
+  static BoxShadow innerShadow = BoxShadow(
+    color: const Color(0x40000000), // 40% opacity
+    offset: const Offset(5, 4),
+    blurRadius: 5.4,
+    spreadRadius: -1, // Use negative spread radius to simulate inset
+    blurStyle: BlurStyle.inner, // Use inner blur style instead of inset parameter
+  );
 } 
