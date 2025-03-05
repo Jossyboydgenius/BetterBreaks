@@ -1,0 +1,258 @@
+import 'dart:async';
+import 'package:better_breaks/ui/views/auth/create_new_password_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:better_breaks/shared/app_colors.dart';
+import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class OtpVerificationView extends StatefulWidget {
+  final String email;
+
+  const OtpVerificationView({
+    super.key,
+    required this.email,
+  });
+
+  @override
+  State<OtpVerificationView> createState() => _OtpVerificationViewState();
+}
+
+class _OtpVerificationViewState extends State<OtpVerificationView> {
+  final List<TextEditingController> _controllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
+  final List<FocusNode> _focusNodes = List.generate(
+    6,
+    (index) => FocusNode(),
+  );
+  Timer? _timer;
+  int _countdown = 60;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+    for (var i = 0; i < 6; i++) {
+      _focusNodes[i].addListener(() {
+        setState(() {}); // Rebuild to update border colors
+      });
+    }
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_countdown == 0) {
+        timer.cancel();
+      } else {
+        setState(() {
+          _countdown--;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var node in _focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
+  }
+
+  void _onOtpDigitChanged(int index, String value) {
+    if (value.length == 1 && index < 5) {
+      _focusNodes[index + 1].requestFocus();
+    } else if (value.isEmpty && index > 0) {
+      _focusNodes[index - 1].requestFocus();
+    }
+  }
+
+  void _handleKeyPress(int index, RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        if (_controllers[index].text.isEmpty && index > 0) {
+          _focusNodes[index - 1].requestFocus();
+          _controllers[index - 1].clear();
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(24.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Back button
+              AppIcons(
+                icon: AppIconData.back,
+                size: 14.r,
+                color: AppColors.lightBlack,
+                onPressed: () => Navigator.pop(context),
+              ),
+              SizedBox(height: 24.h),
+              
+              // Title
+              Text(
+                'OTP Verification',
+                style: AppTextStyle.ralewayExtraBold48.copyWith(
+                  color: AppColors.lightBlack,
+                  height: 1.1,
+                  fontSize: 24.sp,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              
+              // Description
+              Text(
+                'Please enter the 6 digit code we sent to',
+                style: AppTextStyle.satoshiRegular20.copyWith(
+                  color: AppColors.lightGrey,
+                  fontSize: 16.sp,
+                ),
+              ),
+              Text(
+                widget.email,
+                style: AppTextStyle.satoshiRegular20.copyWith(
+                  color: AppColors.lightGrey,
+                  fontSize: 16.sp,
+                ),
+              ),
+              SizedBox(height: 32.h),
+
+              // OTP input fields
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                  6,
+                  (index) => SizedBox(
+                    width: 48.w,
+                    height: 48.w,
+                    child: RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (event) => _handleKeyPress(index, event),
+                      child: TextField(
+                        controller: _controllers[index],
+                        focusNode: _focusNodes[index],
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(1),
+                        ],
+                        onChanged: (value) => _onOtpDigitChanged(index, value),
+                        style: AppTextStyle.satoshiRegular20.copyWith(
+                          color: AppColors.lightBlue,
+                          fontSize: 24.sp,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            borderSide: BorderSide(
+                              color: _focusNodes[index].hasFocus
+                                  ? AppColors.lightBlue
+                                  : AppColors.grey,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            borderSide: BorderSide(
+                              color: _controllers[index].text.isNotEmpty
+                                  ? AppColors.lightBlue
+                                  : AppColors.grey,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            borderSide: BorderSide(
+                              color: AppColors.lightBlue,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 24.h),
+
+              // Verify button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CreateNewPasswordView(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.lightBlue,
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                  ),
+                  child: Text(
+                    'Verify',
+                    style: AppTextStyle.satoshiRegular20.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 24.h),
+
+              // Resend code
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: "Didn't receive code? ",
+                    style: AppTextStyle.satoshiRegular20.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: _countdown > 0
+                            ? 'Tap to resend in ${_countdown}s'
+                            : 'Tap to resend',
+                        style: AppTextStyle.satoshiRegular20.copyWith(
+                          color: AppColors.orange100,
+                          fontSize: 14.sp,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        // Add GestureRecognizer here if needed
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+} 
