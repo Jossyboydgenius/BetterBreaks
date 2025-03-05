@@ -1,5 +1,6 @@
 import 'package:better_breaks/app/routes/app_routes.dart';
 import 'package:better_breaks/app/routes/navigation_service.dart';
+import 'package:better_breaks/ui/views/auth/forgot_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
@@ -170,7 +171,12 @@ class _SignInViewState extends State<SignInView> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    // Navigate to forgot password screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordView(),
+                      ),
+                    );
                   },
                   child: Text(
                     'Forgot password?',
