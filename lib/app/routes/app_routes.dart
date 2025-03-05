@@ -2,20 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:better_breaks/ui/views/onboarding/onboarding_view.dart';
 import 'package:better_breaks/ui/views/onboarding/splash_screen_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:better_breaks/ui/views/auth/sign_in_view.dart';
 
 class AppRoutes {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String dashboard = '/dashboard';
-  static const String profile = '/profile';
-  static const String projects = '/projects';
-  static const String tasks = '/tasks';
-  static const String wallet = '/wallet';
-  static const String members = '/members';
-  static const String comments = '/comments';
-  static const String phoneNumber = '/phone-number';
+  static const String signIn = '/sign-in';
 
   static const String onboardingView = '/onboardingView';
   static const String splashScreenView = '/splashScreenView';
@@ -25,6 +17,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
     onboardingView: (context) => const OnboardingView(),
+    signIn: (context) => const SignInView(),
   };
 
   static GoRouter router = GoRouter(
