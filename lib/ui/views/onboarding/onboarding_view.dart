@@ -145,7 +145,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: _navigateToLogin,
+                            onPressed: () {
+                              NavigationService.pushNamed(AppRoutes.signUp);
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: _pages[_currentPage].backgroundColor,
