@@ -148,7 +148,7 @@ class _SignInViewState extends State<SignInView> {
                       suffix: GestureDetector(
                         onTap: _togglePasswordVisibility,
                         child: Padding(
-                          padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                          padding: EdgeInsets.only(right: 16.w, top: 14.h),
                           child: Text(
                             _obscurePassword ? 'Show' : 'Hide',
                             style: AppTextStyle.satoshiRegular20.copyWith(
