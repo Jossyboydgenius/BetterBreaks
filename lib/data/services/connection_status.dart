@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
+import 'package:better_breaks/shared/app_textstyle.dart';
 
 class ConnectionWidget extends StatefulWidget {
   final bool dismissOfflineBanner;
@@ -57,56 +59,121 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
     });
   }
 
+  Widget _buildOfflineBanner() {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: Material(
+        color: Colors.transparent,
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  // Left red accent bar
+                  Container(
+                    width: 4.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.red,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4.r),
+                        bottomLeft: Radius.circular(4.r),
+                      ),
+                    ),
+                  ),
+                  // Main content
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(16.r),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(4.r),
+                          bottomRight: Radius.circular(4.r),
+                        ),
+                        border: Border(
+                          top: BorderSide(color: AppColors.lightRed),
+                          right: BorderSide(color: AppColors.lightRed),
+                          bottom: BorderSide(color: AppColors.lightRed),
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Close button with square container
+                          Container(
+                            width: 24.w,
+                            height: 24.h,
+                            decoration: BoxDecoration(
+                              color: AppColors.bgRed,
+                              borderRadius: BorderRadius.circular(4.r),
+                              border: Border.all(color: AppColors.lightRed),
+                            ),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.wifi_off,
+                                size: 16.r,
+                                color: AppColors.red,
+                              ),
+                              onPressed: null,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          // Message text
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'No internet connection',
+                                  style: AppTextStyle.satoshiRegular20.copyWith(
+                                    color: Colors.black,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Close button
+                          if (!widget.dismissOfflineBanner)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showBanner = false;
+                                });
+                              },
+                              child: Icon(
+                                Icons.close,
+                                size: 16.r,
+                                color: AppColors.red,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         widget.builder(context, _isOnline),
         if (_showBanner && !widget.dismissOfflineBanner)
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                color: AppColors.red,
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.wifi_off,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'No internet connection',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Spacer(),
-                    if (!widget.dismissOfflineBanner)
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _showBanner = false;
-                          });
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          _buildOfflineBanner(),
       ],
     );
   }
