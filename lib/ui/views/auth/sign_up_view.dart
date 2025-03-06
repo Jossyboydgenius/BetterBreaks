@@ -188,7 +188,7 @@ class _SignUpViewState extends State<SignUpView> {
                       suffix: GestureDetector(
                         onTap: _togglePasswordVisibility,
                         child: Padding(
-                          padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                          padding: EdgeInsets.only(right: 16.w, top: 14.h),
                           child: Text(
                             _obscurePassword ? 'Show' : 'Hide',
                             style: AppTextStyle.satoshiRegular20.copyWith(
@@ -214,7 +214,7 @@ class _SignUpViewState extends State<SignUpView> {
                       suffix: GestureDetector(
                         onTap: _toggleConfirmPasswordVisibility,
                         child: Padding(
-                          padding: EdgeInsets.only(right: 16.w, top: 10.h),
+                          padding: EdgeInsets.only(right: 16.w, top: 14.h),
                           child: Text(
                             _obscureConfirmPassword ? 'Show' : 'Hide',
                             style: AppTextStyle.satoshiRegular20.copyWith(
