@@ -47,7 +47,7 @@ class MainApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         // Since we don't have any BLoC providers yet, we'll use MaterialApp directly
         // instead of MultiBlocProvider with an empty list (which causes an error)
-        return MaterialApp(
+    return MaterialApp(
           title: 'BetterBreaks',
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
