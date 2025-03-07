@@ -46,6 +46,7 @@ class AppIconData {
   static const String work = '$_base/work.svg';
   static const String zap = '$_base/zap.svg';
   static const String zapFilled = '$_base/zap-filled.svg';
+  static const String checkMark = '$_base/check-mark.svg';
 } 
 
 class AppIcons extends StatelessWidget {
