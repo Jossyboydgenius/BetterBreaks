@@ -7,6 +7,7 @@ import 'package:better_breaks/ui/views/auth/sign_up_view.dart';
 import 'package:better_breaks/ui/views/auth/forgot_password_view.dart';
 import 'package:better_breaks/ui/views/auth/otp_verification_view.dart';
 import 'package:better_breaks/ui/views/auth/create_new_password_view.dart';
+import 'package:better_breaks/ui/views/auth/password_success_view.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String otpVerification = '/otp-verification';
   static const String createNewPassword = '/create-new-password';
+  static const String passwordSuccess = '/password-success';
 
   static const String initialRoute = splashScreenView;
 
@@ -30,6 +32,7 @@ class AppRoutes {
     forgotPassword: (context) => const ForgotPasswordView(),
     otpVerification: (context) => const OtpVerificationView(email: ''),
     createNewPassword: (context) => const CreateNewPasswordView(),
+    passwordSuccess: (context) => const PasswordSuccessView(),
   };
 
   static GoRouter router = GoRouter(
