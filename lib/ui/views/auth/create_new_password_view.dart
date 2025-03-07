@@ -7,6 +7,7 @@ import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/utils/form_validators.dart';
 import 'package:better_breaks/ui/widgets/app_toast.dart';
+import 'package:better_breaks/ui/views/auth/password_success_view.dart';
 
 class CreateNewPasswordView extends StatefulWidget {
   const CreateNewPasswordView({super.key});
@@ -54,9 +55,11 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
         AppToast.showErrorToast('Passwords do not match');
         return;
       }
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/sign-in',
-        (route) => false,
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PasswordSuccessView(),
+        ),
       );
     }
   }
