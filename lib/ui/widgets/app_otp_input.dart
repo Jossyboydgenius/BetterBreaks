@@ -43,6 +43,7 @@ class AppOtpInput extends StatelessWidget {
               style: AppTextStyle.satoshiRegular20.copyWith(
                 color: AppColors.lightBlue,
                 fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
               ),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
