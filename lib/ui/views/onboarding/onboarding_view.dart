@@ -28,14 +28,14 @@ class _OnboardingViewState extends State<OnboardingView> {
     OnboardingPage(
       title: 'Analytics & Insights',
       description: 'Track your holiday usage and understand how to reduce stress',
-      image: AppImageData.onboarding3,
-      backgroundColor: AppColors.orange,
+      image: AppImageData.onboarding2,
+      backgroundColor: AppColors.primary,
     ),
     OnboardingPage(
       title: 'Seamless Integration',
       description: 'Sync with your calendar, customize preferences, and set blackout dates',
-      image: AppImageData.onboarding2,
-      backgroundColor: AppColors.lightGreen,
+      image: AppImageData.onboarding3,
+      backgroundColor: AppColors.primary,
     ),
   ];
 
@@ -58,21 +58,51 @@ class _OnboardingViewState extends State<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Full screen PageView for images
           PageView.builder(
             controller: _pageController,
             itemCount: _pages.length,
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {
-              return Image.asset(
-                _pages[index].image,
-                fit: BoxFit.cover,
+              return Container(
+                color: Colors.white,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: MediaQuery.of(context).size.height * (
+                        index == 0 ? 0.13 :
+                        index == 1 ? 0.25 :
+                        0.19
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Center(
+                          child: AppImages(
+                            imagePath: _pages[index].image,
+                            width: index == 0 
+                                ? 380.w  // Calendar view - make it wider
+                                : index == 1 
+                                    ? 340.w  // Analytics view
+                                    : 340.w,  // Experience view
+                            height: index == 0 
+                                ? 600.h  // Calendar view - taller for calendar
+                                : index == 1 
+                                    ? 500.h  // Analytics view
+                                    : 550.h,  // Experience view
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
-          // Bottom sheet content
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -87,9 +117,8 @@ class _OnboardingViewState extends State<OnboardingView> {
               child: Column(
                 children: [
                   SizedBox(height: 24.h),
-                  // Centered page indicator
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center, // Center the dots
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                       _pages.length,
                       (index) => Container(
@@ -105,22 +134,20 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h), // Reduced spacing
-                  // Title with reduced line spacing
+                  SizedBox(height: 20.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: Text(
                       _pages[_currentPage].title,
                       style: AppTextStyle.ralewayExtraBold48.copyWith(
                         color: Colors.white,
-                        height: 1.1, // Reduced line height for title
+                        height: 1.1,
                         fontWeight: FontWeight.w900,
                       ),
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  SizedBox(height: 12.h), // Reduced spacing
-                  // Description
+                  SizedBox(height: 12.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.w),
                     child: Text(
@@ -132,16 +159,15 @@ class _OnboardingViewState extends State<OnboardingView> {
                     ),
                   ),
                   const Spacer(),
-                  // Buttons
                   Padding(
                     padding: EdgeInsets.only(
                       left: 24.r,
                       right: 24.r,
                       bottom: 24.r,
-                      top: 12.r, // Reduced top padding
+                      top: 12.r,
                     ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min, // Use minimum space
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         AppButton(
                           text: 'Sign Up',
