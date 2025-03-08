@@ -21,27 +21,36 @@ class PasswordSuccessView extends StatelessWidget {
             children: [
               // Checkmark icon
               AppIcons(
-                icon: AppIconData.checkMark,
-                size: 64.r,
-                color: AppColors.green,
+                icon: AppIconData.success,
+                size: 120.r,
               ),
               SizedBox(height: 24.h),
               
               // Success message
               Text(
-                "You've successfully changed your password",
+                "Password changed",
                 textAlign: TextAlign.center,
-                style: AppTextStyle.satoshiRegular20.copyWith(
+                style: AppTextStyle.ralewayExtraBold48.copyWith(
                   color: AppColors.lightBlack,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                    "Click on the login button below to continue.",
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.satoshiRegular20.copyWith(
+                      color: AppColors.grey700,
+                      ),
                 ),
               ),
               SizedBox(height: 32.h),
               
               // Back to login button
               AppButton(
-                text: 'Back to Login',
+                text: 'Login',
                 onPressed: () {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     AppRoutes.signIn,
