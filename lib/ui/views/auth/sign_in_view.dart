@@ -10,6 +10,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/utils/form_validators.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -81,12 +82,7 @@ class _SignInViewState extends State<SignInView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Back button
-                AppIcons(
-                  icon: AppIconData.back,
-                  size: 14.r,
-                  color: AppColors.lightBlack,
-                  onPressed: () => Navigator.pop(context),
-                ),
+                const AppBackButton(),
                 SizedBox(height: 24.h),
                 
                 // Welcome text
