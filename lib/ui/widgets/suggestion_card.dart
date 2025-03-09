@@ -25,7 +25,7 @@ class SuggestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
-      padding: EdgeInsets.all(24.r),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(34.r),
@@ -39,7 +39,7 @@ class SuggestionCard extends StatelessWidget {
             backgroundColor: isHighImpact ? AppColors.bgRed100 : AppColors.lightGreen100,
             textColor: isHighImpact ? AppColors.red100 : AppColors.green,
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 12.h),
           Text(
             dateRange,
             style: AppTextStyle.raleway(
@@ -76,4 +76,4 @@ class SuggestionCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
