@@ -28,47 +28,50 @@ class AppInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.grey),
-          borderRadius: BorderRadius.circular(30.r),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: controller,
-                readOnly: readOnly,
-                style: AppTextStyle.satoshiRegular20.copyWith(
-                  fontSize: 16.sp,
-                  color: AppColors.lightBlack,
-                ),
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: AppTextStyle.satoshiRegular20.copyWith(
+      child: AbsorbPointer(
+        absorbing: readOnly,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.grey),
+            borderRadius: BorderRadius.circular(30.r),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: controller,
+                  readOnly: readOnly,
+                  style: AppTextStyle.satoshiRegular20.copyWith(
                     fontSize: 16.sp,
-                    color: AppColors.grey600,
+                    color: AppColors.lightBlack,
                   ),
-                  border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    hintStyle: AppTextStyle.satoshiRegular20.copyWith(
+                      fontSize: 16.sp,
+                      color: AppColors.grey600,
+                    ),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
               ),
-            ),
-            if (icon != null)
-              AppIcons(
-                icon: icon!,
-                size: 24.r,
-                color: iconColor ?? AppColors.grey600,
-              ),
-            if (isDropdown)
-              AppIcons(
-                icon: AppIconData.chevronDown,
-                size: 24.r,
-                color: AppColors.grey600,
-              ),
-          ],
+              if (icon != null)
+                AppIcons(
+                  icon: icon!,
+                  size: 24.r,
+                  color: iconColor ?? AppColors.grey600,
+                ),
+              if (isDropdown)
+                AppIcons(
+                  icon: AppIconData.chevronDown,
+                  size: 24.r,
+                  color: AppColors.grey600,
+                ),
+            ],
+          ),
         ),
       ),
     );
