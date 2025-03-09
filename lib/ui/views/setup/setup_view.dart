@@ -90,26 +90,10 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
-  Widget _buildLeaveBalanceStep() {
+  Widget _buildLeaveBalanceContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Set up your Leave balance',
-          style: AppTextStyle.ralewayExtraBold48.copyWith(
-            fontSize: 24.sp,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          "Let's start by understanding your leave situation.",
-          style: AppTextStyle.satoshiRegular20.copyWith(
-            fontSize: 16.sp,
-            color: AppColors.lightGrey,
-          ),
-        ),
-        SizedBox(height: 32.h),
         Text(
           'Annual Leave Balance',
           style: AppTextStyle.satoshiRegular20.copyWith(
@@ -143,26 +127,10 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
-  Widget _buildPreferenceStep() {
+  Widget _buildPreferenceContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Customise your preference',
-          style: AppTextStyle.ralewayExtraBold48.copyWith(
-            fontSize: 24.sp,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          'Help us suggest the best leave days for you',
-          style: AppTextStyle.satoshiRegular20.copyWith(
-            fontSize: 16.sp,
-            color: AppColors.lightGrey,
-          ),
-        ),
-        SizedBox(height: 32.h),
         Text(
           'Preferred break type',
           style: AppTextStyle.satoshiRegular20.copyWith(
@@ -232,26 +200,9 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
-  Widget _buildSuggestionsStep() {
+  Widget _buildSuggestionsContent() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Better Breaks, Better You',
-          style: AppTextStyle.ralewayExtraBold48.copyWith(
-            fontSize: 24.sp,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          'Here are our optimised sugestion',
-          style: AppTextStyle.satoshiRegular20.copyWith(
-            fontSize: 16.sp,
-            color: AppColors.lightGrey,
-          ),
-        ),
-        SizedBox(height: 24.h),
         SuggestionCard(
           dateRange: 'December 27-29',
           description: 'Take 3 days off to get 9 days of holiday',
@@ -306,54 +257,101 @@ class _SetupViewState extends State<SetupView> {
                 backgroundColor: AppColors.grey,
                 valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  children: [
+                    SizedBox(height: 24.h),
+                    Row(
+                      children: [
+                        const AppBackButton(),
+                      ],
+                    ),
+                    SizedBox(height: 24.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _currentStep == 0
+                                ? 'Set up your Leave balance'
+                                : _currentStep == 1
+                                    ? 'Customise your preference'
+                                    : 'Better Breaks, Better You',
+                            style: AppTextStyle.ralewayExtraBold48.copyWith(
+                              fontSize: 24.sp,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            _currentStep == 0
+                                ? "Let's start by understanding your leave situation."
+                                : _currentStep == 1
+                                    ? 'Help us suggest the best leave days for you'
+                                    : 'Here are our optimised sugestion',
+                            style: AppTextStyle.satoshiRegular20.copyWith(
+                              fontSize: 16.sp,
+                              color: AppColors.lightGrey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(24.r),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppBackButton(),
-                      SizedBox(height: 24.h),
-                      if (_currentStep == 0)
-                        _buildLeaveBalanceStep()
-                      else if (_currentStep == 1)
-                        _buildPreferenceStep()
-                      else
-                        _buildSuggestionsStep(),
-                      if (_currentStep != 2) ...[
-                        SizedBox(height: 32.h),
-                        AppButton(
-                          text: 'Continue',
-                          backgroundColor: AppColors.primary,
-                          onPressed: () {
-                            setState(() {
-                              _currentStep++;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 16.h),
-                        Center(
-                          child: TextButton(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (_currentStep == 0)
+                          _buildLeaveBalanceContent()
+                        else if (_currentStep == 1)
+                          _buildPreferenceContent()
+                        else
+                          _buildSuggestionsContent(),
+                        if (_currentStep != 2) ...[
+                          SizedBox(height: 32.h),
+                          AppButton(
+                            text: 'Continue',
+                            backgroundColor: AppColors.primary,
                             onPressed: () {
-                              if (_currentStep == 0) {
-                                Navigator.pop(context);
-                              } else {
-                                setState(() {
-                                  _currentStep--;
-                                });
-                              }
+                              setState(() {
+                                _currentStep++;
+                              });
                             },
-                            child: Text(
-                              'Back',
-                              style: AppTextStyle.satoshiRegular20.copyWith(
-                                fontSize: 16.sp,
-                                color: AppColors.lightBlack,
+                          ),
+                          SizedBox(height: 16.h),
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                if (_currentStep == 0) {
+                                  Navigator.pop(context);
+                                } else {
+                                  setState(() {
+                                    _currentStep--;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                'Back',
+                                style: AppTextStyle.satoshiRegular20.copyWith(
+                                  fontSize: 16.sp,
+                                  color: AppColors.lightBlack,
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
+                        SizedBox(height: 24.h),
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
