@@ -151,9 +151,18 @@ flutter:
 
 # Flutter Launcher Icons configuration
 flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/icons/app_icon.png"
-  icon_size: 44 # min:48, max:256, default: 48
-  adaptive_icon_background: "#000000" # Black background for Android
-  adaptive_icon_foreground: "assets/icons/app_icon_foreground.png" # Your white logo
+  image_path: "assets/images/logo.png"
+  
+  # Android-specific configuration
+  android:
+    generate: true
+    image_path: "assets/images/logo.png"
+    icon_size: 36 # Reduced size for Android (you can adjust this value)
+    adaptive_icon_background: "#000000" # Black background for Android
+    adaptive_icon_foreground: "assets/images/logo.png"
+  
+  # iOS-specific configuration
+  ios:
+    generate: true
+    image_path: "assets/images/logo.png"
+    icon_size: 48 # Keep the original size for iOS
