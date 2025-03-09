@@ -133,7 +133,8 @@ class _SetupViewState extends State<SetupView> {
         AppInput(
           controller: _dateController,
           hintText: 'Select date',
-          icon: AppIconData.updown,
+          icon: AppIconData.calendar,
+          iconColor: AppColors.primaryLight,
           readOnly: true,
           onTap: _showCalendar,
         ),
