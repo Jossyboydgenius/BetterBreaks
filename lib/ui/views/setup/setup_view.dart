@@ -252,10 +252,23 @@ class _SetupViewState extends State<SetupView> {
         body: SafeArea(
           child: Column(
             children: [
-              LinearProgressIndicator(
-                value: _currentStep == 0 ? 0.33 : _currentStep == 1 ? 0.66 : 1.0,
-                backgroundColor: AppColors.grey,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Container(
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2.r),
+                    color: AppColors.grey,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(2.r),
+                    child: LinearProgressIndicator(
+                      value: _currentStep == 0 ? 0.33 : _currentStep == 1 ? 0.66 : 1.0,
+                      backgroundColor: Colors.transparent,
+                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -264,7 +277,17 @@ class _SetupViewState extends State<SetupView> {
                     SizedBox(height: 24.h),
                     Row(
                       children: [
-                        const AppBackButton(),
+                        AppBackButton(
+                          onPressed: () {
+                            if (_currentStep == 0) {
+                              Navigator.pop(context);
+                            } else {
+                              setState(() {
+                                _currentStep--;
+                              });
+                            }
+                          },
+                        ),
                       ],
                     ),
                     SizedBox(height: 24.h),
