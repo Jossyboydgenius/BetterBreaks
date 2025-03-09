@@ -9,6 +9,7 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
+import 'package:better_breaks/ui/widgets/suggestion_card.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -231,6 +232,66 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
+  Widget _buildSuggestionsStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Better Breaks, Better You',
+          style: AppTextStyle.ralewayExtraBold48.copyWith(
+            fontSize: 24.sp,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Here are our optimised sugestion',
+          style: AppTextStyle.satoshiRegular20.copyWith(
+            fontSize: 16.sp,
+            color: AppColors.lightGrey,
+          ),
+        ),
+        SizedBox(height: 24.h),
+        SuggestionCard(
+          dateRange: 'December 27-29',
+          description: 'Take 3 days off to get 9 days of holiday',
+          isHighImpact: true,
+          holidays: ['Christmas', 'New year'],
+          onPreviewTap: () {
+            // Handle preview tap
+          },
+        ),
+        SuggestionCard(
+          dateRange: 'November 10-20',
+          description: 'Take 3 days off to get 9 days of holiday',
+          isHighImpact: false,
+          holidays: ['Salah', 'El-fatir'],
+          onPreviewTap: () {
+            // Handle preview tap
+          },
+        ),
+        SuggestionCard(
+          dateRange: 'May 09-12',
+          description: 'Take 3 days off to get 9 days of holiday',
+          isHighImpact: false,
+          holidays: ['El-fatir', 'Salah'],
+          onPreviewTap: () {
+            // Handle preview tap
+          },
+        ),
+        SuggestionCard(
+          dateRange: 'May 09-12',
+          description: 'Take 3 days off to get 9 days of holiday',
+          isHighImpact: false,
+          holidays: ['El-fatir', 'Salah'],
+          onPreviewTap: () {
+            // Handle preview tap
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -241,7 +302,7 @@ class _SetupViewState extends State<SetupView> {
           child: Column(
             children: [
               LinearProgressIndicator(
-                value: _currentStep == 0 ? 0.33 : 0.66,
+                value: _currentStep == 0 ? 0.33 : _currentStep == 1 ? 0.66 : 1.0,
                 backgroundColor: AppColors.grey,
                 valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
               ),
@@ -253,44 +314,45 @@ class _SetupViewState extends State<SetupView> {
                     children: [
                       const AppBackButton(),
                       SizedBox(height: 24.h),
-                      _currentStep == 0
-                          ? _buildLeaveBalanceStep()
-                          : _buildPreferenceStep(),
-                      SizedBox(height: 32.h),
-                      AppButton(
-                        text: 'Continue',
-                        backgroundColor: AppColors.primary,
-                        onPressed: () {
-                          if (_currentStep == 0) {
-                            setState(() {
-                              _currentStep = 1;
-                            });
-                          } else {
-                            // Navigate to next screen after setup
-                          }
-                        },
-                      ),
-                      SizedBox(height: 16.h),
-                      Center(
-                        child: TextButton(
+                      if (_currentStep == 0)
+                        _buildLeaveBalanceStep()
+                      else if (_currentStep == 1)
+                        _buildPreferenceStep()
+                      else
+                        _buildSuggestionsStep(),
+                      if (_currentStep != 2) ...[
+                        SizedBox(height: 32.h),
+                        AppButton(
+                          text: 'Continue',
+                          backgroundColor: AppColors.primary,
                           onPressed: () {
-                            if (_currentStep == 0) {
-                              Navigator.pop(context);
-                            } else {
-                              setState(() {
-                                _currentStep = 0;
-                              });
-                            }
+                            setState(() {
+                              _currentStep++;
+                            });
                           },
-                          child: Text(
-                            'Back',
-                            style: AppTextStyle.satoshiRegular20.copyWith(
-                              fontSize: 16.sp,
-                              color: AppColors.lightBlack,
+                        ),
+                        SizedBox(height: 16.h),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {
+                              if (_currentStep == 0) {
+                                Navigator.pop(context);
+                              } else {
+                                setState(() {
+                                  _currentStep--;
+                                });
+                              }
+                            },
+                            child: Text(
+                              'Back',
+                              style: AppTextStyle.satoshiRegular20.copyWith(
+                                fontSize: 16.sp,
+                                color: AppColors.lightBlack,
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
