@@ -150,19 +150,19 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 # Flutter Launcher Icons configuration
-flutter_icons:
+flutter_launcher_icons:
+  # Add a common fallback image path
   image_path: "assets/images/logo.png"
   
   # Android-specific configuration
   android:
     generate: true
-    image_path: "assets/images/logo.png"
-    icon_size: 36 # Reduced size for Android (you can adjust this value)
-    adaptive_icon_background: "#000000" # Black background for Android
-    adaptive_icon_foreground: "assets/images/logo.png"
+    image_path: "assets/images/logo_android.png" # Use the padded version for Android
+    adaptive_icon_background: "#000000"
+    adaptive_icon_foreground: "assets/images/logo_android.png"
   
   # iOS-specific configuration
   ios:
     generate: true
-    image_path: "assets/images/logo.png"
-    icon_size: 48 # Keep the original size for iOS
+    image_path: "assets/images/logo.png" # Keep original version for iOS
+  
