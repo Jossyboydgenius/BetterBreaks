@@ -1,8 +1,9 @@
 import 'package:better_breaks/app/routes/app_routes.dart';
 import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:better_breaks/ui/views/auth/forgot_password_view.dart';
+import 'package:better_breaks/ui/views/setup/setup_view.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
@@ -10,7 +11,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/utils/form_validators.dart';
-import 'package:better_breaks/ui/widgets/app_back_button.dart';
+
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -45,14 +46,22 @@ class _SignInViewState extends State<SignInView> {
     });
   }
 
+// void _handleSignIn() {
+//     if (_formKey.currentState!.validate()) {
+//       // Simulate password check
+//       if (_passwordController.text != "correctPassword") {
+//         AppToast.showErrorToast('The password you entered was incorrect');
+//         return;
+//       }
   void _handleSignIn() {
     if (_formKey.currentState!.validate()) {
-      // Simulate password check
-      if (_passwordController.text != "correctPassword") {
-        AppToast.showErrorToast('The password you entered was incorrect');
-        return;
-      }
-      // Handle successful sign in
+      // Navigate to setup screen directly
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SetupView(),
+        ),
+      );
     }
   }
 
