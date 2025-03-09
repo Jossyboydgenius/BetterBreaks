@@ -11,6 +11,7 @@ class AppInput extends StatelessWidget {
   final String? icon;
   final VoidCallback? onTap;
   final bool readOnly;
+  final Color? iconColor;
 
   const AppInput({
     super.key,
@@ -20,6 +21,7 @@ class AppInput extends StatelessWidget {
     this.icon,
     this.onTap,
     this.readOnly = false,
+    this.iconColor,
   });
 
   @override
@@ -58,7 +60,7 @@ class AppInput extends StatelessWidget {
               AppIcons(
                 icon: icon!,
                 size: 24.r,
-                color: AppColors.grey600,
+                color: iconColor ?? AppColors.grey600,
               ),
             if (isDropdown)
               AppIcons(
