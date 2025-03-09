@@ -252,6 +252,7 @@ class _SetupViewState extends State<SetupView> {
         body: SafeArea(
           child: Column(
             children: [
+              SizedBox(height: 16.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Container(
