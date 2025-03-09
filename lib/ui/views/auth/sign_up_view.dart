@@ -9,6 +9,7 @@ import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/utils/form_validators.dart';
 import 'package:better_breaks/ui/widgets/app_toast.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -114,12 +115,7 @@ class _SignUpViewState extends State<SignUpView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Back button
-                AppIcons(
-                  icon: AppIconData.back,
-                  size: 14.r,
-                  color: AppColors.lightBlack,
-                  onPressed: () => Navigator.pop(context),
-                ),
+                const AppBackButton(),
                 SizedBox(height: 24.h),
                 
                 // Welcome text
