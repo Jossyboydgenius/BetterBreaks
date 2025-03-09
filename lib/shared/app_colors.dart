@@ -40,6 +40,7 @@ class AppColors {
   
   // Black shades
   static const Color lightBlack = Color(0xFF1E232C);
+  static const Color lightBlack100 = Color(0xFF4B5563);
   
   // Background colors
   static const Color background = Color(0xFFCFF7FF);
@@ -52,6 +53,7 @@ class AppColors {
   static const Color lightBlue = Color(0xFF00BBFF);
   static const Color blue = Color(0xFF007AFF);
   static const Color indigo = Color(0xFF607BFF);
+  static const Color bgIndigo = Color(0xFFF5F7FF);
   static const Color lavender = Color(0xFFEEEAFE);
   static const Color deepPurple = Color(0xFF2E1E98);
   static const Color red = Color(0xFFCB1A14);
