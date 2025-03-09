@@ -1,11 +1,11 @@
 import 'package:better_breaks/ui/views/auth/otp_verification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
-import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/utils/form_validators.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -60,12 +60,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Back button
-                AppIcons(
-                  icon: AppIconData.back,
-                  size: 14.r,
-                  color: AppColors.lightBlack,
-                  onPressed: () => Navigator.pop(context),
-                ),
+                const AppBackButton(),
                 SizedBox(height: 24.h),
                 
                 // Title
