@@ -152,17 +152,17 @@ flutter:
 # Flutter Launcher Icons configuration
 flutter_launcher_icons:
   # Add a common fallback image path
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/logo_main.png"
   
   # Android-specific configuration
   android:
     generate: true
-    image_path: "assets/images/logo_android.png" # Use the padded version for Android
+    image_path: "assets/images/logo_main.png" # Use the padded version for Android
     adaptive_icon_background: "#000000"
-    adaptive_icon_foreground: "assets/images/logo_android.png"
+    adaptive_icon_foreground: "assets/images/logo_main.png"
   
   # iOS-specific configuration
   ios:
     generate: true
-    image_path: "assets/images/logo.png" # Keep original version for iOS
+    image_path: "assets/images/logo_main.png" # Keep original version for iOS
   
