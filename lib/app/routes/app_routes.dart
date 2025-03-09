@@ -24,7 +24,7 @@ class AppRoutes {
   static const String passwordSuccess = '/password-success';
   static const String setupView = '/setup-view';
 
-  static const String initialRoute = setupView;
+  static const String initialRoute = splashScreenView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
