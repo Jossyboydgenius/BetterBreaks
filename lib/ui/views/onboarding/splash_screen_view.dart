@@ -42,7 +42,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
             ),
             const SizedBox(height: 6),
             Text(
-              'BetterBreaks',
+              'Better Breaks',
               style: AppTextStyle.redRoseBold32.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
