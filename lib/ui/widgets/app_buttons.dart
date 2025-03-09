@@ -11,6 +11,7 @@ class AppButton extends StatelessWidget {
   final bool isOutlined;
   final bool loading;
   final bool enabled;
+  final double? height;
 
   const AppButton({
     super.key,
@@ -21,6 +22,7 @@ class AppButton extends StatelessWidget {
     this.isOutlined = false,
     this.loading = false,
     this.enabled = true,
+    this.height,
   });
 
   @override
@@ -29,6 +31,7 @@ class AppButton extends StatelessWidget {
     
     return SizedBox(
       width: double.infinity,
+      height: height ?? 48.h,
       child: ElevatedButton(
         onPressed: isDisabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
