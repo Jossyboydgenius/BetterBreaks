@@ -1,3 +1,4 @@
+import 'package:better_breaks/shared/app_sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/app/routes/app_routes.dart';
 import 'package:better_breaks/app/routes/navigation_service.dart';
@@ -57,6 +58,8 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isSmall = AppDimension.isSmall;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -74,25 +77,15 @@ class _OnboardingViewState extends State<OnboardingView> {
                       left: 0,
                       right: 0,
                       bottom: MediaQuery.of(context).size.height * (
-                        index == 0 ? 0.20 :
-                        index == 1 ? 0.20 :
-                        0.20
+                        isSmall ? 0.15 : 0.20  // Adjust bottom position for small devices
                       ),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
                         child: Center(
                           child: AppImages(
                             imagePath: _pages[index].image,
-                            width: index == 0 
-                                ? 280.w  // Calendar view - make it wider
-                                : index == 1 
-                                    ? 280.w  // Analytics view
-                                    : 280.w,  // Experience view
-                            height: index == 0 
-                                ? 700.h  // Calendar view - taller for calendar
-                                : index == 1 
-                                    ? 700.h  // Analytics view
-                                    : 700.h,  // Experience view
+                            width: isSmall ? 260.w : 280.w,  // Smaller width for small devices
+                            height: isSmall ? 700.h : 700.h,  // Smaller height for small devices
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -106,17 +99,17 @@ class _OnboardingViewState extends State<OnboardingView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.43,
+              height: MediaQuery.of(context).size.height * (isSmall ? 0.41 : 0.44),  // Smaller height for small devices
               decoration: BoxDecoration(
                 color: _pages[_currentPage].backgroundColor,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.r),
-                  topRight: Radius.circular(30.r),
+                  topLeft: Radius.circular(isSmall ? 20.r : 22.r),
+                  topRight: Radius.circular(isSmall ? 20.r : 22.r),
                 ),
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 24.h),
+                  SizedBox(height: isSmall ? 10.h : 20.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
@@ -134,26 +127,28 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: isSmall ? 16.h : 10.h),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
                     child: Text(
                       _pages[_currentPage].title,
                       style: AppTextStyle.ralewayExtraBold48.copyWith(
                         color: Colors.white,
                         height: 1.1,
                         fontWeight: FontWeight.w900,
+                        fontSize: isSmall ? 32.sp : 46.sp,  // Smaller font for small devices
                       ),
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: isSmall ? 8.h : 12.h),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
                     child: Text(
                       _pages[_currentPage].description,
                       style: AppTextStyle.satoshiRegular20.copyWith(
                         color: Colors.white,
+                        fontSize: isSmall ? 16.sp : 18.sp,  // Smaller font for small devices
                       ),
                       textAlign: TextAlign.left,
                     ),
@@ -161,10 +156,10 @@ class _OnboardingViewState extends State<OnboardingView> {
                   const Spacer(),
                   Padding(
                     padding: EdgeInsets.only(
-                      left: 24.r,
-                      right: 24.r,
-                      bottom: 24.r,
-                      top: 12.r,
+                      left: isSmall ? 16.r : 24.r,
+                      right: isSmall ? 16.r : 24.r,
+                      bottom: isSmall ? 16.r : 24.r,
+                      top: isSmall ? 8.r : 12.r,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
