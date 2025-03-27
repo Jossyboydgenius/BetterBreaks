@@ -157,7 +157,7 @@ flutter_launcher_icons:
   # Android-specific configuration
   android:
     generate: true
-    image_path: "assets/images/logo_main.png" # Use the padded version for Android
+    image_path: "assets/images/logo_main.png"
     adaptive_icon_background: "#000000"
     adaptive_icon_foreground: "assets/images/logo_main.png"
   
