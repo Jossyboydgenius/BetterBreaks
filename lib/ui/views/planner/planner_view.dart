@@ -23,7 +23,7 @@ class _PlannerViewState extends State<PlannerView> {
   DateTime _currentMonth = DateTime.now();
   DateTime? _startDate;
   DateTime? _endDate;
-  final int _currentStep = 2; // Since this is the last step in setup
+  final int _currentStep = 2; 
 
   @override
   Widget build(BuildContext context) {
