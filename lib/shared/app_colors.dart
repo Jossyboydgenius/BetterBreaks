@@ -37,6 +37,7 @@ class AppColors {
   static const Color grey500 = Color(0xFF999DA3);
   static const Color grey600 = Color(0xFF595D62);
   static const Color grey700 = Color(0xFF888888);
+  static const Color grey800 = Color(0xFF666666);
   
   // Black shades
   static const Color lightBlack = Color(0xFF1E232C);
@@ -100,6 +101,15 @@ class AppColors {
     colors: [
       Color(0x6EBDBDBD), // rgba(189, 189, 189, 0.43)
       Color(0x99FFFFFF), // rgba(255, 255, 255, 0.6)
+    ],
+  );
+
+  static const LinearGradient weatherIndicatorGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFFEA4335), // #EA4335
+      Color(0xFFFBBC04), // #FBBC04
     ],
   );
 } 
