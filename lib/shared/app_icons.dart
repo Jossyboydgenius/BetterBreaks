@@ -51,6 +51,11 @@ class AppIconData {
   static const String success = '$_base/success.svg';
   static const String chevronDown = '$_base/chevron-down.svg';
   static const String check = '$_base/check.svg';
+  static const String leftArrow = '$_base/left-arrow.svg';
+  static const String rightArrow = '$_base/right-arrow.svg';
+  static const String expand = '$_base/expand.svg';
+  static const String cloudy = '$_base/cloudy.svg';
+  static const String rain = '$_base/rain.svg';  
 } 
 
 class AppIcons extends StatelessWidget {

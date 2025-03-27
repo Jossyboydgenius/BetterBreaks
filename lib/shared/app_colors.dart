@@ -93,4 +93,13 @@ class AppColors {
     spreadRadius: -1, // Use negative spread radius to simulate inset
     blurStyle: BlurStyle.inner, // Use inner blur style instead of inset parameter
   );
+
+  static const LinearGradient calendarBorderGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0x6EBDBDBD), // rgba(189, 189, 189, 0.43)
+      Color(0x99FFFFFF), // rgba(255, 255, 255, 0.6)
+    ],
+  );
 } 

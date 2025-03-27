@@ -1,3 +1,4 @@
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/ui/views/onboarding/onboarding_view.dart';
 import 'package:better_breaks/ui/views/onboarding/splash_screen_view.dart';
@@ -23,7 +24,8 @@ class AppRoutes {
   static const String createNewPassword = '/create-new-password';
   static const String passwordSuccess = '/password-success';
   static const String setupView = '/setup-view';
-
+  static const String plannerView = '/planner-view';
+  
   static const String initialRoute = splashScreenView;
 
   static Map<String, WidgetBuilder> routes = {
@@ -36,6 +38,7 @@ class AppRoutes {
     createNewPassword: (context) => const CreateNewPasswordView(),
     passwordSuccess: (context) => const PasswordSuccessView(),
     setupView: (context) => const SetupView(),
+    plannerView: (context) => const PlannerView(),
   };
 
   static GoRouter router = GoRouter(
