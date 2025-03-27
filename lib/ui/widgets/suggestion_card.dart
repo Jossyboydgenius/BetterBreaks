@@ -4,6 +4,8 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/app/routes/navigation_service.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
 
 class SuggestionCard extends StatelessWidget {
   final String dateRange;
@@ -69,7 +71,12 @@ class SuggestionCard extends StatelessWidget {
           AppButton(
             text: 'Preview',
             backgroundColor: AppColors.primary,
-            onPressed: onPreviewTap,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PlannerView()),
+              );
+            },
             height: 44.h,
           ),
         ],
