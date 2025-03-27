@@ -10,6 +10,7 @@ import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:better_breaks/ui/widgets/suggestion_card.dart';
+import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -162,9 +163,9 @@ class _SetupViewState extends State<SetupView> {
                 child: Column(
                   children: [
                     _dropdownItem('Long Weekends'),
-                    Divider(height: 1, color: AppColors.grey),
+                    // Divider(height: 1, color: AppColors.grey),
                     _dropdownItem('Extended Breaks'),
-                    Divider(height: 1, color: AppColors.grey),
+                    // Divider(height: 1, color: AppColors.grey),
                     _dropdownItem('Mix of both'),
                   ],
                 ),
@@ -172,23 +173,23 @@ class _SetupViewState extends State<SetupView> {
             ],
             if (_selectedPreference != null) ...[
               SizedBox(height: 24.h),
-              AppRadioButton(
+              AppBooleanSwitch(
                 text: 'Align with school vacations',
-                isSelected: _alignWithSchool,
-                onTap: () {
+                value: _alignWithSchool,
+                onChanged: (value) {
                   setState(() {
-                    _alignWithSchool = !_alignWithSchool;
+                    _alignWithSchool = value;
                     _alignWithPeak = false;
                   });
                 },
               ),
               SizedBox(height: 16.h),
-              AppRadioButton(
+              AppBooleanSwitch(
                 text: 'Align with peak travel season',
-                isSelected: _alignWithPeak,
-                onTap: () {
+                value: _alignWithPeak,
+                onChanged: (value) {
                   setState(() {
-                    _alignWithPeak = !_alignWithPeak;
+                    _alignWithPeak = value;
                     _alignWithSchool = false;
                   });
                 },
