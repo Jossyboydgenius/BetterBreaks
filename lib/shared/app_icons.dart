@@ -42,6 +42,7 @@ class AppIconData {
   static const String sun = '$_base/sun.svg';
   static const String sunny = '$_base/sunny.svg';
   static const String updown = '$_base/updown.svg';
+  static const String leftright = '$_base/leftright.svg';
   static const String user = '$_base/user.svg';
   static const String work = '$_base/work.svg';
   static const String zap = '$_base/zap.svg';
