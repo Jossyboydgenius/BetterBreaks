@@ -9,8 +9,8 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
-import 'package:better_breaks/ui/widgets/suggestion_card.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
+import 'package:better_breaks/ui/widgets/suggestions_content.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -201,49 +201,6 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
-  Widget _buildSuggestionsContent() {
-    return Column(
-      children: [
-        SuggestionCard(
-          dateRange: 'December 27-29',
-          description: 'Take 3 days off to get 9 days of holiday',
-          isHighImpact: true,
-          holidays: ['Christmas', 'New year'],
-          onPreviewTap: () {
-            // Handle preview tap
-          },
-        ),
-        SuggestionCard(
-          dateRange: 'November 10-20',
-          description: 'Take 3 days off to get 9 days of holiday',
-          isHighImpact: false,
-          holidays: ['Salah', 'El-fatir'],
-          onPreviewTap: () {
-            // Handle preview tap
-          },
-        ),
-        SuggestionCard(
-          dateRange: 'May 09-12',
-          description: 'Take 3 days off to get 9 days of holiday',
-          isHighImpact: false,
-          holidays: ['El-fatir', 'Salah'],
-          onPreviewTap: () {
-            // Handle preview tap
-          },
-        ),
-        SuggestionCard(
-          dateRange: 'May 09-12',
-          description: 'Take 3 days off to get 9 days of holiday',
-          isHighImpact: false,
-          holidays: ['El-fatir', 'Salah'],
-          onPreviewTap: () {
-            // Handle preview tap
-          },
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -340,7 +297,13 @@ class _SetupViewState extends State<SetupView> {
                         else if (_currentStep == 1)
                           _buildPreferenceContent()
                         else
-                          _buildSuggestionsContent(),
+                          SuggestionsContent(
+                            onBack: () {
+                              setState(() {
+                                _currentStep--;
+                              });
+                            },
+                          ),
                         if (_currentStep != 2) ...[
                           SizedBox(height: 32.h),
                           AppButton(
