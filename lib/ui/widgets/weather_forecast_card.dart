@@ -52,15 +52,25 @@ class WeatherForecastCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            date != null ? '$day $date' : day,
-            style: AppTextStyle.satoshi(
-              fontSize: 14.sp,
-              color: AppColors.lightBlack,
+            day,
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              color: AppColors.lightGrey,
             ),
           ),
+          if (date != null) ...[
+            SizedBox(height: 4.h),
+            Text(
+              date.toString(),
+              style: AppTextStyle.raleway(
+                fontSize: 14.sp,
+                color: AppColors.lightGrey,
+              ),
+            ),
+          ],
           SizedBox(height: 12.h),
           _getWeatherIcon(),
           SizedBox(height: 12.h),
