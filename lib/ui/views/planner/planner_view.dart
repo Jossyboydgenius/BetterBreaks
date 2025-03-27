@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/shared/gradient_box_border.dart';
 
 class PlannerView extends StatefulWidget {
   final VoidCallback? onBack;
@@ -99,7 +100,18 @@ class _PlannerViewState extends State<PlannerView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.grey),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white,
+            Colors.white,
+          ],
+        ),
+        border: const GradientBoxBorder(
+          gradient: AppColors.calendarBorderGradient,
+          width: 1,
+        ),
       ),
       padding: EdgeInsets.all(16.r),
       child: Column(
