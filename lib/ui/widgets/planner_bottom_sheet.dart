@@ -10,6 +10,7 @@ import 'package:better_breaks/ui/widgets/weather_forecast_card.dart';
 import 'dart:ui';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:better_breaks/ui/widgets/event_card.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -257,7 +258,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
         ),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 200.h,
+          height: 240.h,
           child: PageView(
             controller: _pageController,
             onPageChanged: (index) {
@@ -268,7 +269,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: _buildEventCard(
+                child: EventCard(
                   image: AppImageData.image,
                   title: 'Beach Yoga festival',
                   location: 'Gelora Bung Karno Stadium..',
@@ -278,7 +279,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: _buildEventCard(
+                child: EventCard(
                   image: AppImageData.image1,
                   title: 'Beach Yoga festival',
                   location: 'Gelora Bung Karno Stadium..',
@@ -288,7 +289,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: _buildEventCard(
+                child: EventCard(
                   image: AppImageData.image2,
                   title: 'Beach Yoga festival',
                   location: 'Gelora Bung Karno Stadium..',
@@ -306,7 +307,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             position: _currentEventIndex,
             decorator: DotsDecorator(
               activeColor: AppColors.primary,
-              color: AppColors.grey,
+              color: Colors.white,
               size: Size(8.r, 8.r),
               activeSize: Size(8.r, 8.r),
               spacing: EdgeInsets.symmetric(horizontal: 4.w),
@@ -314,111 +315,6 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildEventCard({
-    required String image,
-    required String title,
-    required String location,
-    required String date,
-    required String price,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.5),
-          width: 1,
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16.r),
-        child: Stack(
-          children: [
-            AppImages(
-              imagePath: image,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    padding: EdgeInsets.all(16.r),
-                    color: Colors.white.withOpacity(0.15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: AppTextStyle.raleway(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            AppIcons(
-                              icon: AppIconData.location01,
-                              size: 16.r,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: Text(
-                                location,
-                                style: AppTextStyle.satoshi(
-                                  fontSize: 14.sp,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4.h),
-                        Row(
-                          children: [
-                            AppIcons(
-                              icon: AppIconData.calendar01,
-                              size: 16.r,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              date,
-                              style: AppTextStyle.satoshi(
-                                fontSize: 14.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              price,
-                              style: AppTextStyle.raleway(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -431,7 +327,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             text: 'Accept',
             backgroundColor: AppColors.primary,
             onPressed: () {},
-            suffix: AppImages(
+            prefix: AppImages(
               imagePath: AppImageData.starEyes,
               width: 20.r,
               height: 20.r,
@@ -443,7 +339,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             backgroundColor: Colors.white,
             textColor: AppColors.lightBlack,
             onPressed: () {},
-            suffix: AppImages(
+            prefix: AppImages(
               imagePath: AppImageData.sadPensiveFace,
               width: 20.r,
               height: 20.r,
