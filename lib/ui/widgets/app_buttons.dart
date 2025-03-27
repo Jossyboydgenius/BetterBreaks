@@ -12,7 +12,7 @@ class AppButton extends StatelessWidget {
   final bool loading;
   final bool enabled;
   final double? height;
-  final Widget? suffix;
+  final Widget? prefix;
 
   const AppButton({
     super.key,
@@ -24,7 +24,7 @@ class AppButton extends StatelessWidget {
     this.loading = false,
     this.enabled = true,
     this.height,
-    this.suffix,
+    this.prefix,
   });
 
   @override
@@ -49,6 +49,10 @@ class AppButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (prefix != null) ...[
+              prefix!,
+              SizedBox(width: 8.w),
+            ],
             Text(
               text,
               style: AppTextStyle.satoshi(
@@ -57,10 +61,6 @@ class AppButton extends StatelessWidget {
                 color: textColor ?? Colors.white,
               ),
             ),
-            if (suffix != null) ...[
-              SizedBox(width: 8.w),
-              suffix!,
-            ],
           ],
         ),
       ),
