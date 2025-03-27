@@ -11,6 +11,8 @@ import 'dart:ui';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
+import 'package:better_breaks/ui/widgets/app_calendar.dart';
+import 'package:intl/intl.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -36,6 +38,254 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
   bool _isExpanded = false;
   int _currentEventIndex = 0;
   final PageController _pageController = PageController();
+  bool _showSummary = false;
+  DateTime? _startDate;
+  DateTime? _endDate;
+  int _totalBreak = 12; // Example value
+  int _selectedDays = 5; // Calculate based on selected range
+  final _dateFormat = DateFormat('dd/MM/yyyy');
+
+  void _showDatePicker(BuildContext context, bool isStartDate) async {
+    final DateTime? picked = await showDialog(
+      context: context,
+      builder: (context) => AppCalendar(
+        selectedDate: isStartDate ? (_startDate ?? DateTime.now()) : (_endDate ?? DateTime.now()),
+        onDateSelected: (date) {
+          setState(() {
+            if (isStartDate) {
+              _startDate = date;
+            } else {
+              _endDate = date;
+            }
+          });
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  Widget _buildSummaryView() {
+    return Column(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: EdgeInsets.all(24.r),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                border: Border.all(color: Colors.white.withOpacity(0.5)),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Start Date',
+                    style: AppTextStyle.satoshi(
+                      fontSize: 14.sp,
+                      color: AppColors.lightBlack,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  GestureDetector(
+                    onTap: () => _showDatePicker(context, true),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(32.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            _startDate != null ? _dateFormat.format(_startDate!) : '12/09/2003',
+                            style: AppTextStyle.satoshi(
+                              fontSize: 16.sp,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                          const Spacer(),
+                          AppIcons(
+                            icon: AppIconData.calendar,
+                            size: 20.r,
+                            color: AppColors.primaryLight,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'End Date',
+                    style: AppTextStyle.satoshi(
+                      fontSize: 14.sp,
+                      color: AppColors.lightBlack,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  GestureDetector(
+                    onTap: () => _showDatePicker(context, false),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(32.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            _endDate != null ? _dateFormat.format(_endDate!) : '12/09/2003',
+                            style: AppTextStyle.satoshi(
+                              fontSize: 16.sp,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                          const Spacer(),
+                          AppIcons(
+                            icon: AppIconData.calendar,
+                            size: 20.r,
+                            color: AppColors.primaryLight,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 24.h),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 16.w, bottom: 8.h),
+              child: Text(
+                'Leave Remaining',
+                style: AppTextStyle.satoshi(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.lightBlack,
+                ),
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.r),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  padding: EdgeInsets.all(24.r),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    border: Border.all(color: Colors.white.withOpacity(0.5)),
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Total Break',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 12.sp,
+                                    color: AppColors.lightBlack,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '$_totalBreak days',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 14.sp,
+                                    color: AppColors.orange100,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: Text(
+                              '-',
+                              style: AppTextStyle.satoshi(
+                                fontSize: 12.sp,
+                                color: AppColors.lightBlack,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Selected Days',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 12.sp,
+                                    color: AppColors.lightBlack,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '$_selectedDays days',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 14.sp,
+                                    color: AppColors.orange100,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: Text(
+                              '=',
+                              style: AppTextStyle.satoshi(
+                                fontSize: 12.sp,
+                                color: AppColors.lightBlack,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Remaining Balance',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 12.sp,
+                                    color: AppColors.lightBlack,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '${_totalBreak - _selectedDays} days',
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 14.sp,
+                                    color: AppColors.orange100,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +313,59 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             SizedBox(height: 24.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: _buildForecastContainer(),
+              child: _showSummary ? _buildSummaryView() : _buildForecastContainer(),
             ),
             SizedBox(height: 24.h),
             _buildExperienceSection(),
             SizedBox(height: 24.h),
-            _buildActionButtons(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: _showSummary
+                  ? AppButton(
+                      text: 'Confirm Selection',
+                      backgroundColor: AppColors.primary,
+                      onPressed: () {
+                        // Handle confirm selection
+                      },
+                      prefix: AppImages(
+                        imagePath: AppImageData.starEyes,
+                        width: 20.r,
+                        height: 20.r,
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        AppButton(
+                          text: 'Accept',
+                          backgroundColor: AppColors.primary,
+                          onPressed: () {
+                            setState(() {
+                              _showSummary = true;
+                            });
+                          },
+                          prefix: AppImages(
+                            imagePath: AppImageData.starEyes,
+                            width: 20.r,
+                            height: 20.r,
+                          ),
+                        ),
+                        SizedBox(height: 12.h),
+                        AppButton(
+                          text: 'Decline',
+                          backgroundColor: Colors.white,
+                          textColor: AppColors.lightBlack,
+                          onPressed: () {
+                            Navigator.pop(context); // Return to suggestion cards
+                          },
+                          prefix: AppImages(
+                            imagePath: AppImageData.sadPensiveFace,
+                            width: 20.r,
+                            height: 20.r,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
             SizedBox(height: 24.h),
           ],
         ),
@@ -315,38 +612,6 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Column(
-        children: [
-          AppButton(
-            text: 'Accept',
-            backgroundColor: AppColors.primary,
-            onPressed: () {},
-            prefix: AppImages(
-              imagePath: AppImageData.starEyes,
-              width: 20.r,
-              height: 20.r,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          AppButton(
-            text: 'Decline',
-            backgroundColor: Colors.white,
-            textColor: AppColors.lightBlack,
-            onPressed: () {},
-            prefix: AppImages(
-              imagePath: AppImageData.sadPensiveFace,
-              width: 20.r,
-              height: 20.r,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
