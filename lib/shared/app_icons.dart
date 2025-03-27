@@ -19,7 +19,9 @@ class AppIconData {
   
   // Feature icons
   static const String calendar = '$_base/calendar.svg';
+  static const String calendar01 = '$_base/calendar-01.svg';
   static const String card = '$_base/card.svg';
+  static const String analytics = '$_base/analytics.svg';
   static const String checkList = '$_base/check-list.svg';
   static const String checkmarkBadge = '$_base/checkmark-badge.svg';
   static const String crown = '$_base/crown.svg';
