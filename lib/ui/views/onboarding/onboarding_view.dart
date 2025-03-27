@@ -74,9 +74,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                       left: 0,
                       right: 0,
                       bottom: MediaQuery.of(context).size.height * (
-                        index == 0 ? 0.13 :
-                        index == 1 ? 0.25 :
-                        0.19
+                        index == 0 ? 0.20 :
+                        index == 1 ? 0.20 :
+                        0.20
                       ),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -84,15 +84,15 @@ class _OnboardingViewState extends State<OnboardingView> {
                           child: AppImages(
                             imagePath: _pages[index].image,
                             width: index == 0 
-                                ? 380.w  // Calendar view - make it wider
+                                ? 280.w  // Calendar view - make it wider
                                 : index == 1 
-                                    ? 340.w  // Analytics view
-                                    : 340.w,  // Experience view
+                                    ? 280.w  // Analytics view
+                                    : 280.w,  // Experience view
                             height: index == 0 
-                                ? 600.h  // Calendar view - taller for calendar
+                                ? 700.h  // Calendar view - taller for calendar
                                 : index == 1 
-                                    ? 500.h  // Analytics view
-                                    : 550.h,  // Experience view
+                                    ? 700.h  // Analytics view
+                                    : 700.h,  // Experience view
                             fit: BoxFit.contain,
                           ),
                         ),
