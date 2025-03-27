@@ -24,6 +24,8 @@ class _PlannerViewState extends State<PlannerView> {
   DateTime? _startDate;
   DateTime? _endDate;
   final int _currentStep = 2; 
+  bool _showMonthPicker = false;
+  bool _showYearPicker = false;
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +116,32 @@ class _PlannerViewState extends State<PlannerView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          '${_getMonthName(_currentMonth.month)} ${_currentMonth.year}',
-          style: AppTextStyle.satoshi(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColors.lightBlack,
-          ),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => _showMonthPickerDialog(),
+              child: Text(
+                _getMonthName(_currentMonth.month),
+                style: AppTextStyle.satoshi(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.lightBlack,
+                ),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            GestureDetector(
+              onTap: () => _showYearPickerDialog(),
+              child: Text(
+                _currentMonth.year.toString(),
+                style: AppTextStyle.satoshi(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.lightBlack,
+                ),
+              ),
+            ),
+          ],
         ),
         Row(
           children: [
@@ -276,6 +297,229 @@ class _PlannerViewState extends State<PlannerView> {
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month - 1];
+  }
+
+  void _showMonthPickerDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        insetPadding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 24.h),
+        child: Padding(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StatefulBuilder(
+                builder: (context, setDialogState) {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _currentMonth.year.toString(),
+                            style: AppTextStyle.satoshi(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              AppIcons(
+                                icon: AppIconData.leftArrow,
+                                onPressed: () {
+                                  setState(() {
+                                    _currentMonth = DateTime(_currentMonth.year - 1, _currentMonth.month);
+                                  });
+                                  setDialogState(() {}); // Update dialog state
+                                },
+                                size: 18.r,
+                                color: AppColors.lightBlack,
+                              ),
+                              SizedBox(width: 10.w),
+                              AppIcons(
+                                icon: AppIconData.rightArrow,
+                                onPressed: () {
+                                  setState(() {
+                                    _currentMonth = DateTime(_currentMonth.year + 1, _currentMonth.month);
+                                  });
+                                  setDialogState(() {}); // Update dialog state
+                                },
+                                size: 18.r,
+                                color: AppColors.lightBlack,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 12.h, // Reduced spacing
+                          crossAxisSpacing: 12.w, // Reduced spacing
+                          childAspectRatio: 1.5, // Make cells slightly shorter
+                        ),
+                        itemCount: 12,
+                        itemBuilder: (context, index) {
+                          final month = index + 1;
+                          final isSelected = month == _currentMonth.month;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _currentMonth = DateTime(_currentMonth.year, month);
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: isSelected ? AppColors.orange200 : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  _getMonthAbbreviation(month),
+                                  style: AppTextStyle.satoshi(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.lightBlack,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showYearPickerDialog() {
+    final currentYear = _currentMonth.year;
+    final years = List.generate(12, (index) => currentYear - 4 + index);
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        insetPadding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 24.h),
+        child: Padding(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    currentYear.toString(),
+                    style: AppTextStyle.satoshi(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.lightBlack,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      AppIcons(
+                        icon: AppIconData.leftArrow,
+                        onPressed: () {
+                          setState(() {
+                            _currentMonth = DateTime(_currentMonth.year - 12, _currentMonth.month);
+                          });
+                          Navigator.pop(context);
+                          _showYearPickerDialog();
+                        },
+                        size: 18.r,
+                        color: AppColors.lightBlack,
+                      ),
+                      SizedBox(width: 10.w),
+                      AppIcons(
+                        icon: AppIconData.rightArrow,
+                        onPressed: () {
+                          setState(() {
+                            _currentMonth = DateTime(_currentMonth.year + 12, _currentMonth.month);
+                          });
+                          Navigator.pop(context);
+                          _showYearPickerDialog();
+                        },
+                        size: 18.r,
+                        color: AppColors.lightBlack,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 12.h, // Reduced spacing
+                  crossAxisSpacing: 12.w, // Reduced spacing
+                  childAspectRatio: 1.5, // Make cells slightly shorter
+                ),
+                itemCount: years.length,
+                itemBuilder: (context, index) {
+                  final year = years[index];
+                  final isSelected = year == currentYear;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _currentMonth = DateTime(year, _currentMonth.month);
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.orange200 : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Center(
+                        child: Text(
+                          year.toString(),
+                          style: AppTextStyle.satoshi(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.lightBlack,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _getMonthAbbreviation(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     return months[month - 1];
   }
