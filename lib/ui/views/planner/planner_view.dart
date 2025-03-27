@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/shared/gradient_box_border.dart';
+import 'package:better_breaks/ui/widgets/planner_bottom_sheet.dart';
 
 class PlannerView extends StatefulWidget {
   final VoidCallback? onBack;
@@ -32,65 +33,83 @@ class _PlannerViewState extends State<PlannerView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.isSetup) ...[
-              SizedBox(height: 16.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Container(
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2.r),
-                    color: AppColors.grey,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(2.r),
-                    child: const LinearProgressIndicator(
-                      value: 1.0,
-                      backgroundColor: Colors.transparent,
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppBackButton(
-                    onPressed: widget.onBack ?? () => Navigator.pop(context),
-                  ),
-                  SizedBox(height: 24.h),
-                  Text(
-                    'Better Breaks Planner',
-                    style: AppTextStyle.ralewayExtraBold48.copyWith(
-                      fontSize: 24.sp,
-                      color: AppColors.lightBlack,
-                      fontWeight: FontWeight.w800,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.isSetup) ...[
+                  SizedBox(height: 16.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Container(
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2.r),
+                        color: AppColors.grey,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(2.r),
+                        child: const LinearProgressIndicator(
+                          value: 1.0,
+                          backgroundColor: Colors.transparent,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                Padding(
+                  padding: EdgeInsets.all(24.w),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildCalendar(),
+                      AppBackButton(
+                        onPressed: widget.onBack ?? () => Navigator.pop(context),
+                      ),
+                      SizedBox(height: 24.h),
+                      Text(
+                        'Better Breaks Planner',
+                        style: AppTextStyle.ralewayExtraBold48.copyWith(
+                          fontSize: 24.sp,
+                          color: AppColors.lightBlack,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Column(
+                        children: [
+                          _buildCalendar(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: PlannerBottomSheet(
+              startDate: _startDate,
+              endDate: _endDate,
+              description: 'Take 3 days off to get 9 days of holiday',
+              holidays: ['Christmas', 'New year'],
+              onExpand: () {
+                // Handle expand action
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
