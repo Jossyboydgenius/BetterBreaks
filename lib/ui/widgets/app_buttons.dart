@@ -12,6 +12,7 @@ class AppButton extends StatelessWidget {
   final bool loading;
   final bool enabled;
   final double? height;
+  final Widget? suffix;
 
   const AppButton({
     super.key,
@@ -23,6 +24,7 @@ class AppButton extends StatelessWidget {
     this.loading = false,
     this.enabled = true,
     this.height,
+    this.suffix,
   });
 
   @override
@@ -35,35 +37,32 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isDisabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isDisabled
-              ? AppColors.grey
-              : (isOutlined ? Colors.white : (backgroundColor ?? AppColors.lightBlue)),
-          padding: EdgeInsets.symmetric(vertical: 14.h),
+          backgroundColor: backgroundColor ?? AppColors.primary,
+          foregroundColor: textColor ?? Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.r),
-            side: isOutlined ? BorderSide(color: backgroundColor ?? AppColors.grey) : BorderSide.none,
+            side: isOutlined
+                ? BorderSide(color: AppColors.primary)
+                : BorderSide.none,
           ),
         ),
-        child: loading
-            ? SizedBox(
-                height: 20.h,
-                width: 20.h,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    isOutlined ? (backgroundColor ?? AppColors.lightBlue) : Colors.white,
-                  ),
-                ),
-              )
-            : Text(
-                text,
-                style: AppTextStyle.satoshiRegular20.copyWith(
-                  color: isOutlined
-                      ? (textColor ?? backgroundColor ?? AppColors.lightBlue)
-                      : (textColor ?? Colors.white),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14.sp,
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: textColor ?? Colors.white,
               ),
+            ),
+            if (suffix != null) ...[
+              SizedBox(width: 8.w),
+              suffix!,
+            ],
+          ],
+        ),
       ),
     );
   }
