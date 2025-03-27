@@ -65,6 +65,9 @@ dependencies:
   # Calendar
   intl: ^0.18.0
   
+  # New dependencies
+  dots_indicator: ^3.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
