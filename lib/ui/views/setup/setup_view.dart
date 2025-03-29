@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 import 'package:better_breaks/ui/widgets/suggestions_content.dart';
+import 'package:better_breaks/ui/views/home/home_view.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -209,6 +210,7 @@ class _SetupViewState extends State<SetupView> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 16.h),
               Padding(
@@ -247,6 +249,27 @@ class _SetupViewState extends State<SetupView> {
                             }
                           },
                         ),
+                        if (_currentStep == 2) ...[
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeView(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Skip',
+                              style: AppTextStyle.satoshi(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                     SizedBox(height: 24.h),
