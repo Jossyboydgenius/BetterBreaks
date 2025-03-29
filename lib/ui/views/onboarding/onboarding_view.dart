@@ -7,6 +7,7 @@ import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -110,22 +111,11 @@ class _OnboardingViewState extends State<OnboardingView> {
               child: Column(
                 children: [
                   SizedBox(height: isSmall ? 10.h : 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _pages.length,
-                      (index) => Container(
-                        margin: EdgeInsets.only(right: 8.w),
-                        width: 8.r,
-                        height: 8.r,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentPage == index
-                              ? Colors.white
-                              : Colors.white.withOpacity(0.5),
-                        ),
-                      ),
-                    ),
+                  AppDotsIndicator(
+                    dotsCount: _pages.length,
+                    position: _currentPage,
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.white.withOpacity(0.5),
                   ),
                   SizedBox(height: isSmall ? 16.h : 10.h),
                   Padding(
