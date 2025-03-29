@@ -9,11 +9,16 @@ import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'dart:ui';
-import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:better_breaks/ui/widgets/setup_bottom_sheet.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final bool setupCompleted;
+  
+  const HomeView({
+    super.key, 
+    this.setupCompleted = false
+  });
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -22,6 +27,13 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedNavIndex = 0; // 0: Dashboard, 1: Plan, 2: Experience, 3: Analytics
   double _moodValue = 2; // Initial mood (expressionless)
+  late bool _setupCompleted; // Track if setup is completed
+
+  @override
+  void initState() {
+    super.initState();
+    _setupCompleted = widget.setupCompleted; // Initialize from the widget parameter
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +61,9 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLeavePreferenceSection(),
+                      _setupCompleted 
+                          ? _buildCompletedSetupSection() 
+                          : _buildLeavePreferenceSection(),
                       SizedBox(height: 24.h),
                       MoodCheckIn(
                         onMoodSelected: (value) {
@@ -73,6 +87,121 @@ class _HomeViewState extends State<HomeView> {
                 _selectedNavIndex = index;
               });
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompletedSetupSection() {
+    return GlassyContainer(
+      backgroundColor: Colors.white,
+      borderColor: Colors.white,
+      padding: EdgeInsets.all(24.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Are you making the most of your breaks?',
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            'How well you have planned your leave',
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.lightBlack100,
+            ),
+          ),
+          SizedBox(height: 24.h),
+          
+          // Break Analysis Slider
+          const BreakAnalysisSlider(),
+          
+          SizedBox(height: 32.h),
+          
+          // Stats row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildStatCard(
+                title: 'Total Days',
+                value: '90',
+                iconData: AppIconData.calendar,
+                color: AppColors.orange100,
+              ),
+              _buildStatCard(
+                title: 'Breaks Used',
+                value: '35',
+                iconData: AppIconData.sunny,
+                color: AppColors.lightGreen,
+              ),
+              _buildStatCard(
+                title: 'Days Left',
+                value: '55',
+                iconData: AppIconData.calendar01,
+                color: AppColors.lightBlue,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required String iconData,
+    required Color color,
+  }) {
+    return Container(
+      width: 90.w,
+      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 36.r,
+            height: 36.r,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: AppIcons(
+                icon: iconData,
+                color: color,
+                size: 20.r,
+              ),
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            value,
+            style: AppTextStyle.raleway(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            title,
+            style: AppTextStyle.satoshi(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.lightBlack100,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -141,6 +270,9 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context) => SetupBottomSheet(
                   onComplete: () {
                     Navigator.pop(context); // Close the bottom sheet
+                    setState(() {
+                      _setupCompleted = true; // Mark setup as completed
+                    });
                   },
                 ),
               );
