@@ -43,7 +43,7 @@ class AppDotsIndicator extends StatelessWidget {
       position: position,
       decorator: DotsDecorator(
         activeColor: activeColor ?? AppColors.primary,
-        color: inactiveColor ?? Colors.white.withOpacity(0.5),
+        color: inactiveColor ?? Colors.white,
         size: Size(dotSize ?? 8.r, dotSize ?? 8.r),
         activeSize: Size(activeDotSize ?? dotSize ?? 8.r, activeDotSize ?? dotSize ?? 8.r),
         spacing: spacing ?? EdgeInsets.symmetric(horizontal: 4.w),
