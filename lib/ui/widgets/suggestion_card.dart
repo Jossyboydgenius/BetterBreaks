@@ -70,12 +70,7 @@ class SuggestionCard extends StatelessWidget {
           AppButton(
             text: 'Preview',
             backgroundColor: AppColors.primary,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PlannerView()),
-              );
-            },
+            onPressed: onPreviewTap,
             height: 44.h,
           ),
         ],
