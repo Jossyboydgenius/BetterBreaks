@@ -5,6 +5,8 @@ class AppTheme {
   static const String ralewayFont = "Raleway";
   static const String redRoseFont = "RedRose";
   static const String satoshiFont = "Satoshi";
+  static const String playFont = "Play";
+  static const String interVariableFont = "Inter-Variable";
 
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
