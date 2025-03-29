@@ -9,11 +9,10 @@ import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/weather_forecast_card.dart';
 import 'dart:ui';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/summary_bottom_sheet.dart';
-import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -562,16 +561,9 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         ),
         SizedBox(height: 16.h),
         Center(
-          child: DotsIndicator(
+          child: AppDotsIndicator(
             dotsCount: 3,
             position: _currentEventIndex,
-            decorator: DotsDecorator(
-              activeColor: AppColors.primary,
-              color: Colors.white.withOpacity(0.5),
-              size: Size(8.r, 8.r),
-              activeSize: Size(8.r, 8.r),
-              spacing: EdgeInsets.symmetric(horizontal: 4.w),
-            ),
           ),
         ),
       ],
