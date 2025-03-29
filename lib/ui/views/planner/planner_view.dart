@@ -87,6 +87,7 @@ class _PlannerViewState extends State<PlannerView> {
                       child: Column(
                         children: [
                           _buildCalendar(),
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.4),
                         ],
                       ),
                     ),
@@ -95,19 +96,11 @@ class _PlannerViewState extends State<PlannerView> {
               ],
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: PlannerBottomSheet(
-              startDate: _startDate,
-              endDate: _endDate,
-              description: 'Take 3 days off to get 9 days of holiday',
-              holidays: ['Christmas', 'New year'],
-              onExpand: () {
-                // Handle expand action
-              },
-            ),
+          PlannerBottomSheet(
+            startDate: _startDate,
+            endDate: _endDate,
+            description: 'Take 3 days off to get 9 days of holiday',
+            holidays: ['Christmas', 'New year'],
           ),
         ],
       ),
@@ -179,14 +172,14 @@ class _PlannerViewState extends State<PlannerView> {
             AppIcons(
               icon: AppIconData.leftArrow,
               onPressed: _previousMonth,
-              size: 18.r,
+              size: 14.r,
               color: AppColors.lightBlack,
             ),
             SizedBox(width: 10.w),
             AppIcons(
               icon: AppIconData.rightArrow,
               onPressed: _nextMonth,
-              size: 18.r,
+              size: 14.r,
               color: AppColors.lightBlack,
             ),
           ],
@@ -371,7 +364,7 @@ class _PlannerViewState extends State<PlannerView> {
                                   });
                                   setDialogState(() {}); // Update dialog state
                                 },
-                                size: 18.r,
+                                size: 14.r,
                                 color: AppColors.lightBlack,
                               ),
                               SizedBox(width: 10.w),
@@ -383,7 +376,7 @@ class _PlannerViewState extends State<PlannerView> {
                                   });
                                   setDialogState(() {}); // Update dialog state
                                 },
-                                size: 18.r,
+                                size: 14.r,
                                 color: AppColors.lightBlack,
                               ),
                             ],
@@ -480,7 +473,7 @@ class _PlannerViewState extends State<PlannerView> {
                           Navigator.pop(context);
                           _showYearPickerDialog();
                         },
-                        size: 18.r,
+                        size: 14.r,
                         color: AppColors.lightBlack,
                       ),
                       SizedBox(width: 10.w),
@@ -493,7 +486,7 @@ class _PlannerViewState extends State<PlannerView> {
                           Navigator.pop(context);
                           _showYearPickerDialog();
                         },
-                        size: 18.r,
+                        size: 14.r,
                         color: AppColors.lightBlack,
                       ),
                     ],
