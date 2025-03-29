@@ -20,6 +20,7 @@ class PlannerBottomSheet extends StatefulWidget {
   final VoidCallback? onExpand;
   final String? description;
   final List<String> holidays;
+  final VoidCallback? onComplete;
 
   const PlannerBottomSheet({
     super.key,
@@ -28,6 +29,7 @@ class PlannerBottomSheet extends StatefulWidget {
     this.onExpand,
     this.description,
     this.holidays = const [],
+    this.onComplete,
   });
 
   @override
@@ -99,7 +101,11 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTick
         },
         onConfirm: () {
           Navigator.pop(context);
+          if (widget.onComplete != null) {
+            Navigator.pop(context);
+          }
         },
+        onComplete: widget.onComplete,
       ),
     );
   }
