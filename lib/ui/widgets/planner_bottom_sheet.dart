@@ -11,9 +11,9 @@ import 'dart:ui';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
-import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/summary_bottom_sheet.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -238,35 +238,29 @@ class PlannerForecastContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.r),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.45),
-            border: Border.all(color: Colors.white.withOpacity(0.5)),
-            borderRadius: BorderRadius.circular(16.r),
+    return GlassyContainer(
+      backgroundColor: Colors.white,
+      borderColor: Colors.white,
+      blurSigmaX: 10,
+      blurSigmaY: 10,
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          PlannerDateRangeSection(
+            startDate: startDate,
+            endDate: endDate,
+            description: description,
+            holidays: holidays,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PlannerDateRangeSection(
-                startDate: startDate,
-                endDate: endDate,
-                description: description,
-                holidays: holidays,
-              ),
-              Divider(color: Colors.white.withOpacity(0.5), height: 1.h),
-              WeatherForecastSection(
-                isExpanded: isExpanded,
-                expandAnimation: expandAnimation,
-                onExpand: onExpand,
-                onCollapse: onCollapse,
-              ),
-            ],
+          Divider(color: Colors.white.withOpacity(0.5), height: 1.h),
+          WeatherForecastSection(
+            isExpanded: isExpanded,
+            expandAnimation: expandAnimation,
+            onExpand: onExpand,
+            onCollapse: onCollapse,
           ),
-        ),
+        ],
       ),
     );
   }
