@@ -13,7 +13,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/summary_bottom_sheet.dart';
-import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -323,7 +323,7 @@ class PlannerDateRangeSection extends StatelessWidget {
                 spacing: 8.w,
                 runSpacing: 8.h,
                 children: holidays
-                    .map((holiday) => AppBadge.holiday(name: holiday))
+                    .map((holiday) => AppBadge.holiday(text: holiday))
                     .toList(),
               ),
             ],
