@@ -46,7 +46,7 @@ class AppStatCard extends StatelessWidget {
                   child: AppIcons(
                     icon: iconData,
                     color: color,
-                    size: 14.r,
+                    size: 20.r,
                   ),
                 ),
               ),
