@@ -343,6 +343,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             // Track current display year separately
             int displayYear = currentYear;
             
+            // Calculate responsive height based on design spec (approximately 3 rows of months)
+            double gridHeight = MediaQuery.of(context).size.height * 0.16;
+            // Ensure height stays within reasonable bounds
+            gridHeight = gridHeight.clamp(110.0, 140.0);
+            
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
               child: Column(
@@ -390,7 +395,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   ),
                   SizedBox(height: 12.h),
                   SizedBox(
-                    height: 130.h,
+                    height: gridHeight,
                     child: PageView.builder(
                       controller: pageController,
                       onPageChanged: (page) {
@@ -471,6 +476,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             int startYear = baseYear - 5 + (rangeOffset * 12);
             int endYear = baseYear + 6 + (rangeOffset * 12);
             
+            // Calculate responsive height based on design spec (approximately 3 rows of years)
+            double gridHeight = MediaQuery.of(context).size.height * 0.16;
+            // Ensure height stays within reasonable bounds
+            gridHeight = gridHeight.clamp(110.0, 130.0);
+            
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
               child: Column(
@@ -518,7 +528,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   ),
                   SizedBox(height: 12.h),
                   SizedBox(
-                    height: 130.h, // Fixed compact height
+                    height: gridHeight,
                     child: PageView.builder(
                       controller: pageController,
                       onPageChanged: (page) {
