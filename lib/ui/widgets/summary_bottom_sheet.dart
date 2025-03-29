@@ -10,7 +10,7 @@ import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
-import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
 class SummaryBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -199,7 +199,6 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
         ),
         SizedBox(height: 8.h),
         GlassyContainer(
-          width: double.infinity,
           padding: EdgeInsets.all(24.r),
           backgroundColor: Colors.white,
           borderColor: Colors.white,
