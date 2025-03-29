@@ -10,6 +10,7 @@ import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class SummaryBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -124,26 +125,19 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
   }
 
   Widget _buildDateSelectionContainer() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.r),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          padding: EdgeInsets.all(24.r),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            border: Border.all(color: Colors.white.withOpacity(0.5)),
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildDateInput('Start Date', widget.startDate, true),
-              SizedBox(height: 16.h),
-              _buildDateInput('End Date', widget.endDate, false),
-            ],
-          ),
-        ),
+    return GlassyContainer(
+      padding: EdgeInsets.all(24.r),
+      backgroundColor: Colors.white,
+      borderColor: Colors.white,
+      blurSigmaX: 10,
+      blurSigmaY: 10,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDateInput('Start Date', widget.startDate, true),
+          SizedBox(height: 16.h),
+          _buildDateInput('End Date', widget.endDate, false),
+        ],
       ),
     );
   }
@@ -171,7 +165,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
             child: Row(
               children: [
                 Text(
-                  date != null ? _dateFormat.format(date) : '12/09/2003',
+                  date != null ? _dateFormat.format(date) : 'DD/MM/YYYY',
                   style: AppTextStyle.satoshi(
                     fontSize: 16.sp,
                     color: AppColors.lightBlack,
@@ -198,47 +192,40 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
         Text(
           'Leave Remaining',
           style: AppTextStyle.satoshi(
-            fontSize: 14.sp,
+            fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.lightBlack,
           ),
         ),
         SizedBox(height: 8.h),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(24.r),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                border: Border.all(color: Colors.white.withOpacity(0.5)),
-                borderRadius: BorderRadius.circular(16.r),
+        GlassyContainer(
+          width: double.infinity,
+          padding: EdgeInsets.all(24.r),
+          backgroundColor: Colors.white,
+          borderColor: Colors.white,
+          blurSigmaX: 10,
+          blurSigmaY: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildLeaveColumn('Total Break', _totalBreak),
+              Text(
+                '-',
+                style: AppTextStyle.satoshi(
+                  fontSize: 14.sp,
+                  color: AppColors.lightBlack,
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildLeaveColumn('Total Break', _totalBreak),
-                  Text(
-                    '-',
-                    style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
-                  _buildLeaveColumn('Selected Days', _selectedDays),
-                  Text(
-                    '=',
-                    style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
-                  _buildLeaveColumn('Remaining Balance', _totalBreak - _selectedDays),
-                ],
+              _buildLeaveColumn('Selected Days', _selectedDays),
+              Text(
+                '=',
+                style: AppTextStyle.satoshi(
+                  fontSize: 14.sp,
+                  color: AppColors.lightBlack,
+                ),
               ),
-            ),
+              _buildLeaveColumn('Remaining Balance', _totalBreak - _selectedDays),
+            ],
           ),
         ),
       ],
@@ -248,11 +235,16 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
   Widget _buildLeaveColumn(String label, int days) {
     return Column(
       children: [
-        Text(
-          label,
-          style: AppTextStyle.satoshi(
-            fontSize: 12.sp,
-            color: AppColors.lightBlack,
+        SizedBox(
+          width: 85.w,
+          child: Text(
+            label,
+            style: AppTextStyle.satoshi(
+              fontSize: 12.sp,
+              color: AppColors.lightBlack,
+            ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         Text(
