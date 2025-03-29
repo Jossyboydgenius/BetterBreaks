@@ -22,7 +22,8 @@ class ExpandedWeatherForecast extends StatelessWidget {
             child: Text(
               day,
               style: AppTextStyle.raleway(
-                fontSize: 16.sp,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
                 color: AppColors.lightBlack,
               ),
             ),
@@ -35,8 +36,10 @@ class ExpandedWeatherForecast extends StatelessWidget {
           SizedBox(width: 16.w),
           Text(
             '$lowTemp°',
-            style: AppTextStyle.raleway(
-              fontSize: 16.sp,
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.lightBlack,
             ),
           ),
           SizedBox(width: 12.w),
@@ -52,8 +55,9 @@ class ExpandedWeatherForecast extends StatelessWidget {
           SizedBox(width: 12.w),
           Text(
             '$highTemp°',
-            style: AppTextStyle.raleway(
-              fontSize: 16.sp,
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
               color: AppColors.lightBlack,
             ),
           ),
@@ -83,9 +87,9 @@ class ExpandedWeatherForecast extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '10 Day weather Forecast',
-          style: AppTextStyle.raleway(
-            fontSize: 16.sp,
+          '10 Days Weather Prediction',
+          style: AppTextStyle.satoshi(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.lightBlack,
           ),
