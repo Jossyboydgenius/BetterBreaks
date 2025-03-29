@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/calendar_widget.dart';
 import 'package:better_breaks/ui/widgets/planner_bottom_sheet.dart';
+import 'package:better_breaks/ui/views/home/home_view.dart';
 
 class PlannerView extends StatefulWidget {
   final VoidCallback? onBack;
@@ -111,6 +112,14 @@ class _PlannerViewState extends State<PlannerView> {
             endDate: _endDate,
             description: 'Take 3 days off to get 9 days of holiday',
             holidays: ['Christmas', 'New year'],
+            onComplete: widget.isSetup ? () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeView(setupCompleted: true),
+                ),
+              );
+            } : null,
           ),
         ],
       ),
