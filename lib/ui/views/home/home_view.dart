@@ -8,6 +8,8 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
+import 'package:better_breaks/ui/widgets/break_recommendation_widget.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'dart:ui';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:better_breaks/ui/widgets/setup_bottom_sheet.dart';
@@ -33,6 +35,11 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _setupCompleted = widget.setupCompleted; // Initialize from the widget parameter
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -64,6 +71,57 @@ class _HomeViewState extends State<HomeView> {
                       _setupCompleted 
                           ? _buildCompletedSetupSection() 
                           : _buildLeavePreferenceSection(),
+                      SizedBox(height: 24.h),
+                      BreakRecommendationWidget(
+                        title: 'Breaks Recommendation',
+                        onSeeAllTap: () {
+                          // Navigate to see all recommendations
+                        },
+                        recommendations: [
+                          RecommendationItem(
+                            dateRange: 'December 27-29',
+                            description: 'Take 3 days off to get 9 days of holiday',
+                            isHighImpact: true,
+                            holidays: ['Christmas', 'New year'],
+                            onPreviewTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PlannerView(),
+                                ),
+                              );
+                            },
+                          ),
+                          RecommendationItem(
+                            dateRange: 'January 15-18',
+                            description: 'Take 3 days off to get 9 days of holiday',
+                            isHighImpact: true,
+                            holidays: ['Easter', 'Spring break'],
+                            onPreviewTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PlannerView(),
+                                ),
+                              );
+                            },
+                          ),
+                          RecommendationItem(
+                            dateRange: 'May 22-26',
+                            description: 'Take 4 days off to get 9 days of holiday',
+                            isHighImpact: false,
+                            holidays: ['Memorial Day', 'Summer start'],
+                            onPreviewTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PlannerView(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 24.h),
                       MoodCheckIn(
                         onMoodSelected: (value) {
