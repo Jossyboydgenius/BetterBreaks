@@ -16,6 +16,7 @@ class AppIconData {
   static const String dashboard = '$_base/dashboard-square.svg';
   static const String settings = '$_base/settings.svg';
   static const String logout = '$_base/logout.svg';
+  static const String close = '$_base/close.svg';
   
   // Feature icons
   static const String calendar = '$_base/calendar.svg';
