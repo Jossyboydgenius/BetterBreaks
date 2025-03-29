@@ -73,7 +73,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         children: [
           _buildCalendarHeader(),
           SizedBox(height: 16.h),
-          _buildCalendarGrid(),
+          GestureDetector(
+            onHorizontalDragEnd: (details) {
+              // Determine swipe direction based on velocity
+              if (details.primaryVelocity != null) {
+                if (details.primaryVelocity! > 0) {
+                  // Swiping from left to right (go to previous month)
+                  _previousMonth();
+                } else {
+                  // Swiping from right to left (go to next month)
+                  _nextMonth();
+                }
+              }
+            },
+            child: _buildCalendarGrid(),
+          ),
         ],
       ),
     );
