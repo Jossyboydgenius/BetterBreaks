@@ -26,7 +26,7 @@ class AppRoutes {
   static const String setupView = '/setup-view';
   static const String plannerView = '/planner-view';
   
-  static const String initialRoute = splashScreenView;
+  static const String initialRoute = setupView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
