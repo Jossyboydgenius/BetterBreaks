@@ -256,7 +256,7 @@ class _SetupViewState extends State<SetupView> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomeView(),
+                                  builder: (context) => const HomeView(setupCompleted: false),
                                 ),
                               );
                             },
