@@ -40,7 +40,7 @@ class EventCard extends StatelessWidget {
         );
       },
       child: Container(
-        height: 240.h, // Increased height
+        height: 240.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
@@ -52,18 +52,22 @@ class EventCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           child: Stack(
             children: [
+              // Background image
               AppImages(
                 imagePath: image,
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
               ),
+              
+              // Content overlay
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 0,
                 child: Column(
                   children: [
+                    // White separator line
                     Container(
                       height: 2.h,
                       color: Colors.white.withOpacity(0.6),
@@ -77,73 +81,93 @@ class EventCard extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Title
                               Text(
                                 title,
                                 style: AppTextStyle.raleway(
-                                  fontSize: 15.sp,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
                               ),
-                              SizedBox(height: 4.h),
+                              // SizedBox(height: 4.h),
+                              
+                              // Location and Price label in a row
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  AppIcons(
-                                    icon: AppIconData.location01,
-                                    size: 14.r,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 8.w),
+                                  // Location and icon
                                   Expanded(
-                                    child: Text(
-                                      location,
-                                      style: AppTextStyle.satoshi(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        AppIcons(
+                                          icon: AppIconData.location01,
+                                          size: 14.r,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Expanded(
+                                          child: Text(
+                                            location,
+                                            style: AppTextStyle.satoshi(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                              // SizedBox(height: 4.h),
-                              Row(
-                                children: [
-                                  AppIcons(
-                                    icon: AppIconData.calendar01,
-                                    size: 14.r,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 8.w),
+                                  
+                                  // Price label (right aligned)
                                   Text(
-                                    date,
+                                    'Price',
                                     style: AppTextStyle.satoshi(
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white,
                                     ),
                                   ),
-                                  const Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'Price',
-                                        style: AppTextStyle.satoshi(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
+                                ],
+                              ),
+                              
+                              // SizedBox(height: 14.h),
+                              
+                              // Date and Price value in a row
+                              Row(
+                                children: [
+                                  // Date
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        AppIcons(
+                                          icon: AppIconData.calendar01,
+                                          size: 14.r,
                                           color: Colors.white,
                                         ),
-                                      ),
-                                      Text(
-                                        price,
-                                        style: AppTextStyle.satoshi(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          date,
+                                          style: AppTextStyle.satoshi(
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                  ),
+                                  
+                                  // Price value
+                                  Text(
+                                    price,
+                                    style: AppTextStyle.satoshi(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),
