@@ -10,6 +10,7 @@ import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'dart:ui';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/ui/widgets/setup_bottom_sheet.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -126,7 +127,23 @@ class _HomeViewState extends State<HomeView> {
             text: 'Set up',
             backgroundColor: AppColors.primary,
             onPressed: () {
-              // Navigate to setup preferences screen
+              // Show setup bottomsheet
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                isDismissible: true,
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(24.r),
+                  ),
+                ),
+                builder: (context) => SetupBottomSheet(
+                  onComplete: () {
+                    Navigator.pop(context); // Close the bottom sheet
+                  },
+                ),
+              );
             },
             height: 44.h,
           ),
