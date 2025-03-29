@@ -16,6 +16,8 @@ class AppImageData {
   static const String planner = '$_base/planner.png';
   static const String sittingWoman = '$_base/sitting-woman-with-open-laptop.png';
   static const String vikingHelmet = '$_base/viking-helmet.png';
+  static const String stackBolt = '$_base/stack-bolt.png';
+  static const String calendarPlanner = '$_base/calendar-planner.png';
   static const String user = '$_base/user.png';
   static const String image = '$_base/image.png';
   static const String image1 = '$_base/image1.png';
