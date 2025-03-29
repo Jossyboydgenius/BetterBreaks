@@ -163,7 +163,7 @@ class EventCard extends StatelessWidget {
                                   // Price value
                                   Text(
                                     price,
-                                    style: AppTextStyle.satoshi(
+                                    style: AppTextStyle.interVariable(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
