@@ -27,8 +27,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   late DateTime _currentMonth;
   late DateTime? _startDate;
   late DateTime? _endDate;
-  bool _showMonthPicker = false;
-  bool _showYearPicker = false;
+  
+  // Page controller for month swipe
+  late PageController _pageController;
+  
+  // Keep track of the page index to manage the infinitely scrolling PageView
+  int _currentPageIndex = 1000; // Start with an arbitrary large number
 
   @override
   void initState() {
@@ -36,6 +40,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     _currentMonth = DateTime.now();
     _startDate = widget.startDate;
     _endDate = widget.endDate;
+    _pageController = PageController(initialPage: _currentPageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -73,21 +84,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         children: [
           _buildCalendarHeader(),
           SizedBox(height: 16.h),
-          GestureDetector(
-            onHorizontalDragEnd: (details) {
-              // Determine swipe direction based on velocity
-              if (details.primaryVelocity != null) {
-                if (details.primaryVelocity! > 0) {
-                  // Swiping from left to right (go to previous month)
-                  _previousMonth();
-                } else {
-                  // Swiping from right to left (go to next month)
-                  _nextMonth();
-                }
-              }
-            },
-            child: _buildCalendarGrid(),
-          ),
+          _buildCalendarGrid(),
         ],
       ),
     );
@@ -150,9 +147,39 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       children: [
         _buildWeekdayHeader(),
         SizedBox(height: 16.h),
-        _buildDaysGrid(),
+        Container(
+          height: 240.h, // Adjusted height
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: _handlePageChange,
+            itemBuilder: (context, index) {
+              // Calculate the month offset relative to the current month
+              final monthOffset = index - _currentPageIndex;
+              final targetMonth = DateTime(
+                _currentMonth.year,
+                _currentMonth.month + monthOffset,
+              );
+              return _buildMonthGrid(targetMonth);
+            },
+          ),
+        ),
       ],
     );
+  }
+  
+  void _handlePageChange(int page) {
+    if (page != _currentPageIndex) {
+      final monthDiff = page - _currentPageIndex;
+      final newMonth = DateTime(
+        _currentMonth.year,
+        _currentMonth.month + monthDiff,
+      );
+      
+      setState(() {
+        _currentMonth = newMonth;
+        _currentPageIndex = page;
+      });
+    }
   }
 
   Widget _buildWeekdayHeader() {
@@ -177,9 +204,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     );
   }
 
-  Widget _buildDaysGrid() {
-    final daysInMonth = DateTime(_currentMonth.year, _currentMonth.month + 1, 0).day;
-    final firstDayOfMonth = DateTime(_currentMonth.year, _currentMonth.month, 1);
+  Widget _buildMonthGrid(DateTime month) {
+    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    final firstDayOfMonth = DateTime(month.year, month.month, 1);
     final firstWeekday = firstDayOfMonth.weekday;
 
     return GridView.builder(
@@ -199,7 +226,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           return const SizedBox();
         }
 
-        final date = DateTime(_currentMonth.year, _currentMonth.month, day);
+        final date = DateTime(month.year, month.month, day);
         final isStartDate = _startDate?.year == date.year && 
                            _startDate?.month == date.month && 
                            _startDate?.day == date.day;
@@ -276,15 +303,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   void _previousMonth() {
-    setState(() {
-      _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
-    });
+    // Animate to the previous page
+    _pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   void _nextMonth() {
-    setState(() {
-      _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
-    });
+    // Animate to the next page
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   String _getMonthName(int month) {
@@ -296,6 +327,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   void _showMonthPickerDialog() {
+    final currentYear = _currentMonth.year;
+    final PageController pageController = PageController(initialPage: 1000); // Large initial page for "infinite" scrolling
+    
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -304,110 +338,124 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           borderRadius: BorderRadius.circular(16.r),
         ),
         insetPadding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 24.h),
-        child: Padding(
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StatefulBuilder(
-                builder: (context, setDialogState) {
-                  return Column(
+        child: StatefulBuilder(
+          builder: (context, setDialogState) {
+            // Track current display year separately
+            int displayYear = currentYear;
+            
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(
+                        displayYear.toString(),
+                        style: AppTextStyle.satoshi(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.lightBlack,
+                        ),
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            _currentMonth.year.toString(),
-                            style: AppTextStyle.satoshi(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.lightBlack,
-                            ),
+                          AppIcons(
+                            icon: AppIconData.leftArrow,
+                            onPressed: () {
+                              pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            size: 18.r,
+                            color: AppColors.lightBlack,
                           ),
-                          Row(
-                            children: [
-                              AppIcons(
-                                icon: AppIconData.leftArrow,
-                                onPressed: () {
-                                  setState(() {
-                                    _currentMonth = DateTime(_currentMonth.year - 1, _currentMonth.month);
-                                  });
-                                  setDialogState(() {}); // Update dialog state
-                                },
-                                size: 18.r,
-                                color: AppColors.lightBlack,
-                              ),
-                              SizedBox(width: 20.w),
-                              AppIcons(
-                                icon: AppIconData.rightArrow,
-                                onPressed: () {
-                                  setState(() {
-                                    _currentMonth = DateTime(_currentMonth.year + 1, _currentMonth.month);
-                                  });
-                                  setDialogState(() {}); // Update dialog state
-                                },
-                                size: 18.r,
-                                color: AppColors.lightBlack,
-                              ),
-                            ],
+                          SizedBox(width: 20.w),
+                          AppIcons(
+                            icon: AppIconData.rightArrow,
+                            onPressed: () {
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            size: 18.r,
+                            color: AppColors.lightBlack,
                           ),
                         ],
                       ),
-                      SizedBox(height: 16.h),
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          mainAxisSpacing: 12.h,
-                          crossAxisSpacing: 12.w,
-                          childAspectRatio: 1.5,
-                        ),
-                        itemCount: 12,
-                        itemBuilder: (context, index) {
-                          final month = index + 1;
-                          final isSelected = month == _currentMonth.month;
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _currentMonth = DateTime(_currentMonth.year, month);
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: isSelected ? AppColors.orange200 : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  _getMonthAbbreviation(month),
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.lightBlack,
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  SizedBox(
+                    height: 130.h,
+                    child: PageView.builder(
+                      controller: pageController,
+                      onPageChanged: (page) {
+                        setDialogState(() {
+                          displayYear = currentYear + (page - 1000);
+                        });
+                      },
+                      itemBuilder: (context, pageIndex) {
+                        final year = currentYear + (pageIndex - 1000);
+                        
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 8.h,
+                            crossAxisSpacing: 8.w,
+                            childAspectRatio: 2.0,
+                          ),
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            final month = index + 1;
+                            final isSelected = month == _currentMonth.month && year == _currentMonth.year;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _currentMonth = DateTime(year, month);
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: isSelected ? AppColors.orange200 : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    _getMonthAbbreviation(month),
+                                    style: AppTextStyle.satoshi(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.lightBlack,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
   void _showYearPickerDialog() {
-    final currentYear = _currentMonth.year;
-    final years = List.generate(12, (index) => currentYear - 4 + index);
-
+    final int baseYear = DateTime.now().year;
+    final PageController pageController = PageController(initialPage: 1000);
+    
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -416,95 +464,122 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           borderRadius: BorderRadius.circular(16.r),
         ),
         insetPadding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 24.h),
-        child: Padding(
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: StatefulBuilder(
+          builder: (context, setDialogState) {
+            // Local state for the current page's year range
+            int rangeOffset = 0;
+            int startYear = baseYear - 5 + (rangeOffset * 12);
+            int endYear = baseYear + 6 + (rangeOffset * 12);
+            
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    currentYear.toString(),
-                    style: AppTextStyle.satoshi(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AppIcons(
-                        icon: AppIconData.leftArrow,
-                        onPressed: () {
-                          setState(() {
-                            _currentMonth = DateTime(_currentMonth.year - 12, _currentMonth.month);
-                          });
-                          Navigator.pop(context);
-                          _showYearPickerDialog();
-                        },
-                        size: 18.r,
-                        color: AppColors.lightBlack,
+                      Text(
+                        "${startYear} - ${endYear}",
+                        style: AppTextStyle.satoshi(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.lightBlack,
+                        ),
                       ),
-                      SizedBox(width: 20.w),
-                      AppIcons(
-                        icon: AppIconData.rightArrow,
-                        onPressed: () {
-                          setState(() {
-                            _currentMonth = DateTime(_currentMonth.year + 12, _currentMonth.month);
-                          });
-                          Navigator.pop(context);
-                          _showYearPickerDialog();
-                        },
-                        size: 18.r,
-                        color: AppColors.lightBlack,
+                      Row(
+                        children: [
+                          AppIcons(
+                            icon: AppIconData.leftArrow,
+                            onPressed: () {
+                              pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            size: 18.r,
+                            color: AppColors.lightBlack,
+                          ),
+                          SizedBox(width: 20.w),
+                          AppIcons(
+                            icon: AppIconData.rightArrow,
+                            onPressed: () {
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                            size: 18.r,
+                            color: AppColors.lightBlack,
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  SizedBox(height: 12.h),
+                  SizedBox(
+                    height: 130.h, // Fixed compact height
+                    child: PageView.builder(
+                      controller: pageController,
+                      onPageChanged: (page) {
+                        setDialogState(() {
+                          rangeOffset = page - 1000;
+                          startYear = baseYear - 5 + (rangeOffset * 12);
+                          endYear = baseYear + 6 + (rangeOffset * 12);
+                        });
+                      },
+                      itemBuilder: (context, pageIndex) {
+                        final pageOffset = pageIndex - 1000;
+                        final pageStartYear = baseYear - 5 + (pageOffset * 12);
+                        final List<int> years = List.generate(12, (index) => pageStartYear + index);
+                        
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 8.h,
+                            crossAxisSpacing: 8.w,
+                            childAspectRatio: 2.0,
+                          ),
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            final year = years[index];
+                            final isSelected = year == _currentMonth.year;
+                            
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _currentMonth = DateTime(year, _currentMonth.month);
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: isSelected ? AppColors.orange200 : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    year.toString(),
+                                    style: AppTextStyle.satoshi(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.lightBlack,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 16.h),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 12.h,
-                  crossAxisSpacing: 12.w,
-                  childAspectRatio: 1.5,
-                ),
-                itemCount: years.length,
-                itemBuilder: (context, index) {
-                  final year = years[index];
-                  final isSelected = year == currentYear;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _currentMonth = DateTime(year, _currentMonth.month);
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.orange200 : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Center(
-                        child: Text(
-                          year.toString(),
-                          style: AppTextStyle.satoshi(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.lightBlack,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -517,4 +592,5 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     ];
     return months[month - 1];
   }
-} 
+}
+  
