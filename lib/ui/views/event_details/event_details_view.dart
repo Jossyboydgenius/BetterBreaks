@@ -4,7 +4,7 @@
   import 'package:better_breaks/shared/app_textstyle.dart';
   import 'package:better_breaks/shared/app_icons.dart';
   import 'package:better_breaks/shared/app_images.dart';
-  import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+  import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
   class EventDetailsView extends StatelessWidget {
     final String image;
@@ -141,10 +141,10 @@
                             ),
                           ),
                           
-                          // Price Value
+                        // Price Value
                           Text(
                             price,
-                            style: AppTextStyle.satoshi(
+                            style: AppTextStyle.interVariable(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.lightBlack,
@@ -160,7 +160,7 @@
                         height: 1,
                         color: Colors.white.withOpacity(0.3),
                       ),
-                      SizedBox(height: 8.h),
+                      // SizedBox(height: 8.h),
                       
                       // About section
                       Text(
