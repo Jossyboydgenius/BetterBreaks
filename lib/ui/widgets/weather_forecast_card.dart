@@ -53,11 +53,11 @@ class WeatherForecastCard extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      children: [
           Text(
             day,
             style: AppTextStyle.raleway(
-              fontSize: 16.sp,
+              fontSize: 12.sp,
               color: AppColors.lightGrey,
             ),
           ),
@@ -66,7 +66,7 @@ class WeatherForecastCard extends StatelessWidget {
             Text(
               date.toString(),
               style: AppTextStyle.raleway(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: AppColors.lightGrey,
               ),
             ),
@@ -77,7 +77,7 @@ class WeatherForecastCard extends StatelessWidget {
           Text(
             temperature,
             style: AppTextStyle.satoshi(
-              fontSize: 14.sp,
+              fontSize: 15.sp,
               color: AppColors.lightBlack,
             ),
           ),
