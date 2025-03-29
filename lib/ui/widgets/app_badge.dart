@@ -33,44 +33,14 @@ class AppBadge extends StatelessWidget {
     );
   }
 
-  factory AppBadge.holiday({required String name}) {
-    switch (name.toLowerCase()) {
-      case 'christmas':
-        return AppBadge(
-          text: 'Christmas',
-          backgroundColor: AppColors.bgRed100,
-          textColor: AppColors.red100,
-          isSmall: true,
-        );
-      case 'new year':
-        return AppBadge(
-          text: 'New year',
-          backgroundColor: AppColors.bgIndigo,
-          textColor: AppColors.indigo,
-          isSmall: true,
-        );
-      case 'el-fatir':
-        return AppBadge(
-          text: 'El-fatir',
-          backgroundColor: AppColors.orange200,
-          textColor: AppColors.orange100,
-          isSmall: true,
-        );
-      case 'salah':
-        return AppBadge(
-          text: 'Salah',
-          backgroundColor: AppColors.cream,
-          textColor: AppColors.amber,
-          isSmall: true,
-        );
-      default:
-        return AppBadge(
-          text: name,
-          backgroundColor: AppColors.grey100,
-          textColor: AppColors.grey600,
-          isSmall: true,
-        );
-    }
+  factory AppBadge.holiday({
+    required String text,
+  }) {
+    return AppBadge(
+      text: text,
+      backgroundColor: const Color(0xFFFFFBE6),
+      textColor: const Color(0xFFFBB904),
+    );
   }
 
   @override
