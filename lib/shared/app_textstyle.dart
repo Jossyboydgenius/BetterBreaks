@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:better_breaks/app/themes.dart';
 
 abstract class AppTextStyle {
+  // Play styles
+  static TextStyle get playBold32 => TextStyle(
+    fontFamily: AppTheme.playFont,
+    fontSize: 32,
+    fontWeight: AppFontWeight.bold,
+  );
+
   // RedRose styles
   static TextStyle get redRoseBold32 => TextStyle(
     fontFamily: AppTheme.redRoseFont,
@@ -24,6 +31,17 @@ abstract class AppTextStyle {
   );
 
   // Helper methods for creating custom styles
+  static TextStyle play({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+  }) => TextStyle(
+    fontFamily: AppTheme.playFont,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color,
+  );
+
   static TextStyle redRose({
     double? fontSize,
     FontWeight? fontWeight,
@@ -52,6 +70,17 @@ abstract class AppTextStyle {
     Color? color,
   }) => TextStyle(
     fontFamily: AppTheme.satoshiFont,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color,
+  );
+
+  static TextStyle interVariable({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+  }) => TextStyle(
+    fontFamily: AppTheme.interVariableFont,
     fontSize: fontSize,
     fontWeight: fontWeight,
     color: color,
