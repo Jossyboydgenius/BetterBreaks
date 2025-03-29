@@ -35,34 +35,53 @@ class PlannerBottomSheet extends StatefulWidget {
   State<PlannerBottomSheet> createState() => _PlannerBottomSheetState();
 }
 
-class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
+class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTickerProviderStateMixin {
+  final _dateFormat = DateFormat('dd/MM/yyyy');
+  final DraggableScrollableController _dragController = DraggableScrollableController();
+  
+  // Animation controller for weather expand/collapse
+  late AnimationController _animationController;
+  late Animation<double> _expandAnimation;
+  
   bool _isExpanded = false;
-  int _currentEventIndex = 0;
-  final PageController _pageController = PageController();
   bool _showSummary = false;
   DateTime? _startDate;
   DateTime? _endDate;
-  int _totalBreak = 12; // Example value
-  int _selectedDays = 5; // Calculate based on selected range
-  final _dateFormat = DateFormat('dd/MM/yyyy');
 
-  void _showDatePicker(BuildContext context, bool isStartDate) async {
-    final DateTime? picked = await showDialog(
-      context: context,
-      builder: (context) => AppCalendar(
-        selectedDate: isStartDate ? (_startDate ?? DateTime.now()) : (_endDate ?? DateTime.now()),
-        onDateSelected: (date) {
-          setState(() {
-            if (isStartDate) {
-              _startDate = date;
-            } else {
-              _endDate = date;
-            }
-          });
-          Navigator.pop(context);
-        },
-      ),
+  @override
+  void initState() {
+    super.initState();
+    _startDate = widget.startDate;
+    _endDate = widget.endDate;
+    
+    // Setup animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
     );
+    
+    _expandAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+  }
+  
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _dragController.dispose();
+    super.dispose();
+  }
+
+  void _toggleExpanded() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
   }
 
   void _onAccept() {
@@ -80,325 +99,145 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
           setState(() => _endDate = date);
         },
         onConfirm: () {
-          // Handle confirmation
           Navigator.pop(context);
         },
       ),
     );
   }
 
-  Widget _buildSummaryView() {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              padding: EdgeInsets.all(24.r),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                border: Border.all(color: Colors.white.withOpacity(0.5)),
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Start Date',
-                    style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () => _showDatePicker(context, true),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            _startDate != null ? _dateFormat.format(_startDate!) : '12/09/2003',
-                            style: AppTextStyle.satoshi(
-                              fontSize: 16.sp,
-                              color: AppColors.lightBlack,
-                            ),
-                          ),
-                          const Spacer(),
-                          AppIcons(
-                            icon: AppIconData.calendar,
-                            size: 20.r,
-                            color: AppColors.primaryLight,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    'End Date',
-                    style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () => _showDatePicker(context, false),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(32.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            _endDate != null ? _dateFormat.format(_endDate!) : '12/09/2003',
-                            style: AppTextStyle.satoshi(
-                              fontSize: 16.sp,
-                              color: AppColors.lightBlack,
-                            ),
-                          ),
-                          const Spacer(),
-                          AppIcons(
-                            icon: AppIconData.calendar,
-                            size: 20.r,
-                            color: AppColors.primaryLight,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.4, // 40% of screen height
+      minChildSize: 0.2, // Minimum 20% of screen height
+      maxChildSize: 0.8, // Maximum 80% of screen height
+      snap: true,
+      snapSizes: const [0.2, 0.4, 0.8],
+      controller: _dragController,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
             ),
           ),
-        ),
-        SizedBox(height: 24.h),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 16.w, bottom: 8.h),
-              child: Text(
-                'Leave Remaining',
-                style: AppTextStyle.satoshi(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.lightBlack,
-                ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Draggable indicator - Now wrapped in GestureDetector
+              GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  // Calculate new size based on drag
+                  final newSize = _dragController.size - (details.delta.dy / MediaQuery.of(context).size.height);
+                  // Clamp to min/max bounds
+                  final clampedSize = newSize.clamp(0.2, 0.8);
+                  // Update controller
+                  if (_dragController.size != clampedSize && clampedSize >= 0.2 && clampedSize <= 0.8) {
+                    _dragController.jumpTo(clampedSize);
+                  }
+                },
+                behavior: HitTestBehavior.translucent,
+                child: DraggableIndicator(),
               ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16.r),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  padding: EdgeInsets.all(24.r),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    border: Border.all(color: Colors.white.withOpacity(0.5)),
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
+              
+              // Scrollable content
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Total Break',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 12.sp,
-                                    color: AppColors.lightBlack,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '$_totalBreak days',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 14.sp,
-                                    color: AppColors.orange100,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      if (!_showSummary) ...[
+                        PlannerForecastContainer(
+                          startDate: widget.startDate,
+                          endDate: widget.endDate,
+                          description: widget.description,
+                          holidays: widget.holidays,
+                          isExpanded: _isExpanded,
+                          expandAnimation: _expandAnimation,
+                          onExpand: _toggleExpanded,
+                          onCollapse: _toggleExpanded,
+                        ),
+                        SizedBox(height: 24.h),
+                        ExperienceSection(),
+                        SizedBox(height: 24.h),
+                        PlannerActionButtons(
+                          onAccept: _onAccept,
+                          onDecline: () => Navigator.pop(context),
+                        ),
+                      ] else ...[
+                        AppButton(
+                          text: 'Confirm Selection',
+                          backgroundColor: AppColors.primary,
+                          onPressed: () {
+                            // Handle confirm selection
+                          },
+                          prefix: AppImages(
+                            imagePath: AppImageData.starEyes,
+                            width: 20.r,
+                            height: 20.r,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.w),
-                            child: Text(
-                              '-',
-                              style: AppTextStyle.satoshi(
-                                fontSize: 12.sp,
-                                color: AppColors.lightBlack,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Selected Days',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 12.sp,
-                                    color: AppColors.lightBlack,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '$_selectedDays days',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 14.sp,
-                                    color: AppColors.orange100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.w),
-                            child: Text(
-                              '=',
-                              style: AppTextStyle.satoshi(
-                                fontSize: 12.sp,
-                                color: AppColors.lightBlack,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Remaining Balance',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 12.sp,
-                                    color: AppColors.lightBlack,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '${_totalBreak - _selectedDays} days',
-                                  style: AppTextStyle.satoshi(
-                                    fontSize: 14.sp,
-                                    color: AppColors.orange100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
+                      SizedBox(height: 24.h),
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        );
+      },
     );
   }
+}
+
+class DraggableIndicator extends StatelessWidget {
+  const DraggableIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.4,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.r),
-          topRight: Radius.circular(24.r),
+    return Center(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 12.h),
+        width: 120.w,
+        height: 5.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(3.r),
         ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Fixed draggable indicator
-          Center(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 12.h),
-              width: 120.w,
-              height: 5.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(3.r),
-              ),
-            ),
-          ),
-          // Scrollable content
-          Flexible(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!_showSummary) ...[
-                    _buildForecastContainer(),
-                    SizedBox(height: 24.h),
-                    _buildExperienceSection(),
-                    SizedBox(height: 24.h),
-                    AppButton(
-                      text: 'Accept',
-                      backgroundColor: AppColors.primary,
-                      onPressed: _onAccept,
-                      prefix: AppImages(
-                        imagePath: AppImageData.starEyes,
-                        width: 20.r,
-                        height: 20.r,
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    AppButton(
-                      text: 'Decline',
-                      backgroundColor: Colors.white,
-                      textColor: AppColors.lightBlack,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      prefix: AppImages(
-                        imagePath: AppImageData.sadPensiveFace,
-                        width: 20.r,
-                        height: 20.r,
-                      ),
-                    ),
-                  ] else ...[
-                    AppButton(
-                      text: 'Confirm Selection',
-                      backgroundColor: AppColors.primary,
-                      onPressed: () {
-                        // Handle confirm selection
-                      },
-                      prefix: AppImages(
-                        imagePath: AppImageData.starEyes,
-                        width: 20.r,
-                        height: 20.r,
-                      ),
-                    ),
-                  ],
-                  SizedBox(height: 24.h),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
+}
 
-  Widget _buildForecastContainer() {
+class PlannerForecastContainer extends StatelessWidget {
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? description;
+  final List<String> holidays;
+  final bool isExpanded;
+  final Animation<double> expandAnimation;
+  final VoidCallback onExpand;
+  final VoidCallback onCollapse;
+
+  const PlannerForecastContainer({
+    Key? key,
+    this.startDate,
+    this.endDate,
+    this.description,
+    this.holidays = const [],
+    required this.isExpanded,
+    required this.expandAnimation,
+    required this.onExpand,
+    required this.onCollapse,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16.r),
       child: BackdropFilter(
@@ -412,31 +251,57 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDateRangeSection(),
+              PlannerDateRangeSection(
+                startDate: startDate,
+                endDate: endDate,
+                description: description,
+                holidays: holidays,
+              ),
               Divider(color: Colors.white.withOpacity(0.5), height: 1.h),
-              _buildWeatherSection(),
+              WeatherForecastSection(
+                isExpanded: isExpanded,
+                expandAnimation: expandAnimation,
+                onExpand: onExpand,
+                onCollapse: onCollapse,
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildDateRangeSection() {
+class PlannerDateRangeSection extends StatelessWidget {
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? description;
+  final List<String> holidays;
+
+  const PlannerDateRangeSection({
+    Key? key,
+    this.startDate,
+    this.endDate,
+    this.description,
+    this.holidays = const [],
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.startDate != null && widget.endDate != null) ...[
+          if (startDate != null && endDate != null) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${_formatDate(widget.startDate!)}-${_formatDate(widget.endDate!)}',
+                  '${_formatDate(startDate!)}-${_formatDate(endDate!)}',
                   style: AppTextStyle.raleway(
                     fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.lightBlack,
                   ),
                 ),
@@ -447,22 +312,23 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
                 ),
               ],
             ),
-            if (widget.description != null) ...[
+            if (description != null) ...[
               SizedBox(height: 8.h),
               Text(
-                widget.description!,
+                description!,
                 style: AppTextStyle.satoshi(
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.lightBlack,
                 ),
               ),
             ],
-            if (widget.holidays.isNotEmpty) ...[
+            if (holidays.isNotEmpty) ...[
               SizedBox(height: 12.h),
               Wrap(
                 spacing: 8.w,
                 runSpacing: 8.h,
-                children: widget.holidays
+                children: holidays
                     .map((holiday) => AppBadge.holiday(name: holiday))
                     .toList(),
               ),
@@ -473,97 +339,175 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
     );
   }
 
-  Widget _buildWeatherSection() {
+  String _formatDate(DateTime date) {
+    return '${date.day} ${_getMonthName(date.month)}';
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[month - 1];
+  }
+}
+
+class WeatherForecastSection extends StatelessWidget {
+  final bool isExpanded;
+  final Animation<double> expandAnimation;
+  final VoidCallback onExpand;
+  final VoidCallback onCollapse;
+
+  const WeatherForecastSection({
+    Key? key,
+    required this.isExpanded,
+    required this.expandAnimation,
+    required this.onExpand,
+    required this.onCollapse,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.r),
-      child: _isExpanded
-          ? ExpandedWeatherForecast(
-              onCollapse: () => setState(() => _isExpanded = false),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '10 Day weather Forecast',
-                  style: AppTextStyle.satoshi(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.lightBlack,
+      child: AnimatedBuilder(
+        animation: expandAnimation,
+        builder: (context, child) {
+          return AnimatedCrossFade(
+            firstChild: _buildCollapsedView(),
+            secondChild: ExpandedWeatherForecast(onCollapse: onCollapse),
+            crossFadeState: isExpanded 
+                ? CrossFadeState.showSecond 
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+            layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+              return Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Positioned(
+                    key: bottomChildKey,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: bottomChild,
                   ),
-                ),
-                SizedBox(height: 16.h),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      WeatherForecastCard(
-                        day: 'Wed',
-                        date: 11,
-                        weatherType: 'sunny',
-                        temperature: '49°',
-                      ),
-                      SizedBox(width: 12.w),
-                      WeatherForecastCard(
-                        day: 'Sun',
-                        date: 12,
-                        weatherType: 'cloudy',
-                        temperature: '49°',
-                      ),
-                      SizedBox(width: 12.w),
-                      WeatherForecastCard(
-                        day: 'Mon',
-                        date: 13,
-                        weatherType: 'sunny',
-                        temperature: '49°',
-                      ),
-                      SizedBox(width: 12.w),
-                      WeatherForecastCard(
-                        day: 'Tues',
-                        date: 14,
-                        weatherType: 'sunny',
-                        temperature: '49°',
-                      ),
-                      SizedBox(width: 12.w),
-                      WeatherForecastCard(
-                        day: 'Tues',
-                        date: 15,
-                        weatherType: 'sunny',
-                        temperature: '49°',
-                      ),
-                    ],
+                  Positioned(
+                    key: topChildKey,
+                    child: topChild,
                   ),
-                ),
-                SizedBox(height: 16.h),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => setState(() => _isExpanded = true),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Expand',
-                          style: AppTextStyle.satoshi(
-                            fontSize: 14.sp,
-                            color: AppColors.lightBlack,
-                          ),
-                        ),
-                        SizedBox(width: 4.w),
-                        AppIcons(
-                          icon: AppIconData.expand,
-                          size: 16.r,
-                          color: AppColors.lightBlack,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildExperienceSection() {
+  Widget _buildCollapsedView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '10 Days Weather Forecast',
+          style: AppTextStyle.satoshi(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        SizedBox(height: 16.h),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              WeatherForecastCard(
+                day: 'Wed',
+                date: 11,
+                weatherType: 'sunny',
+                temperature: '49°',
+              ),
+              SizedBox(width: 12.w),
+              WeatherForecastCard(
+                day: 'Sun',
+                date: 12,
+                weatherType: 'cloudy',
+                temperature: '49°',
+              ),
+              SizedBox(width: 12.w),
+              WeatherForecastCard(
+                day: 'Mon',
+                date: 13,
+                weatherType: 'sunny',
+                temperature: '49°',
+              ),
+              SizedBox(width: 12.w),
+              WeatherForecastCard(
+                day: 'Tues',
+                date: 14,
+                weatherType: 'sunny',
+                temperature: '49°',
+              ),
+              SizedBox(width: 12.w),
+              WeatherForecastCard(
+                day: 'Tues',
+                date: 15,
+                weatherType: 'sunny',
+                temperature: '49°',
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16.h),
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: onExpand,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Expand',
+                  style: AppTextStyle.satoshi(
+                    fontSize: 14.sp,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+                SizedBox(width: 4.w),
+                AppIcons(
+                  icon: AppIconData.expand,
+                  size: 16.r,
+                  color: AppColors.lightBlack,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ExperienceSection extends StatefulWidget {
+  const ExperienceSection({super.key});
+
+  @override
+  State<ExperienceSection> createState() => _ExperienceSectionState();
+}
+
+class _ExperienceSectionState extends State<ExperienceSection> {
+  int _currentEventIndex = 0;
+  final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -629,7 +573,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             position: _currentEventIndex,
             decorator: DotsDecorator(
               activeColor: AppColors.primary,
-              color: Colors.white,
+              color: Colors.white.withOpacity(0.5),
               size: Size(8.r, 8.r),
               activeSize: Size(8.r, 8.r),
               spacing: EdgeInsets.symmetric(horizontal: 4.w),
@@ -639,16 +583,45 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
       ],
     );
   }
+}
 
-  String _formatDate(DateTime date) {
-    return '${date.day} ${_getMonthName(date.month)}';
-  }
+class PlannerActionButtons extends StatelessWidget {
+  final VoidCallback onAccept;
+  final VoidCallback onDecline;
 
-  String _getMonthName(int month) {
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return months[month - 1];
+  const PlannerActionButtons({
+    Key? key,
+    required this.onAccept,
+    required this.onDecline,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AppButton(
+          text: 'Accept',
+          backgroundColor: AppColors.primary,
+          onPressed: onAccept,
+          prefix: AppImages(
+            imagePath: AppImageData.starEyes,
+            width: 20.r,
+            height: 20.r,
+          ),
+        ),
+        SizedBox(height: 12.h),
+        AppButton(
+          text: 'Decline',
+          backgroundColor: Colors.white,
+          textColor: AppColors.lightBlack,
+          onPressed: onDecline,
+          prefix: AppImages(
+            imagePath: AppImageData.sadPensiveFace,
+            width: 20.r,
+            height: 20.r,
+          ),
+        ),
+      ],
+    );
   }
 } 
