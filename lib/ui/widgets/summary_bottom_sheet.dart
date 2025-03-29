@@ -198,8 +198,8 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
         Text(
           'Leave Remaining',
           style: AppTextStyle.satoshi(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
             color: AppColors.lightBlack,
           ),
         ),
