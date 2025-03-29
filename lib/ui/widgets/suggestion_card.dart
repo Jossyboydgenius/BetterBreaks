@@ -4,7 +4,6 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:better_breaks/ui/views/planner/planner_view.dart';
 
 class SuggestionCard extends StatelessWidget {
@@ -64,7 +63,7 @@ class SuggestionCard extends StatelessWidget {
             spacing: 8.w,
             runSpacing: 8.h,
             children: holidays
-                .map((holiday) => AppBadge.holiday(name: holiday))
+                .map((holiday) => AppBadge.holiday(text: holiday))
                 .toList(),
           ),
           SizedBox(height: 16.h),
