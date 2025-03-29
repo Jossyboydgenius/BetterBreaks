@@ -125,83 +125,37 @@ class _HomeViewState extends State<HomeView> {
           
           SizedBox(height: 32.h),
           
-          // Stats row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStatCard(
-                title: 'Total Days',
-                value: '90',
-                iconData: AppIconData.calendar,
-                color: AppColors.orange100,
-              ),
-              _buildStatCard(
-                title: 'Breaks Used',
-                value: '35',
-                iconData: AppIconData.sunny,
-                color: AppColors.lightGreen,
-              ),
-              _buildStatCard(
-                title: 'Days Left',
-                value: '55',
-                iconData: AppIconData.calendar01,
-                color: AppColors.lightBlue,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatCard({
-    required String title,
-    required String value,
-    required String iconData,
-    required Color color,
-  }) {
-    return Container(
-      width: 90.w,
-      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: 36.r,
-            height: 36.r,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+          // Stats row - make horizontally scrollable
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: [
+                AppStatCard(
+                  title: 'Total Days',
+                  value: '25 Days',
+                  iconData: AppIconData.calendar,
+                  color: AppColors.orange100,
+                  width: 140,
+                ),
+                SizedBox(width: 8.w),
+                AppStatCard(
+                  title: 'Break Used',
+                  value: '12 Days',
+                  iconData: AppIconData.calendar,
+                  color: AppColors.lightGreen,
+                  width: 140,
+                ),
+                SizedBox(width: 8.w),
+                AppStatCard(
+                  title: 'Days Left',
+                  value: '25 Days',
+                  iconData: AppIconData.sunny,
+                  color: AppColors.lightBlue,
+                  width: 140,
+                ),
+              ],
             ),
-            child: Center(
-              child: AppIcons(
-                icon: iconData,
-                color: color,
-                size: 20.r,
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            value,
-            style: AppTextStyle.raleway(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w700,
-              color: AppColors.lightBlack,
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            title,
-            style: AppTextStyle.satoshi(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: AppColors.lightBlack100,
-            ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),
