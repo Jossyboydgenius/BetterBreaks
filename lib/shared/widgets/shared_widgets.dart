@@ -1,6 +1,7 @@
 // Export file for all shared widgets
 export '../../ui/widgets/glassy_container.dart';
 export '../widgets/app_dots_indicator.dart';
+export '../widgets/app_stat_card.dart';
 export '../../ui/widgets/break_analysis_slider.dart';
 
 import 'package:flutter/material.dart';
