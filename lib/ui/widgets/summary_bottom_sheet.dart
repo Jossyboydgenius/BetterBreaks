@@ -8,9 +8,8 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'dart:ui';
 import 'package:intl/intl.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
-import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class SummaryBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -310,16 +309,10 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
         ),
         SizedBox(height: 16.h),
         Center(
-          child: DotsIndicator(
+          child: AppDotsIndicator(
             dotsCount: 3,
             position: _currentEventIndex,
-            decorator: DotsDecorator(
-              activeColor: AppColors.primary,
-              color: Colors.white,
-              size: Size(8.r, 8.r),
-              activeSize: Size(8.r, 8.r),
-              spacing: EdgeInsets.symmetric(horizontal: 4.w),
-            ),
+            inactiveColor: Colors.white,
           ),
         ),
       ],
