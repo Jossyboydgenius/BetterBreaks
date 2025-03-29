@@ -89,6 +89,7 @@ class EventDetailsView extends StatelessWidget {
                                   'Price',
                                   style: AppTextStyle.satoshi(
                                     fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
                                     color: AppColors.grey800,
                                   ),
                                 ),
@@ -115,8 +116,8 @@ class EventDetailsView extends StatelessWidget {
                         Text(
                           'About the event',
                           style: AppTextStyle.raleway(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
                             color: AppColors.lightBlack,
                           ),
                         ),
@@ -125,6 +126,7 @@ class EventDetailsView extends StatelessWidget {
                           'Lorem ipsum dolor sit amet consectetur. Neque semper ultrices tempor facilisi viverra. Tellus congue id lacinia leo rutrum tellus. Quis quis eget volutpat sapien faucibus quam lacus in fermentum.',
                           style: AppTextStyle.satoshi(
                             fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
                             color: AppColors.grey800,
                           ),
                         ),
@@ -133,8 +135,8 @@ class EventDetailsView extends StatelessWidget {
                         Text(
                           'Location',
                           style: AppTextStyle.raleway(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
                             color: AppColors.lightBlack,
                           ),
                         ),
@@ -152,6 +154,7 @@ class EventDetailsView extends StatelessWidget {
                                 location,
                                 style: AppTextStyle.satoshi(
                                   fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
                                   color: AppColors.grey800,
                                 ),
                               ),
@@ -184,6 +187,7 @@ class EventDetailsView extends StatelessWidget {
             text,
             style: AppTextStyle.satoshi(
               fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
               color: AppColors.grey800,
             ),
           ),
