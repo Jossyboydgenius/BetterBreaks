@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:better_breaks/ui/views/onboarding/splash_screen_view.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +54,19 @@ class MainApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.initialRoute,
           routes: AppRoutes.routes,
+          onGenerateRoute: (settings) {
+            if (settings.name == '/') {
+              return MaterialPageRoute(
+                builder: (context) => const SplashScreenView(), // Or whatever view you want as root
+              );
+            }
+            return null;
+          },
+          onUnknownRoute: (settings) {
+            return MaterialPageRoute(
+              builder: (context) => const SplashScreenView(), // Fallback route
+            );
+          },
           theme: AppTheme.lightTheme,
           builder: (context, child) {
             return ConnectionWidget(
