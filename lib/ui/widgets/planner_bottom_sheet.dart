@@ -13,6 +13,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:better_breaks/ui/widgets/summary_bottom_sheet.dart';
 
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
@@ -58,6 +59,28 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
               _endDate = date;
             }
           });
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  void _onAccept() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SummaryBottomSheet(
+        startDate: _startDate,
+        endDate: _endDate,
+        onStartDateChanged: (date) {
+          setState(() => _startDate = date);
+        },
+        onEndDateChanged: (date) {
+          setState(() => _endDate = date);
+        },
+        onConfirm: () {
+          // Handle confirmation
           Navigator.pop(context);
         },
       ),
@@ -289,20 +312,24 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.r),
-            topRight: Radius.circular(24.r),
-          ),
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.4,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 12.h),
-            Container(
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Fixed draggable indicator
+          Center(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 12.h),
               width: 120.w,
               height: 5.h,
               decoration: BoxDecoration(
@@ -310,18 +337,45 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
                 borderRadius: BorderRadius.circular(3.r),
               ),
             ),
-            SizedBox(height: 24.h),
-            Padding(
+          ),
+          // Scrollable content
+          Flexible(
+            child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: _showSummary ? _buildSummaryView() : _buildForecastContainer(),
-            ),
-            SizedBox(height: 24.h),
-            _buildExperienceSection(),
-            SizedBox(height: 24.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: _showSummary
-                  ? AppButton(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!_showSummary) ...[
+                    _buildForecastContainer(),
+                    SizedBox(height: 24.h),
+                    _buildExperienceSection(),
+                    SizedBox(height: 24.h),
+                    AppButton(
+                      text: 'Accept',
+                      backgroundColor: AppColors.primary,
+                      onPressed: _onAccept,
+                      prefix: AppImages(
+                        imagePath: AppImageData.starEyes,
+                        width: 20.r,
+                        height: 20.r,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    AppButton(
+                      text: 'Decline',
+                      backgroundColor: Colors.white,
+                      textColor: AppColors.lightBlack,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      prefix: AppImages(
+                        imagePath: AppImageData.sadPensiveFace,
+                        width: 20.r,
+                        height: 20.r,
+                      ),
+                    ),
+                  ] else ...[
+                    AppButton(
                       text: 'Confirm Selection',
                       backgroundColor: AppColors.primary,
                       onPressed: () {
@@ -332,43 +386,14 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
                         width: 20.r,
                         height: 20.r,
                       ),
-                    )
-                  : Column(
-                      children: [
-                        AppButton(
-                          text: 'Accept',
-                          backgroundColor: AppColors.primary,
-                          onPressed: () {
-                            setState(() {
-                              _showSummary = true;
-                            });
-                          },
-                          prefix: AppImages(
-                            imagePath: AppImageData.starEyes,
-                            width: 20.r,
-                            height: 20.r,
-                          ),
-                        ),
-                        SizedBox(height: 12.h),
-                        AppButton(
-                          text: 'Decline',
-                          backgroundColor: Colors.white,
-                          textColor: AppColors.lightBlack,
-                          onPressed: () {
-                            Navigator.pop(context); // Return to suggestion cards
-                          },
-                          prefix: AppImages(
-                            imagePath: AppImageData.sadPensiveFace,
-                            width: 20.r,
-                            height: 20.r,
-                          ),
-                        ),
-                      ],
                     ),
+                  ],
+                  SizedBox(height: 24.h),
+                ],
+              ),
             ),
-            SizedBox(height: 24.h),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -543,11 +568,11 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 4.w),
           child: Text(
             'Experience',
             style: AppTextStyle.raleway(
-              fontSize: 20.sp,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.lightBlack,
             ),
@@ -565,7 +590,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
             },
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: EventCard(
                   image: AppImageData.image,
                   title: 'Beach Yoga festival',
@@ -575,7 +600,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: EventCard(
                   image: AppImageData.image1,
                   title: 'Beach Yoga festival',
@@ -585,7 +610,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: EventCard(
                   image: AppImageData.image2,
                   title: 'Beach Yoga festival',
