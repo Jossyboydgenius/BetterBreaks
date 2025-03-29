@@ -17,6 +17,7 @@ class SummaryBottomSheet extends StatefulWidget {
   final Function(DateTime) onStartDateChanged;
   final Function(DateTime) onEndDateChanged;
   final VoidCallback onConfirm;
+  final VoidCallback? onComplete;
 
   const SummaryBottomSheet({
     super.key,
@@ -25,6 +26,7 @@ class SummaryBottomSheet extends StatefulWidget {
     required this.onStartDateChanged,
     required this.onEndDateChanged,
     required this.onConfirm,
+    this.onComplete,
   });
 
   @override
@@ -110,7 +112,12 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
             child: AppButton(
               text: 'Confirm Selection',
               backgroundColor: AppColors.primary,
-              onPressed: widget.onConfirm,
+              onPressed: () {
+                widget.onConfirm();
+                if (widget.onComplete != null) {
+                  widget.onComplete!();
+                }
+              },
               prefix: AppImages(
                 imagePath: AppImageData.starEyes,
                 width: 20.r,
