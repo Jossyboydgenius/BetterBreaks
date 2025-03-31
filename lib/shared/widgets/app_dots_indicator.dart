@@ -26,7 +26,7 @@ class AppDotsIndicator extends StatelessWidget {
   final EdgeInsets? spacing;
 
   const AppDotsIndicator({
-    Key? key,
+    super.key,
     required this.dotsCount,
     required this.position,
     this.activeColor,
@@ -34,7 +34,7 @@ class AppDotsIndicator extends StatelessWidget {
     this.dotSize,
     this.activeDotSize,
     this.spacing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
