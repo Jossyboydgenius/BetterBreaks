@@ -49,6 +49,7 @@ class AppIconData {
   static const String user = '$_base/user.svg';
   static const String work = '$_base/work.svg';
   static const String zap = '$_base/zap.svg';
+  static const String zap01 = '$_base/zap-01.svg';
   static const String zapFilled = '$_base/zap-filled.svg';
   static const String checkMark = '$_base/check-mark.svg';
   static const String success = '$_base/success.svg';
