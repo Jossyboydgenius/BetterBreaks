@@ -1,3 +1,4 @@
+import 'package:better_breaks/data/models/break_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
@@ -9,9 +10,9 @@ class BreakDetailView extends StatelessWidget {
   final BreakItem breakItem;
 
   const BreakDetailView({
-    super.key,
+    Key? key,
     required this.breakItem,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
