@@ -16,6 +16,7 @@ import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:better_breaks/ui/widgets/setup_bottom_sheet.dart';
 import 'package:better_breaks/ui/widgets/upcoming_breaks_widget.dart';
 import 'package:better_breaks/ui/views/break_detail/break_detail_view.dart';
+import 'package:better_breaks/ui/widgets/app_badge.dart';
 
 class HomeView extends StatefulWidget {
   final bool setupCompleted;
@@ -33,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
   int _selectedNavIndex = 0; // 0: Dashboard, 1: Plan, 2: Experience, 3: Analytics
   double _moodValue = 2; // Initial mood (expressionless)
   late bool _setupCompleted; // Track if setup is completed
+  bool _showAllBreaks = false; // Track if showing all breaks view
 
   @override
   void initState() {
@@ -68,203 +70,7 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(24.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _setupCompleted 
-                          ? _buildCompletedSetupSection() 
-                          : _buildLeavePreferenceSection(),
-                      SizedBox(height: 24.h),
-                      if (_setupCompleted) // Only show recommendations when setup is completed
-                        BreakRecommendationWidget(
-                          title: 'Breaks Recommendation',
-                          onSeeAllTap: () {
-                            // Navigate to see all recommendations
-                          },
-                          recommendations: [
-                            RecommendationItem(
-                              dateRange: 'December 27-29',
-                              description: 'Take 3 days off to get 9 days of holiday',
-                              isHighImpact: true,
-                              holidays: ['Christmas', 'New year'],
-                              onPreviewTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PlannerView(),
-                                  ),
-                                );
-                              },
-                            ),
-                            RecommendationItem(
-                              dateRange: 'January 15-18',
-                              description: 'Take 3 days off to get 9 days of holiday',
-                              isHighImpact: true,
-                              holidays: ['Easter', 'Spring break'],
-                              onPreviewTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PlannerView(),
-                                  ),
-                                );
-                              },
-                            ),
-                            RecommendationItem(
-                              dateRange: 'May 22-26',
-                              description: 'Take 4 days off to get 9 days of holiday',
-                              isHighImpact: false,
-                              holidays: ['Memorial Day', 'Summer start'],
-                              onPreviewTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PlannerView(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      if (_setupCompleted) // Add spacing only when needed
-                        SizedBox(height: 24.h),
-                      MoodCheckIn(
-                        onMoodSelected: (value) {
-                          setState(() {
-                            _moodValue = value;
-                          });
-                        },
-                      ),
-                      if (_setupCompleted) // Add spacing only when needed
-                        SizedBox(height: 24.h),
-                      if (_setupCompleted) // Only show optimization timeline when setup is completed
-                        OptimizationTimelineWidget(
-                          title: 'Analytics',
-                          onSeeAllTap: () {
-                            // Navigate to analytics screen
-                          },
-                        ),
-                      if (_setupCompleted) // Add spacing only when needed
-                        SizedBox(height: 24.h),
-                      if (_setupCompleted) // Only show upcoming breaks when setup is completed
-                        UpcomingBreaksWidget(
-                          title: 'Upcoming Breaks',
-                          onSeeAllTap: () {
-                            // Navigate to see all upcoming breaks
-                          },
-                          breaks: [
-                            BreakItem(
-                              title: 'Summer Vacation',
-                              month: 'April',
-                              day: '24',
-                              days: 5,
-                              status: 'Approved',
-                              daysRemaining: 50,
-                              cardColor: AppColors.lightPurple,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BreakDetailView(
-                                      breakItem: BreakItem(
-                                        title: 'Summer Vacation',
-                                        month: 'April',
-                                        day: '24',
-                                        days: 5,
-                                        status: 'Approved',
-                                        daysRemaining: 50,
-                                        cardColor: AppColors.lightPurple,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            BreakItem(
-                              title: 'Summer Vacation',
-                              month: 'April',
-                              day: '24',
-                              days: 5,
-                              status: 'Approved',
-                              daysRemaining: 50,
-                              cardColor: AppColors.lightGreen,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BreakDetailView(
-                                      breakItem: BreakItem(
-                                        title: 'Summer Vacation',
-                                        month: 'April',
-                                        day: '24',
-                                        days: 5,
-                                        status: 'Approved',
-                                        daysRemaining: 50,
-                                        cardColor: AppColors.lightGreen,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            BreakItem(
-                              title: 'Summer Vacation',
-                              month: 'April',
-                              day: '24',
-                              days: 5,
-                              status: 'Approved',
-                              daysRemaining: 50,
-                              cardColor: AppColors.orange100,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BreakDetailView(
-                                      breakItem: BreakItem(
-                                        title: 'Summer Vacation',
-                                        month: 'April',
-                                        day: '24',
-                                        days: 5,
-                                        status: 'Approved',
-                                        daysRemaining: 50,
-                                        cardColor: AppColors.orange100,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            BreakItem(
-                              title: 'Summer Vacation',
-                              month: 'April',
-                              day: '24',
-                              days: 5,
-                              status: 'Approved',
-                              daysRemaining: 50,
-                              cardColor: AppColors.lightPurple,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BreakDetailView(
-                                      breakItem: BreakItem(
-                                        title: 'Summer Vacation',
-                                        month: 'April',
-                                        day: '24',
-                                        days: 5,
-                                        status: 'Approved',
-                                        daysRemaining: 50,
-                                        cardColor: AppColors.lightPurple,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+                  child: _showAllBreaks ? _buildAllBreaksView() : _buildHomeContent(),
                 ),
               ),
               // Add bottom padding to accommodate the bottom nav
@@ -276,12 +82,424 @@ class _HomeViewState extends State<HomeView> {
             onItemSelected: (index) {
               setState(() {
                 _selectedNavIndex = index;
+                // Reset to home view when changing tabs
+                if (_showAllBreaks) {
+                  _showAllBreaks = false;
+                }
               });
             },
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildHomeContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _setupCompleted 
+            ? _buildCompletedSetupSection() 
+            : _buildLeavePreferenceSection(),
+        SizedBox(height: 24.h),
+        if (_setupCompleted) // Only show recommendations when setup is completed
+          BreakRecommendationWidget(
+            title: 'Breaks Recommendation',
+            onSeeAllTap: () {
+              // Navigate to see all recommendations
+            },
+            recommendations: [
+              RecommendationItem(
+                dateRange: 'December 27-29',
+                description: 'Take 3 days off to get 9 days of holiday',
+                isHighImpact: true,
+                holidays: ['Christmas', 'New year'],
+                onPreviewTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlannerView(),
+                    ),
+                  );
+                },
+              ),
+              RecommendationItem(
+                dateRange: 'January 15-18',
+                description: 'Take 3 days off to get 9 days of holiday',
+                isHighImpact: true,
+                holidays: ['Easter', 'Spring break'],
+                onPreviewTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlannerView(),
+                    ),
+                  );
+                },
+              ),
+              RecommendationItem(
+                dateRange: 'May 22-26',
+                description: 'Take 4 days off to get 9 days of holiday',
+                isHighImpact: false,
+                holidays: ['Memorial Day', 'Summer start'],
+                onPreviewTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlannerView(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        if (_setupCompleted) // Add spacing only when needed
+          SizedBox(height: 24.h),
+        MoodCheckIn(
+          onMoodSelected: (value) {
+            setState(() {
+              _moodValue = value;
+            });
+          },
+        ),
+        if (_setupCompleted) // Add spacing only when needed
+          SizedBox(height: 24.h),
+        if (_setupCompleted) // Only show optimization timeline when setup is completed
+          OptimizationTimelineWidget(
+            title: 'Analytics',
+            onSeeAllTap: () {
+              // Navigate to analytics screen
+            },
+          ),
+        if (_setupCompleted) // Add spacing only when needed
+          SizedBox(height: 24.h),
+        if (_setupCompleted) // Only show upcoming breaks when setup is completed
+          UpcomingBreaksWidget(
+            title: 'Upcoming Breaks',
+            onSeeAllTap: () {
+              setState(() {
+                _showAllBreaks = true;
+              });
+            },
+            breaks: _getBreaksList(),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAllBreaksView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header with back button
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showAllBreaks = false;
+                });
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: AppColors.lightBlack,
+                size: 24.r,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Text(
+              'All Upcoming Breaks',
+              style: AppTextStyle.raleway(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.lightBlack,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 24.h),
+        // List of all breaks
+        GlassyContainer(
+          backgroundColor: Colors.white,
+          borderColor: Colors.white,
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            children: _getBreaksList().map((breakItem) {
+              // Use MediaQuery for consistent sizing across devices
+              final screenWidth = MediaQuery.of(context).size.width;
+              final dateContainerWidth = screenWidth * 0.15; // 15% of screen width
+              final dateContainerHeight = dateContainerWidth * 1.2; // Aspect ratio of 1.2
+              
+              return Padding(
+                padding: EdgeInsets.only(bottom: breakItem == _getBreaksList().last ? 0 : 8.h),
+                child: GestureDetector(
+                  onTap: breakItem.onTap,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Date container with fixed dimensions
+                        Container(
+                          width: dateContainerWidth,
+                          height: dateContainerHeight,
+                          decoration: BoxDecoration(
+                            color: breakItem.cardColor,
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                breakItem.month,
+                                style: AppTextStyle.satoshi(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                breakItem.day,
+                                style: AppTextStyle.raleway(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        // Content
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.r),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        breakItem.title,
+                                        style: AppTextStyle.raleway(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.lightBlack,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                      SizedBox(height: 4.h),
+                                      Text(
+                                        '${breakItem.days} days • ${breakItem.status}',
+                                        style: AppTextStyle.satoshi(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.grey600,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                
+                                // Days badge
+                                AppBadge(
+                                  text: 'In ${breakItem.daysRemaining} days',
+                                  backgroundColor: breakItem.cardColor.withOpacity(0.2),
+                                  textColor: breakItem.cardColor,
+                                  isSmall: true,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper method to generate the list of breaks
+  List<BreakItem> _getBreaksList() {
+    return [
+      BreakItem(
+        title: 'Summer Vacation',
+        month: 'April',
+        day: '24',
+        days: 5,
+        status: 'Approved',
+        daysRemaining: 50,
+        cardColor: AppColors.lightPurple,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Summer Vacation',
+                  month: 'April',
+                  day: '24',
+                  days: 5,
+                  status: 'Approved',
+                  daysRemaining: 50,
+                  cardColor: AppColors.lightPurple,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      BreakItem(
+        title: 'Summer Vacation',
+        month: 'April',
+        day: '24',
+        days: 5,
+        status: 'Approved',
+        daysRemaining: 50,
+        cardColor: AppColors.lightGreen,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Summer Vacation',
+                  month: 'April',
+                  day: '24',
+                  days: 5,
+                  status: 'Approved',
+                  daysRemaining: 50,
+                  cardColor: AppColors.lightGreen,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      BreakItem(
+        title: 'Summer Vacation',
+        month: 'April',
+        day: '24',
+        days: 5,
+        status: 'Approved',
+        daysRemaining: 50,
+        cardColor: AppColors.orange100,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Summer Vacation',
+                  month: 'April',
+                  day: '24',
+                  days: 5,
+                  status: 'Approved',
+                  daysRemaining: 50,
+                  cardColor: AppColors.orange100,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      BreakItem(
+        title: 'Summer Vacation',
+        month: 'April',
+        day: '24',
+        days: 5,
+        status: 'Approved',
+        daysRemaining: 50,
+        cardColor: AppColors.lightPurple,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Summer Vacation',
+                  month: 'April',
+                  day: '24',
+                  days: 5,
+                  status: 'Approved',
+                  daysRemaining: 50,
+                  cardColor: AppColors.lightPurple,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      // Add more breaks for the "See All" view
+      BreakItem(
+        title: 'Winter Break',
+        month: 'Dec',
+        day: '21',
+        days: 7,
+        status: 'Pending',
+        daysRemaining: 265,
+        cardColor: AppColors.orange100,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Winter Break',
+                  month: 'Dec',
+                  day: '21',
+                  days: 7,
+                  status: 'Pending',
+                  daysRemaining: 265,
+                  cardColor: AppColors.orange100,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      BreakItem(
+        title: 'Spring Break',
+        month: 'March',
+        day: '10',
+        days: 4,
+        status: 'Pending',
+        daysRemaining: 345,
+        cardColor: AppColors.lightGreen,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
+                  title: 'Spring Break',
+                  month: 'March',
+                  day: '10',
+                  days: 4,
+                  status: 'Pending',
+                  daysRemaining: 345,
+                  cardColor: AppColors.lightGreen,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    ];
   }
 
   Widget _buildCompletedSetupSection() {
