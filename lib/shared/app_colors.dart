@@ -30,6 +30,7 @@ class AppColors {
   
   // Grey shades
   static const Color lightGrey = Color(0xFFA3A3A3);
+  static const Color greyLight = Color(0xFFFFFFFF);
   static const Color grey = Color(0xFFE2E2E2);
   static const Color grey100 = Color(0xFFF7F8F9);
   static const Color grey200 = Color(0xFFE8ECF4);
