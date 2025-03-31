@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 import 'package:better_breaks/ui/widgets/suggestions_content.dart';
-import 'package:better_breaks/ui/views/home/home_view.dart';
+import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -256,7 +256,7 @@ class _SetupViewState extends State<SetupView> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomeView(setupCompleted: false),
+                                  builder: (context) => const DashboardView(setupCompleted: false),
                                 ),
                               );
                             },
