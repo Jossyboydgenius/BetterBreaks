@@ -55,22 +55,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildSectionHeading(
-                        title: _getTitleForCurrentPage(),
-                        iconPath: _getIconForCurrentPage(),
-                        iconColor: _getColorForCurrentPage(),
-                      ),
-                      SizedBox(height: 16.h),
-                      _buildAnalyticsSlider(),
-                      SizedBox(height: 16.h),
-                      Center(
-                        child: AppDotsIndicator(
-                          dotsCount: 3,
-                          position: _currentPage,
-                          activeColor: AppColors.primary,
-                          inactiveColor: AppColors.grey200,
-                        ),
-                      ),
+                      _buildAnalyticsSection(),
                       SizedBox(height: 32.h),
                       Text(
                         "Analytics information will help you understand how well you're maximizing your breaks and time off. Review your scores regularly to optimize your schedule.",
@@ -100,6 +85,83 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     );
   }
 
+  Widget _buildAnalyticsSection() {
+    // Calculate container height based on screen width for consistent sizing
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerHeight = screenWidth * 0.65; // Same size ratio as BreakAnalysisSlider
+    
+    return GlassyContainer(
+      backgroundColor: Colors.white,
+      borderColor: Colors.white,
+      padding: EdgeInsets.all(16.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Heading inside the glassy container
+          _buildSectionHeading(
+            title: _getTitleForCurrentPage(),
+            iconPath: _getIconForCurrentPage(),
+            iconColor: _getColorForCurrentPage(),
+          ),
+          SizedBox(height: 24.h),
+          
+          // Slider content
+          SizedBox(
+            height: containerHeight,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              children: [
+                // Optimization Score
+                AppCircularProgress(
+                  progress: 0.85, // 85%
+                  primaryLabel: "85%",
+                  secondaryLabel: "Optimization\nscore",
+                  progressColor: AppColors.orange100,
+                ),
+                
+                // Total Optimization Days
+                AppCircularProgress(
+                  progress: 0.6, // 60%
+                  primaryLabel: "60",
+                  secondaryLabel: "Total optimization\ndays",
+                  progressColor: AppColors.lightGreen,
+                  maxValueText: "days",
+                ),
+                
+                // Break Score
+                AppCircularProgress(
+                  progress: 0.1, // 10%
+                  primaryLabel: "10",
+                  secondaryLabel: "Break Score",
+                  progressColor: AppColors.orange100,
+                  iconPath: AppIconData.zapFilled,
+                  maxValueText: "/100",
+                ),
+              ],
+            ),
+          ),
+          
+          SizedBox(height: 16.h),
+          
+          // Dots indicator
+          Center(
+            child: AppDotsIndicator(
+              dotsCount: 3,
+              position: _currentPage,
+              activeColor: AppColors.primary,
+              inactiveColor: AppColors.grey200,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSectionHeading({
     required String title,
     required String iconPath,
@@ -122,57 +184,6 @@ class _AnalyticsViewState extends State<AnalyticsView> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAnalyticsSlider() {
-    // Calculate container height based on screen width for consistent sizing
-    final screenWidth = MediaQuery.of(context).size.width;
-    final containerHeight = screenWidth * 0.9;
-    
-    return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
-      padding: EdgeInsets.all(16.r),
-      child: SizedBox(
-        height: containerHeight,
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-          children: [
-            // Optimization Score
-            AppCircularProgress(
-              progress: 0.85, // 85%
-              primaryLabel: "85%",
-              secondaryLabel: "Optimization\nscore",
-              progressColor: AppColors.orange100,
-            ),
-            
-            // Total Optimization Days
-            AppCircularProgress(
-              progress: 0.6, // 60%
-              primaryLabel: "60",
-              secondaryLabel: "Total optimization\ndays",
-              progressColor: AppColors.lightGreen,
-              maxValueText: "days",
-            ),
-            
-            // Break Score
-            AppCircularProgress(
-              progress: 0.1, // 10%
-              primaryLabel: "10",
-              secondaryLabel: "Break Score",
-              progressColor: AppColors.orange100,
-              iconPath: AppIconData.zapFilled,
-              maxValueText: "/100",
-            ),
-          ],
-        ),
-      ),
     );
   }
 
