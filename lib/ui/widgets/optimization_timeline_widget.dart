@@ -38,7 +38,7 @@ class OptimizationTimelineWidget extends StatelessWidget {
                 style: AppTextStyle.satoshi(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black,
+                  color: AppColors.primary,
                 ),
               ),
             ),
