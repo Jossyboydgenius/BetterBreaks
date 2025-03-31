@@ -10,6 +10,9 @@ import 'package:better_breaks/ui/views/auth/otp_verification_view.dart';
 import 'package:better_breaks/ui/views/auth/create_new_password_view.dart';
 import 'package:better_breaks/ui/views/auth/password_success_view.dart';
 import 'package:better_breaks/ui/views/setup/setup_view.dart';
+import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
+import 'package:better_breaks/ui/views/experience/experience_view.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -25,6 +28,9 @@ class AppRoutes {
   static const String passwordSuccess = '/password-success';
   static const String setupView = '/setup-view';
   static const String plannerView = '/planner-view';
+  static const String dashboardView = '/dashboard-view';
+  static const String analyticsView = '/analytics-view';
+  static const String experienceView = '/experience-view';
   
   static const String initialRoute = setupView;
 
@@ -38,7 +44,10 @@ class AppRoutes {
     createNewPassword: (context) => const CreateNewPasswordView(),
     passwordSuccess: (context) => const PasswordSuccessView(),
     setupView: (context) => const SetupView(),
-    plannerView: (context) => const PlannerView(),
+    plannerView: (context) => const PlannerView(showBottomNav: true),
+    dashboardView: (context) => const DashboardView(),
+    analyticsView: (context) => const AnalyticsView(),
+    experienceView: (context) => const ExperienceView(),
   };
 
   static GoRouter router = GoRouter(
