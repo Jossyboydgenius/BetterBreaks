@@ -4,7 +4,6 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/views/planner/planner_view.dart';
 
 class SuggestionCard extends StatelessWidget {
   final String dateRange;
