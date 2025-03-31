@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
-import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_radio_button.dart';
