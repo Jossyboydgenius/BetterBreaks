@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
-import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/widgets/app_circular_progress.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 
 class BreakAnalysisSlider extends StatefulWidget {
-  const BreakAnalysisSlider({Key? key}) : super(key: key);
+  const BreakAnalysisSlider({super.key});
 
   @override
   State<BreakAnalysisSlider> createState() => _BreakAnalysisSliderState();
