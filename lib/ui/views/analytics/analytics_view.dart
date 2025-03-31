@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+import 'package:better_breaks/shared/widgets/app_circular_progress.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/app_top_bar.dart';
-import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
+import 'package:better_breaks/ui/views/experience/experience_view.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -16,6 +20,14 @@ class AnalyticsView extends StatefulWidget {
 
 class _AnalyticsViewState extends State<AnalyticsView> {
   int _selectedNavIndex = 3; // Analytics tab
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +50,32 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 },
               ),
               Expanded(
-                child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(24.w),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.analytics_outlined,
-                        size: 100.r,
-                        color: AppColors.primary,
+                      _buildSectionHeading(
+                        title: _getTitleForCurrentPage(),
+                        iconPath: _getIconForCurrentPage(),
+                        iconColor: _getColorForCurrentPage(),
                       ),
-                      SizedBox(height: 20.h),
-                      Text(
-                        'Analytics Coming Soon',
-                        style: AppTextStyle.raleway(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.lightBlack,
+                      SizedBox(height: 16.h),
+                      _buildAnalyticsSlider(),
+                      SizedBox(height: 16.h),
+                      Center(
+                        child: AppDotsIndicator(
+                          dotsCount: 3,
+                          position: _currentPage,
+                          activeColor: AppColors.primary,
+                          inactiveColor: AppColors.grey200,
                         ),
                       ),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 32.h),
                       Text(
-                        'This feature is under development',
+                        "Analytics information will help you understand how well you're maximizing your breaks and time off. Review your scores regularly to optimize your schedule.",
                         style: AppTextStyle.satoshi(
-                          fontSize: 16.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           color: AppColors.lightBlack100,
                         ),
@@ -85,16 +100,154 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     );
   }
 
-  void _navigateToPage(int index) {
-    if (index == 0) {
-      // Navigate to Dashboard
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DashboardView(),
+  Widget _buildSectionHeading({
+    required String title,
+    required String iconPath,
+    required Color iconColor,
+  }) {
+    return Row(
+      children: [
+        AppIcons(
+          icon: iconPath,
+          size: 24.r,
+          color: iconColor,
         ),
-      );
+        SizedBox(width: 8.w),
+        Text(
+          title,
+          style: AppTextStyle.raleway(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w700,
+            color: AppColors.lightBlack,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnalyticsSlider() {
+    // Calculate container height based on screen width for consistent sizing
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerHeight = screenWidth * 0.9;
+    
+    return GlassyContainer(
+      backgroundColor: Colors.white,
+      borderColor: Colors.white,
+      padding: EdgeInsets.all(16.r),
+      child: SizedBox(
+        height: containerHeight,
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+          children: [
+            // Optimization Score
+            AppCircularProgress(
+              progress: 0.85, // 85%
+              primaryLabel: "85%",
+              secondaryLabel: "Optimization\nscore",
+              progressColor: AppColors.orange100,
+            ),
+            
+            // Total Optimization Days
+            AppCircularProgress(
+              progress: 0.6, // 60%
+              primaryLabel: "60",
+              secondaryLabel: "Total optimization\ndays",
+              progressColor: AppColors.lightGreen,
+              maxValueText: "days",
+            ),
+            
+            // Break Score
+            AppCircularProgress(
+              progress: 0.1, // 10%
+              primaryLabel: "10",
+              secondaryLabel: "Break Score",
+              progressColor: AppColors.orange100,
+              iconPath: AppIconData.zapFilled,
+              maxValueText: "/100",
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getIconForCurrentPage() {
+    switch (_currentPage) {
+      case 0:
+        return AppIconData.zap01;
+      case 1:
+        return AppIconData.calendar;
+      case 2:
+        return AppIconData.zapFilled;
+      default:
+        return AppIconData.zap01;
     }
-    // Other navigation options will be added later
+  }
+
+  Color _getColorForCurrentPage() {
+    switch (_currentPage) {
+      case 0:
+        return AppColors.orange100;
+      case 1:
+        return AppColors.lightGreen;
+      case 2:
+        return AppColors.orange100;
+      default:
+        return AppColors.orange100;
+    }
+  }
+
+  String _getTitleForCurrentPage() {
+    switch (_currentPage) {
+      case 0:
+        return 'Optimization score';
+      case 1:
+        return 'Total optimization days';
+      case 2:
+        return 'Break Score';
+      default:
+        return 'Optimization score';
+    }
+  }
+
+  void _navigateToPage(int index) {
+    switch (index) {
+      case 0:
+        // Navigate to Dashboard
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardView(),
+          ),
+        );
+        break;
+      case 1:
+        // Navigate to Plan
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlannerView(
+              isSetup: false,
+              showBottomNav: true,
+            ),
+          ),
+        );
+        break;
+      case 2:
+        // Navigate to Experience
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ExperienceView(),
+          ),
+        );
+        break;
+      // Already on Analytics tab
+    }
   }
 } 
