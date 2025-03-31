@@ -45,10 +45,17 @@ class AppBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate constraints based on device width
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final maxWidth = isSmall ? deviceWidth * 0.25 : deviceWidth * 0.35; // 25% or 35% of screen width
+    
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 8.w : 12.w,
-        vertical: isSmall ? 4.h : 6.h,
+        horizontal: isSmall ? 6.w : 10.w,
+        vertical: isSmall ? 3.h : 5.h,
+      ),
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -61,6 +68,9 @@ class AppBadge extends StatelessWidget {
           fontWeight: isSmall ? FontWeight.w500 : FontWeight.w400,
           color: textColor,
         ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        textAlign: TextAlign.center,
       ),
     );
   }
