@@ -151,7 +151,7 @@ class OptimizationTimelineWidget extends StatelessWidget {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              interval: 25,
+              interval: 5,
               reservedSize: 35,
               getTitlesWidget: (value, meta) {
                 const style = TextStyle(
@@ -161,7 +161,7 @@ class OptimizationTimelineWidget extends StatelessWidget {
                 );
                 
                 return Text(
-                  '${value.toInt()}%',
+                  value.toInt().toString(),
                   style: style,
                   textAlign: TextAlign.left,
                 );
@@ -175,17 +175,17 @@ class OptimizationTimelineWidget extends StatelessWidget {
         minX: 0,
         maxX: 6,
         minY: 0,
-        maxY: 100,
+        maxY: 30,
         lineBarsData: [
           LineChartBarData(
             spots: const [
-              FlSpot(0, 25),
-              FlSpot(1, 40),
-              FlSpot(2, 35),
-              FlSpot(3, 70),
-              FlSpot(4, 60),
-              FlSpot(5, 85),
-              FlSpot(6, 90),
+              FlSpot(0, 8),
+              FlSpot(1, 12),
+              FlSpot(2, 9),
+              FlSpot(3, 15),
+              FlSpot(4, 11),
+              FlSpot(5, 14),
+              FlSpot(6, 13),
             ],
             isCurved: true,
             gradient: LinearGradient(
@@ -199,8 +199,9 @@ class OptimizationTimelineWidget extends StatelessWidget {
             dotData: FlDotData(
               show: true,
               getDotPainter: (spot, percent, barData, index) {
+                final bool isApril = index == 3;
                 return FlDotCirclePainter(
-                  radius: 4,
+                  radius: isApril ? 6 : 4,
                   color: Colors.white,
                   strokeWidth: 2,
                   strokeColor: AppColors.orange300,
@@ -221,6 +222,33 @@ class OptimizationTimelineWidget extends StatelessWidget {
             ),
           ),
         ],
+        lineTouchData: LineTouchData(
+          enabled: true,
+          touchTooltipData: LineTouchTooltipData(
+            tooltipRoundedRadius: 8,
+            tooltipPadding: EdgeInsets.all(8),
+            tooltipMargin: 8,
+            getTooltipColor: (touchedSpot) => Colors.white,
+            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+              return touchedSpots.map((LineBarSpot touchedSpot) {
+                final monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+                final monthName = monthNames[touchedSpot.x.toInt()];
+                final days = touchedSpot.y.toInt();
+                
+                return LineTooltipItem(
+                  'Opti. Days\n$monthName: $days Days',
+                  TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                );
+              }).toList();
+            },
+          ),
+          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {},
+          handleBuiltInTouches: true,
+        ),
       ),
     );
   }
