@@ -10,8 +10,8 @@ import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:better_breaks/ui/views/experience/experience_view.dart';
-import 'package:easy_pie_chart/easy_pie_chart.dart';
 import 'package:better_breaks/ui/views/analytics/widgets/break_balance_analysis.dart';
+import 'package:better_breaks/ui/views/analytics/widgets/holiday_distribution_chart.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -60,6 +60,9 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                       _buildAnalyticsSection(),
                       SizedBox(height: 32.h),
                       const BreakBalanceAnalysis(),
+                      SizedBox(height: 32.h),
+                      const HolidayDistributionChart(),
+                      SizedBox(height: 32.h),
                     ],
                   ),
                 ),
