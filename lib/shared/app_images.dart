@@ -10,6 +10,7 @@ class AppImageData {
   static const String sadPensiveFace = '$_base/sad_pensive_face.png';
   static const String smilingFaceWithTear = '$_base/smiling_face_with_tear.png';
   static const String starEyes = '$_base/star_eyes.png';
+  static const String sleep = '$_base/sleep.png';
   
   // Other images
   static const String ecoEnergy = '$_base/eco-energy.png';
