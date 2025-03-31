@@ -79,7 +79,8 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
           Row(
             children: [
               AppIcons(
-                icon: AppIconData.favourite,
+                icon: AppIconData.analytics,
+                color: AppColors.lightPurple,
                 size: 28.r, 
               ),
               SizedBox(width: 8.w),
