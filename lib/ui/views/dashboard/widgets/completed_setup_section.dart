@@ -58,7 +58,7 @@ class CompletedSetupSection extends StatelessWidget {
                 AppStatCard(
                   title: 'Break Used',
                   value: '12 Days',
-                  iconData: AppIconData.calendar,
+                  iconData: AppIconData.sidebarTop01,
                   color: AppColors.lightGreen,
                   width: 140,
                 ),
