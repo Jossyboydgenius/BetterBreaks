@@ -14,6 +14,8 @@ import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'dart:ui';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:better_breaks/ui/widgets/setup_bottom_sheet.dart';
+import 'package:better_breaks/ui/widgets/upcoming_breaks_widget.dart';
+import 'package:better_breaks/ui/views/break_detail/break_detail_view.dart';
 
 class HomeView extends StatefulWidget {
   final bool setupCompleted;
@@ -126,6 +128,15 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       if (_setupCompleted) // Add spacing only when needed
                         SizedBox(height: 24.h),
+                      MoodCheckIn(
+                        onMoodSelected: (value) {
+                          setState(() {
+                            _moodValue = value;
+                          });
+                        },
+                      ),
+                      if (_setupCompleted) // Add spacing only when needed
+                        SizedBox(height: 24.h),
                       if (_setupCompleted) // Only show optimization timeline when setup is completed
                         OptimizationTimelineWidget(
                           title: 'Analytics',
@@ -135,13 +146,123 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       if (_setupCompleted) // Add spacing only when needed
                         SizedBox(height: 24.h),
-                      MoodCheckIn(
-                        onMoodSelected: (value) {
-                          setState(() {
-                            _moodValue = value;
-                          });
-                        },
-                      ),
+                      if (_setupCompleted) // Only show upcoming breaks when setup is completed
+                        UpcomingBreaksWidget(
+                          title: 'Upcoming Breaks',
+                          onSeeAllTap: () {
+                            // Navigate to see all upcoming breaks
+                          },
+                          breaks: [
+                            BreakItem(
+                              title: 'Summer Vacation',
+                              month: 'April',
+                              day: '24',
+                              days: 5,
+                              status: 'Approved',
+                              daysRemaining: 50,
+                              cardColor: AppColors.lightPurple,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BreakDetailView(
+                                      breakItem: BreakItem(
+                                        title: 'Summer Vacation',
+                                        month: 'April',
+                                        day: '24',
+                                        days: 5,
+                                        status: 'Approved',
+                                        daysRemaining: 50,
+                                        cardColor: AppColors.lightPurple,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            BreakItem(
+                              title: 'Summer Vacation',
+                              month: 'April',
+                              day: '24',
+                              days: 5,
+                              status: 'Approved',
+                              daysRemaining: 50,
+                              cardColor: AppColors.lightGreen,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BreakDetailView(
+                                      breakItem: BreakItem(
+                                        title: 'Summer Vacation',
+                                        month: 'April',
+                                        day: '24',
+                                        days: 5,
+                                        status: 'Approved',
+                                        daysRemaining: 50,
+                                        cardColor: AppColors.lightGreen,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            BreakItem(
+                              title: 'Summer Vacation',
+                              month: 'April',
+                              day: '24',
+                              days: 5,
+                              status: 'Approved',
+                              daysRemaining: 50,
+                              cardColor: AppColors.orange100,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BreakDetailView(
+                                      breakItem: BreakItem(
+                                        title: 'Summer Vacation',
+                                        month: 'April',
+                                        day: '24',
+                                        days: 5,
+                                        status: 'Approved',
+                                        daysRemaining: 50,
+                                        cardColor: AppColors.orange100,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            BreakItem(
+                              title: 'Summer Vacation',
+                              month: 'April',
+                              day: '24',
+                              days: 5,
+                              status: 'Approved',
+                              daysRemaining: 50,
+                              cardColor: AppColors.lightPurple,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BreakDetailView(
+                                      breakItem: BreakItem(
+                                        title: 'Summer Vacation',
+                                        month: 'April',
+                                        day: '24',
+                                        days: 5,
+                                        status: 'Approved',
+                                        daysRemaining: 50,
+                                        cardColor: AppColors.lightPurple,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
