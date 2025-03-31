@@ -3,15 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/app/routes/navigation_service.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemSelected;
+  final Function(int)? onItemSelected;
 
   const AppBottomNav({
     super.key,
     required this.selectedIndex,
-    required this.onItemSelected,
+    this.onItemSelected,
   });
 
   @override
@@ -37,7 +38,7 @@ class AppBottomNav extends StatelessWidget {
               label: 'Dashboard',
               index: 0,
               isSelected: selectedIndex == 0,
-              onTap: () => onItemSelected(0),
+              onTap: () => _navigateTo(context, 0),
             ),
             _buildNavItem(
               context: context,
@@ -45,7 +46,7 @@ class AppBottomNav extends StatelessWidget {
               label: 'Plan',
               index: 1,
               isSelected: selectedIndex == 1,
-              onTap: () => onItemSelected(1),
+              onTap: () => _navigateTo(context, 1),
             ),
             _buildNavItem(
               context: context,
@@ -53,7 +54,7 @@ class AppBottomNav extends StatelessWidget {
               label: 'Experience',
               index: 2,
               isSelected: selectedIndex == 2,
-              onTap: () => onItemSelected(2),
+              onTap: () => _navigateTo(context, 2),
             ),
             _buildNavItem(
               context: context,
@@ -61,12 +62,44 @@ class AppBottomNav extends StatelessWidget {
               label: 'Analytics',
               index: 3,
               isSelected: selectedIndex == 3,
-              onTap: () => onItemSelected(3),
+              onTap: () => _navigateTo(context, 3),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _navigateTo(BuildContext context, int index) {
+    // First use the callback if provided (for stateful updates)
+    if (onItemSelected != null) {
+      onItemSelected!(index);
+      return;
+    }
+
+    // Otherwise use the navigation service
+    switch (index) {
+      case 0:
+        if (selectedIndex != 0) {
+          NavigationService.pushReplacementNamed('/dashboard');
+        }
+        break;
+      case 1:
+        if (selectedIndex != 1) {
+          NavigationService.pushReplacementNamed('/planner');
+        }
+        break;
+      case 2:
+        if (selectedIndex != 2) {
+          NavigationService.pushReplacementNamed('/experience');
+        }
+        break;
+      case 3:
+        if (selectedIndex != 3) {
+          NavigationService.pushReplacementNamed('/analytics');
+        }
+        break;
+    }
   }
 
   Widget _buildNavItem({
