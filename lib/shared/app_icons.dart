@@ -17,6 +17,14 @@ class AppIconData {
   static const String settings = '$_base/settings.svg';
   static const String logout = '$_base/logout.svg';
   static const String close = '$_base/close.svg';
+
+  // Payment icons
+  static const String creditCard = '$_base/credit-card.svg';
+  static const String payment = '$_base/payment.svg';
+  static const String paypal = '$_base/paypal.svg';
+  static const String applePay = '$_base/apple-pay.svg';
+  static const String googlePay = '$_base/google-pay.svg';
+  
   
   // Feature icons
   static const String calendar = '$_base/calendar.svg';
