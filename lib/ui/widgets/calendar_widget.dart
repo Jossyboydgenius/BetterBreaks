@@ -12,12 +12,12 @@ class CalendarWidget extends StatefulWidget {
   final Function(DateTime, DateTime?) onRangeSelected;
 
   const CalendarWidget({
-    Key? key,
+    super.key,
     this.startDate,
     this.endDate,
     required this.onDateSelected,
     required this.onRangeSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<CalendarWidget> createState() => _CalendarWidgetState();
