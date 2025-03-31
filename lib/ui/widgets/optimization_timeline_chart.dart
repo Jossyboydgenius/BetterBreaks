@@ -209,7 +209,7 @@ class OptimizationTimelineChart extends StatelessWidget {
                   radius: isApril ? 6 : 4,
                   color: Colors.white,
                   strokeWidth: 2,
-                  strokeColor: AppColors.orange300,
+                  strokeColor: AppColors.orange100,
                 );
               },
             ),
