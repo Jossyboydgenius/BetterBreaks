@@ -1,6 +1,11 @@
 import 'dart:async';
 
 import 'package:better_breaks/ui/views/onboarding/splash_screen_view.dart';
+import 'package:better_breaks/ui/views/setup/setup_view.dart';
+import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
+import 'package:better_breaks/ui/views/experience/experience_view.dart';
+import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +62,28 @@ class MainApp extends StatelessWidget {
           onGenerateRoute: (settings) {
             if (settings.name == '/') {
               return MaterialPageRoute(
-                builder: (context) => const SplashScreenView(), // Or whatever view you want as root
+                builder: (context) => const SetupView(), // Or whatever view you want as root
+              );
+            }
+            // Add routing for bottom navigation views
+            else if (settings.name == '/dashboard') {
+              return MaterialPageRoute(
+                builder: (context) => const DashboardView(),
+              );
+            }
+            else if (settings.name == '/planner') {
+              return MaterialPageRoute(
+                builder: (context) => const PlannerView(showBottomNav: true, isSetup: false),
+              );
+            }
+            else if (settings.name == '/experience') {
+              return MaterialPageRoute(
+                builder: (context) => const ExperienceView(),
+              );
+            }
+            else if (settings.name == '/analytics') {
+              return MaterialPageRoute(
+                builder: (context) => const AnalyticsView(),
               );
             }
             return null;
