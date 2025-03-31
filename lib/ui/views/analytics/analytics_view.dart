@@ -13,6 +13,7 @@ import 'package:better_breaks/ui/views/experience/experience_view.dart';
 import 'package:better_breaks/ui/views/analytics/widgets/break_balance_analysis.dart';
 import 'package:better_breaks/ui/views/analytics/widgets/holiday_distribution_chart.dart';
 import 'package:better_breaks/ui/widgets/optimization_timeline_chart.dart';
+import 'package:better_breaks/ui/views/analytics/widgets/holiday_stress_chart.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -68,6 +69,8 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                         title: 'Optimization Timeline',
                         showHeader: false,
                       ),
+                      SizedBox(height: 32.h),
+                      const HolidayStressChart(),
                       SizedBox(height: 32.h),
                     ],
                   ),
