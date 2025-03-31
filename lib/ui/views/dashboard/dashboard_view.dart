@@ -15,6 +15,9 @@ import 'package:better_breaks/ui/views/dashboard/widgets/completed_setup_section
 import 'package:better_breaks/ui/views/dashboard/widgets/leave_preference_section.dart';
 import 'package:better_breaks/ui/views/dashboard/widgets/all_breaks_view.dart';
 import 'package:better_breaks/ui/views/dashboard/widgets/all_recommendations_view.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
+import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
+import 'package:better_breaks/ui/views/experience/experience_view.dart';
 
 class DashboardView extends StatefulWidget {
   final bool setupCompleted;
@@ -96,19 +99,60 @@ class _DashboardViewState extends State<DashboardView> {
           AppBottomNav(
             selectedIndex: _selectedNavIndex,
             onItemSelected: (index) {
-              setState(() {
-                _selectedNavIndex = index;
-                // Reset to dashboard view when changing tabs
-                if (_showAllBreaks || _showAllRecommendations) {
-                  _showAllBreaks = false;
-                  _showAllRecommendations = false;
-                }
-              });
+              if (index == _selectedNavIndex) {
+                // Already on this tab, do nothing
+                return;
+              }
+              
+              _navigateToTab(index);
             },
           ),
         ],
       ),
     );
+  }
+
+  void _navigateToTab(int index) {
+    switch (index) {
+      case 0:
+        // Already on Dashboard
+        setState(() {
+          _selectedNavIndex = 0;
+          _showAllBreaks = false;
+          _showAllRecommendations = false;
+        });
+        break;
+      case 1:
+        // Navigate to Plan
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlannerView(
+              isSetup: false,
+              showBottomNav: true,
+            ),
+          ),
+        );
+        break;
+      case 2:
+        // Navigate to Experience
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ExperienceView(),
+          ),
+        );
+        break;
+      case 3:
+        // Navigate to Analytics
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AnalyticsView(),
+          ),
+        );
+        break;
+    }
   }
 
   Widget _buildDashboardContent() {
