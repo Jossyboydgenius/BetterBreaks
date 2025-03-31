@@ -6,15 +6,20 @@ import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/calendar_widget.dart';
 import 'package:better_breaks/ui/widgets/planner_bottom_sheet.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
+import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
+import 'package:better_breaks/ui/views/experience/experience_view.dart';
 
 class PlannerView extends StatefulWidget {
   final VoidCallback? onBack;
   final bool isSetup;
+  final bool showBottomNav;
 
   const PlannerView({
     super.key,
     this.onBack,
     this.isSetup = true,
+    this.showBottomNav = false,
   });
 
   @override
@@ -24,7 +29,8 @@ class PlannerView extends StatefulWidget {
 class _PlannerViewState extends State<PlannerView> {
   DateTime? _startDate;
   DateTime? _endDate;
-  final int _currentStep = 2; 
+  final int _currentStep = 2;
+  int _selectedNavIndex = 1; // Plan tab 
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +127,45 @@ class _PlannerViewState extends State<PlannerView> {
               );
             } : null,
           ),
+          if (widget.showBottomNav)
+            AppBottomNav(
+              selectedIndex: _selectedNavIndex,
+              onItemSelected: (index) {
+                if (index != _selectedNavIndex) {
+                  _navigateToPage(index);
+                }
+              },
+            ),
         ],
       ),
     );
+  }
+  
+  void _navigateToPage(int index) {
+    if (index == 0) {
+      // Navigate to Dashboard
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DashboardView(),
+        ),
+      );
+    } else if (index == 2) {
+      // Navigate to Experience
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ExperienceView(),
+        ),
+      );
+    } else if (index == 3) {
+      // Navigate to Analytics
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AnalyticsView(),
+        ),
+      );
+    }
   }
 } 
