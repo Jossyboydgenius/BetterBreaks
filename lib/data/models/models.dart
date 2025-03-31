@@ -16,4 +16,6 @@
 // 
 //   @override
 //   List<Object?> get props => [id, name, email];
-// } 
+// }
+
+export 'break_models.dart'; 
