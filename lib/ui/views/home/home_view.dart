@@ -7,6 +7,7 @@ import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'package:better_breaks/ui/widgets/break_recommendation_widget.dart';
 import 'package:better_breaks/ui/widgets/optimization_timeline_widget.dart';
@@ -35,6 +36,7 @@ class _HomeViewState extends State<HomeView> {
   double _moodValue = 2; // Initial mood (expressionless)
   late bool _setupCompleted; // Track if setup is completed
   bool _showAllBreaks = false; // Track if showing all breaks view
+  bool _showAllRecommendations = false; // Track if showing all recommendations view
 
   @override
   void initState() {
@@ -55,22 +57,29 @@ class _HomeViewState extends State<HomeView> {
         children: [
           Column(
             children: [
-              AppTopBar(
-                heading: 'BetterBreaks',
-                headingFontSize: 16,
-                subheading: 'Serah Lopez',
-                subheadingFontSize: 24,
-                subheadingFontWeight: FontWeight.w700,
-                icon: AppIconData.settings,
-                iconSize: 46,
-                onIconTap: () {
-                  // Open settings
-                },
-              ),
+              if (_showAllRecommendations)
+                _buildRecommendationsTopBar()
+              else
+                AppTopBar(
+                  heading: 'BetterBreaks',
+                  headingFontSize: 16,
+                  subheading: 'Serah Lopez',
+                  subheadingFontSize: 24,
+                  subheadingFontWeight: FontWeight.w700,
+                  icon: AppIconData.settings,
+                  iconSize: 46,
+                  onIconTap: () {
+                    // Open settings
+                  },
+                ),
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(24.w),
-                  child: _showAllBreaks ? _buildAllBreaksView() : _buildHomeContent(),
+                  child: _showAllBreaks 
+                    ? _buildAllBreaksView() 
+                    : _showAllRecommendations 
+                      ? _buildAllRecommendationsView()
+                      : _buildHomeContent(),
                 ),
               ),
               // Add bottom padding to accommodate the bottom nav
@@ -83,13 +92,67 @@ class _HomeViewState extends State<HomeView> {
               setState(() {
                 _selectedNavIndex = index;
                 // Reset to home view when changing tabs
-                if (_showAllBreaks) {
+                if (_showAllBreaks || _showAllRecommendations) {
                   _showAllBreaks = false;
+                  _showAllRecommendations = false;
                 }
               });
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildRecommendationsTopBar() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(24.r),
+          bottomRight: Radius.circular(24.r),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AppBackButton(
+                  color: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      _showAllRecommendations = false;
+                    });
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'Better Breaks, Better You',
+              style: AppTextStyle.raleway(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'Here are our optimised Recommendations',
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8.h),
+          ],
+        ),
       ),
     );
   }
@@ -106,52 +169,11 @@ class _HomeViewState extends State<HomeView> {
           BreakRecommendationWidget(
             title: 'Breaks Recommendation',
             onSeeAllTap: () {
-              // Navigate to see all recommendations
+              setState(() {
+                _showAllRecommendations = true;
+              });
             },
-            recommendations: [
-              RecommendationItem(
-                dateRange: 'December 27-29',
-                description: 'Take 3 days off to get 9 days of holiday',
-                isHighImpact: true,
-                holidays: ['Christmas', 'New year'],
-                onPreviewTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PlannerView(),
-                    ),
-                  );
-                },
-              ),
-              RecommendationItem(
-                dateRange: 'January 15-18',
-                description: 'Take 3 days off to get 9 days of holiday',
-                isHighImpact: true,
-                holidays: ['Easter', 'Spring break'],
-                onPreviewTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PlannerView(),
-                    ),
-                  );
-                },
-              ),
-              RecommendationItem(
-                dateRange: 'May 22-26',
-                description: 'Take 4 days off to get 9 days of holiday',
-                isHighImpact: false,
-                holidays: ['Memorial Day', 'Summer start'],
-                onPreviewTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PlannerView(),
-                    ),
-                  );
-                },
-              ),
-            ],
+            recommendations: _getRecommendationsList(),
           ),
         if (_setupCompleted) // Add spacing only when needed
           SizedBox(height: 24.h),
@@ -185,6 +207,157 @@ class _HomeViewState extends State<HomeView> {
           ),
       ],
     );
+  }
+
+  Widget _buildAllRecommendationsView() {
+    final recommendations = _getRecommendationsList();
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: recommendations.map((recommendation) {
+        return Container(
+          margin: EdgeInsets.only(bottom: 16.h),
+          child: GlassyContainer(
+            backgroundColor: Colors.white,
+            borderColor: Colors.white,
+            padding: EdgeInsets.all(20.r),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Impact badge
+                Container(
+                  decoration: BoxDecoration(
+                    color: recommendation.isHighImpact ? AppColors.bgRed100 : AppColors.lightGreen100,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  child: Text(
+                    recommendation.isHighImpact ? 'High Impact' : 'Low Impact',
+                    style: AppTextStyle.satoshi(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: recommendation.isHighImpact ? AppColors.red100 : AppColors.green,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                // Date range
+                Text(
+                  recommendation.dateRange,
+                  style: AppTextStyle.raleway(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                // Description
+                Text(
+                  recommendation.description,
+                  style: AppTextStyle.satoshi(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.lightBlack100,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                // Holiday badges
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children: recommendation.holidays
+                      .map((holiday) => Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBE6),
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        child: Text(
+                          holiday,
+                          style: AppTextStyle.satoshi(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFFFBBC04),
+                          ),
+                        ),
+                      ))
+                      .toList(),
+                ),
+                SizedBox(height: 20.h),
+                // Preview button
+                AppButton(
+                  text: 'Preview',
+                  backgroundColor: AppColors.primary,
+                  onPressed: recommendation.onPreviewTap,
+                  height: 48.h,
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  List<RecommendationItem> _getRecommendationsList() {
+    return [
+      RecommendationItem(
+        dateRange: 'December 27-29',
+        description: 'Take 3 days off to get 9 days of holiday',
+        isHighImpact: true,
+        holidays: ['Christmas', 'New year'],
+        onPreviewTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PlannerView(),
+            ),
+          );
+        },
+      ),
+      RecommendationItem(
+        dateRange: 'November 10-20',
+        description: 'Take 3 days off to get 9 days of holiday',
+        isHighImpact: false,
+        holidays: ['Salah', 'El-fatir'],
+        onPreviewTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PlannerView(),
+            ),
+          );
+        },
+      ),
+      RecommendationItem(
+        dateRange: 'May 09-12',
+        description: 'Take 3 days off to get 9 days of holiday',
+        isHighImpact: false,
+        holidays: ['El-fatir', 'Salah'],
+        onPreviewTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PlannerView(),
+            ),
+          );
+        },
+      ),
+      RecommendationItem(
+        dateRange: 'May 09-12',
+        description: 'Take 3 days off to get 9 days of holiday',
+        isHighImpact: false,
+        holidays: ['El-fatir', 'Salah'],
+        onPreviewTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PlannerView(),
+            ),
+          );
+        },
+      ),
+    ];
   }
 
   Widget _buildAllBreaksView() {
