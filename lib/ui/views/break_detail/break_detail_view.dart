@@ -9,9 +9,9 @@ class BreakDetailView extends StatelessWidget {
   final BreakItem breakItem;
 
   const BreakDetailView({
-    Key? key,
+    super.key,
     required this.breakItem,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
