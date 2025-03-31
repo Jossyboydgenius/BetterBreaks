@@ -6,7 +6,7 @@ import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'package:better_breaks/ui/widgets/break_recommendation_widget.dart';
-import 'package:better_breaks/ui/widgets/optimization_timeline_widget.dart';
+import 'package:better_breaks/ui/widgets/optimization_timeline_chart.dart';
 import 'dart:ui';
 import 'package:better_breaks/ui/widgets/upcoming_breaks_widget.dart';
 import 'package:better_breaks/data/repositories/break_repository.dart';
@@ -190,11 +190,12 @@ class _DashboardViewState extends State<DashboardView> {
         ),
         if (_setupCompleted) ...[
           SizedBox(height: 24.h),
-          OptimizationTimelineWidget(
+          OptimizationTimelineChart(
             title: 'Analytics',
             onSeeAllTap: () {
               // Navigate to analytics screen
             },
+            showHeader: true,
           ),
           SizedBox(height: 24.h),
           UpcomingBreaksWidget(
