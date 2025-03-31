@@ -56,7 +56,7 @@ class OptimizationTimelineWidget extends StatelessWidget {
                 children: [
                   AppIcons(
                     icon: AppIconData.zap01,
-                    size: 24.r,
+                    size: 20.r,
                   ),
                   SizedBox(width: 8.w),
                   Text(
