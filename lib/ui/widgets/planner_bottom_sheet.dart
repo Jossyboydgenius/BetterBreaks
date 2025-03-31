@@ -230,7 +230,7 @@ class PlannerForecastContainer extends StatelessWidget {
   final VoidCallback onCollapse;
 
   const PlannerForecastContainer({
-    Key? key,
+    super.key,
     this.startDate,
     this.endDate,
     this.description,
@@ -239,7 +239,7 @@ class PlannerForecastContainer extends StatelessWidget {
     required this.expandAnimation,
     required this.onExpand,
     required this.onCollapse,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -278,12 +278,12 @@ class PlannerDateRangeSection extends StatelessWidget {
   final List<String> holidays;
 
   const PlannerDateRangeSection({
-    Key? key,
+    super.key,
     this.startDate,
     this.endDate,
     this.description,
     this.holidays = const [],
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -358,12 +358,12 @@ class WeatherForecastSection extends StatelessWidget {
   final VoidCallback onCollapse;
 
   const WeatherForecastSection({
-    Key? key,
+    super.key,
     required this.isExpanded,
     required this.expandAnimation,
     required this.onExpand,
     required this.onCollapse,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -582,10 +582,10 @@ class PlannerActionButtons extends StatelessWidget {
   final VoidCallback onDecline;
 
   const PlannerActionButtons({
-    Key? key,
+    super.key,
     required this.onAccept,
     required this.onDecline,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
