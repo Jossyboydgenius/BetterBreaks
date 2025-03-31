@@ -12,11 +12,11 @@ class BreakRecommendationWidget extends StatelessWidget {
   final List<RecommendationItem> recommendations;
   
   const BreakRecommendationWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.onSeeAllTap,
     required this.recommendations,
-  }) : super(key: key);
+  });
   
   @override
   Widget build(BuildContext context) {
