@@ -59,6 +59,8 @@ class _HomeViewState extends State<HomeView> {
             children: [
               if (_showAllRecommendations)
                 _buildRecommendationsTopBar()
+              else if (_showAllBreaks)
+                _buildBreaksTopBar()
               else
                 AppTopBar(
                   heading: 'BetterBreaks',
@@ -144,6 +146,59 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(height: 8.h),
             Text(
               'Here are our optimised Recommendations',
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBreaksTopBar() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(24.r),
+          bottomRight: Radius.circular(24.r),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AppBackButton(
+                  color: Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      _showAllBreaks = false;
+                    });
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'Better Breaks, Better You',
+              style: AppTextStyle.raleway(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'All Upcoming Breaks',
               style: AppTextStyle.satoshi(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
@@ -364,33 +419,6 @@ class _HomeViewState extends State<HomeView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header with back button
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showAllBreaks = false;
-                });
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: AppColors.lightBlack,
-                size: 24.r,
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Text(
-              'All Upcoming Breaks',
-              style: AppTextStyle.raleway(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.lightBlack,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 24.h),
         // List of all breaks
         GlassyContainer(
           backgroundColor: Colors.white,
