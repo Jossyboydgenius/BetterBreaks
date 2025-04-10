@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
-import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/ui/widgets/app_back_button.dart';
 
 class ExperienceTopBar extends StatelessWidget {
   final String title;
@@ -18,32 +18,29 @@ class ExperienceTopBar extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
-          left: 16.w,
-          right: 16.w,
-          top: MediaQuery.of(context).padding.top + 16.h,
-          bottom: 16.h),
+        left: 24.w,
+        right: 24.w,
+        top: MediaQuery.of(context).padding.top + 16.h,
+        bottom: 8.h,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Back button
-          GestureDetector(
-            onTap: onBackTap ?? () => Navigator.pop(context),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 16.h),
-              child: AppIcons(
-                icon: AppIconData.back,
-                size: 24.r,
-                color: Colors.white,
-              ),
-            ),
+          AppBackButton(
+            onPressed: onBackTap,
+            color: Colors.white,
+            size: 18.r,
           ),
+
+          SizedBox(height: 8.h),
 
           // Title
           Text(
             title,
             style: AppTextStyle.raleway(
               fontSize: 24.sp,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
               color: Colors.white,
             ),
           ),
