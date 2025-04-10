@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AppIconData {
   static const String _base = 'assets/svgs';
-  
+
   // Social icons
   static const String facebook = '$_base/facebook.svg';
   static const String google = '$_base/google.svg';
@@ -15,6 +15,7 @@ class AppIconData {
   static const String back = '$_base/back.svg';
   static const String dashboard = '$_base/dashboard-square.svg';
   static const String settings = '$_base/settings.svg';
+  static const String filter = '$_base/filter.svg';
   static const String logout = '$_base/logout.svg';
   static const String close = '$_base/close.svg';
 
@@ -24,8 +25,7 @@ class AppIconData {
   static const String paypal = '$_base/paypal.svg';
   static const String applePay = '$_base/apple-pay.svg';
   static const String googlePay = '$_base/google-pay.svg';
-  
-  
+
   // Feature icons
   static const String calendar = '$_base/calendar.svg';
   static const String calendar01 = '$_base/calendar-01.svg';
@@ -67,8 +67,8 @@ class AppIconData {
   static const String rightArrow = '$_base/right-arrow.svg';
   static const String expand = '$_base/expand.svg';
   static const String cloudy = '$_base/cloudy.svg';
-  static const String rain = '$_base/rain.svg';  
-} 
+  static const String rain = '$_base/rain.svg';
+}
 
 class AppIcons extends StatelessWidget {
   final VoidCallback? onPressed;
