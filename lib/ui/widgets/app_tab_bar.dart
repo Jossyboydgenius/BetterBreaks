@@ -18,32 +18,78 @@ class AppTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48.h,
+      height: 40.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: tabs.length,
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
         itemBuilder: (context, index) {
           final isSelected = index == selectedIndex;
           return GestureDetector(
             onTap: () => onTabSelected(index),
             child: Container(
-              margin: EdgeInsets.only(right: 8.w),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              margin: EdgeInsets.only(right: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               decoration: BoxDecoration(
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(24.r),
+                color: null, // No solid color for any tab
+                gradient: isSelected
+                    ? AppColors.selectedTabGradient
+                    : AppColors.searchFieldGradient,
+                borderRadius: BorderRadius.circular(20.r),
+                border: isSelected
+                    ? Border.all(
+                        color: Colors.white.withOpacity(0.8),
+                        width: 1.2,
+                      )
+                    : null,
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 2),
+                        ),
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.6),
+                          blurRadius: 3,
+                          spreadRadius: 0,
+                          offset: const Offset(0, -1),
+                        )
+                      ]
+                    : null,
               ),
               child: Center(
-                child: Text(
-                  tabs[index],
-                  style: AppTextStyle.satoshi(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? AppColors.primary : Colors.white,
-                  ),
-                ),
+                child: isSelected
+                    ? ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xFF0088CC), // Darker primary
+                              AppColors.primary,
+                            ],
+                          ).createShader(bounds);
+                        },
+                        blendMode: BlendMode.srcIn,
+                        child: Text(
+                          tabs[index],
+                          style: AppTextStyle.satoshi(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        tabs[index],
+                        style: AppTextStyle.satoshi(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           );
