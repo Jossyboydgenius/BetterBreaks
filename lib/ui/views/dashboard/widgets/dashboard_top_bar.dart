@@ -52,11 +52,11 @@ class DashboardTopBar extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              showAllRecommendations 
-                ? 'Here are our optimised Recommendations'
-                : showAllBreaks 
-                  ? 'All Upcoming Breaks'
-                  : '',
+              showAllRecommendations
+                  ? 'Here are our optimised Recommendations'
+                  : showAllBreaks
+                      ? 'All Upcoming Breaks'
+                      : '',
               style: AppTextStyle.satoshi(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
@@ -69,4 +69,4 @@ class DashboardTopBar extends StatelessWidget {
       ),
     );
   }
-} 
+}
