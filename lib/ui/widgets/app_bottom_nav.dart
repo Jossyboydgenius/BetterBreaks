@@ -123,18 +123,44 @@ class AppBottomNav extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(horizontal: isSelected ? 16.w : 0),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
+          gradient: isSelected ? AppColors.selectedTabGradient : null,
+          color: isSelected ? null : Colors.transparent,
           borderRadius: BorderRadius.circular(24.r),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 2,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 1),
+                  )
+                ]
+              : null,
         ),
         child: Row(
-          mainAxisAlignment: isSelected ? MainAxisAlignment.start : MainAxisAlignment.center,
+          mainAxisAlignment:
+              isSelected ? MainAxisAlignment.start : MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (isSelected) 
-              AppIcons(
-                icon: icon,
-                size: 20.r,
-                color: AppColors.primary,
+            if (isSelected)
+              ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF0088CC), // Darker primary
+                      AppColors.primary,
+                    ],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+                child: AppIcons(
+                  icon: icon,
+                  size: 20.r,
+                  color:
+                      AppColors.primary, // This will be modified by the shader
+                ),
               )
             else
               Container(
@@ -158,14 +184,28 @@ class AppBottomNav extends StatelessWidget {
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isSelected ? 1.0 : 0.0,
-                  child: Text(
-                    label,
-                    style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0088CC), // Darker primary
+                          AppColors.primary,
+                        ],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.srcIn,
+                    child: Text(
+                      label,
+                      style: AppTextStyle.satoshi(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors
+                            .primary, // This will be modified by the shader
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -175,4 +215,4 @@ class AppBottomNav extends StatelessWidget {
       ),
     );
   }
-} 
+}
