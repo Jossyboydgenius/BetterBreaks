@@ -7,7 +7,6 @@ import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'package:better_breaks/ui/widgets/break_recommendation_widget.dart';
 import 'package:better_breaks/ui/widgets/optimization_timeline_chart.dart';
-import 'dart:ui';
 import 'package:better_breaks/ui/widgets/upcoming_breaks_widget.dart';
 import 'package:better_breaks/data/repositories/break_repository.dart';
 import 'package:better_breaks/ui/views/dashboard/widgets/dashboard_top_bar.dart';
@@ -21,28 +20,28 @@ import 'package:better_breaks/ui/views/experience/experience_view.dart';
 
 class DashboardView extends StatefulWidget {
   final bool setupCompleted;
-  
-  const DashboardView({
-    super.key, 
-    this.setupCompleted = false
-  });
+
+  const DashboardView({super.key, this.setupCompleted = false});
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  int _selectedNavIndex = 0; // 0: Dashboard, 1: Plan, 2: Experience, 3: Analytics
+  int _selectedNavIndex =
+      0; // 0: Dashboard, 1: Plan, 2: Experience, 3: Analytics
   double _moodValue = 2; // Initial mood (expressionless)
   late bool _setupCompleted; // Track if setup is completed
   bool _showAllBreaks = false; // Track if showing all breaks view
-  bool _showAllRecommendations = false; // Track if showing all recommendations view
+  bool _showAllRecommendations =
+      false; // Track if showing all recommendations view
   final _breakRepository = BreakRepository();
 
   @override
   void initState() {
     super.initState();
-    _setupCompleted = widget.setupCompleted; // Initialize from the widget parameter
+    _setupCompleted =
+        widget.setupCompleted; // Initialize from the widget parameter
   }
 
   @override
@@ -85,11 +84,14 @@ class _DashboardViewState extends State<DashboardView> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(24.w),
-                  child: _showAllBreaks 
-                    ? AllBreaksView(breaks: _breakRepository.getBreaks(context))
-                    : _showAllRecommendations 
-                      ? AllRecommendationsView(recommendations: _breakRepository.getRecommendations(context))
-                      : _buildDashboardContent(),
+                  child: _showAllBreaks
+                      ? AllBreaksView(
+                          breaks: _breakRepository.getBreaks(context))
+                      : _showAllRecommendations
+                          ? AllRecommendationsView(
+                              recommendations:
+                                  _breakRepository.getRecommendations(context))
+                          : _buildDashboardContent(),
                 ),
               ),
               // Add bottom padding to accommodate the bottom nav
@@ -103,7 +105,7 @@ class _DashboardViewState extends State<DashboardView> {
                 // Already on this tab, do nothing
                 return;
               }
-              
+
               _navigateToTab(index);
             },
           ),
@@ -159,7 +161,7 @@ class _DashboardViewState extends State<DashboardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _setupCompleted 
+        _setupCompleted
             ? const CompletedSetupSection()
             : LeavePreferenceSection(
                 onSetupComplete: () {
@@ -254,7 +256,8 @@ class RoundedRectangleThumbShape extends SliderComponentShape {
 
     // Draw drop shadow
     canvas.drawShadow(
-      Path()..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius)),
+      Path()
+        ..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius)),
       Colors.black.withOpacity(0.2),
       4,
       true,
@@ -264,4 +267,4 @@ class RoundedRectangleThumbShape extends SliderComponentShape {
     canvas.drawCircle(center, enabledThumbRadius, fillPaint);
     canvas.drawCircle(center, enabledThumbRadius, borderPaint);
   }
-} 
+}
