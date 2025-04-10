@@ -27,7 +27,7 @@ class _ExperienceViewState extends State<ExperienceView> {
       'title': 'Jazz Night at The Blue Note',
       'location': 'The Blue Note, London',
       'date': 'Fri, 15 Jul • 8:00 PM',
-      'price': '\$25',
+      'price': '£25',
       'fullWidth': 'true',
     },
     {
@@ -94,7 +94,7 @@ class _ExperienceViewState extends State<ExperienceView> {
         children: [
           Column(
             children: [
-              // Experience Top Bar with "Experiences for you" heading, search, and tabs
+              // Experience Top Bar
               ExperienceTopBar(
                 title: 'Experiences for you',
                 onBackTap: () {
@@ -122,42 +122,41 @@ class _ExperienceViewState extends State<ExperienceView> {
                 },
               ),
 
-              // Content area (light blue background with rounded corners)
+              // Expanded content area with scroll
               Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.lightPrimary,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24.r),
-                      topRight: Radius.circular(24.r),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.r),
-                    child: _buildEventsList(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Content container with rounded corners
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPrimary,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24.r),
+                            topRight: Radius.circular(24.r),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 0),
+                        child: _buildEventsList(),
+                      ),
+                      // Bottom padding to prevent content from being hidden behind bottom nav
+                      SizedBox(height: 80.h),
+                    ],
                   ),
                 ),
               ),
-
-              // Add space for the bottom nav
-              SizedBox(height: 80.h),
             ],
           ),
 
-          // Bottom navigation
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: AppBottomNav(
-              selectedIndex: _selectedNavIndex,
-              onItemSelected: (index) {
-                if (index != _selectedNavIndex) {
-                  _navigateToPage(index);
-                }
-              },
-            ),
+          // Bottom navigation - positioned at the bottom of the stack
+          AppBottomNav(
+            selectedIndex: _selectedNavIndex,
+            onItemSelected: (index) {
+              if (index != _selectedNavIndex) {
+                _navigateToPage(index);
+              }
+            },
           ),
         ],
       ),
@@ -176,7 +175,7 @@ class _ExperienceViewState extends State<ExperienceView> {
         // Add full-width card
         rows.add(
           Padding(
-            padding: EdgeInsets.only(bottom: 8.h),
+            padding: EdgeInsets.only(bottom: 6.h),
             child: EventCard(
               image: event['image']!,
               title: event['title']!,
@@ -194,7 +193,7 @@ class _ExperienceViewState extends State<ExperienceView> {
           // We have two half-width cards to display in a row
           rows.add(
             Padding(
-              padding: EdgeInsets.only(bottom: 8.h),
+              padding: EdgeInsets.only(bottom: 6.h),
               child: Row(
                 children: [
                   Expanded(
@@ -207,7 +206,7 @@ class _ExperienceViewState extends State<ExperienceView> {
                       useGradientOverlay: true,
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 6.w),
                   Expanded(
                     child: EventCard(
                       image: _events[i + 1]['image']!,
@@ -229,7 +228,7 @@ class _ExperienceViewState extends State<ExperienceView> {
           // Just one half-width card, display it as full-width
           rows.add(
             Padding(
-              padding: EdgeInsets.only(bottom: 8.h),
+              padding: EdgeInsets.only(bottom: 6.h),
               child: EventCard(
                 image: event['image']!,
                 title: event['title']!,
@@ -245,8 +244,7 @@ class _ExperienceViewState extends State<ExperienceView> {
       }
     }
 
-    return ListView(
-      padding: EdgeInsets.zero,
+    return Column(
       children: rows,
     );
   }
