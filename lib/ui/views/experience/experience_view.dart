@@ -39,13 +39,19 @@ class _ExperienceViewState extends State<ExperienceView> {
               ExperienceTopBar(
                 title: 'Experiences for you',
                 onBackTap: () {
-                  Navigator.pop(context);
+                  // Navigate to Dashboard
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardView(),
+                    ),
+                  );
                 },
               ),
 
               // Search bar
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                 child: AppSearch(
                   controller: _searchController,
                   onChanged: (value) {
@@ -70,14 +76,15 @@ class _ExperienceViewState extends State<ExperienceView> {
 
               SizedBox(height: 16.h),
 
-              // Content area (placeholder for now)
+              // Content area (light blue background with rounded corners)
               Expanded(
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.background,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightPrimary,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24),
+                      topLeft: Radius.circular(20.r),
+                      topRight: Radius.circular(20.r),
                     ),
                   ),
                   child: Center(
@@ -92,22 +99,20 @@ class _ExperienceViewState extends State<ExperienceView> {
                   ),
                 ),
               ),
+
+              // Add space for the bottom nav
+              SizedBox(height: 80.h),
             ],
           ),
 
           // Bottom navigation
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: AppBottomNav(
-              selectedIndex: _selectedNavIndex,
-              onItemSelected: (index) {
-                if (index != _selectedNavIndex) {
-                  _navigateToPage(index);
-                }
-              },
-            ),
+          AppBottomNav(
+            selectedIndex: _selectedNavIndex,
+            onItemSelected: (index) {
+              if (index != _selectedNavIndex) {
+                _navigateToPage(index);
+              }
+            },
           ),
         ],
       ),
