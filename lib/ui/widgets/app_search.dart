@@ -20,15 +20,11 @@ class AppSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56.h,
+      height: 48.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(28.r),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.4),
-          width: 1,
-        ),
+        color: Colors.white.withOpacity(0.45),
+        borderRadius: BorderRadius.circular(24.r),
       ),
       child: Row(
         children: [
@@ -46,16 +42,16 @@ class AppSearch extends StatelessWidget {
               controller: controller,
               onChanged: onChanged,
               style: AppTextStyle.satoshi(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w500,
                 color: Colors.white,
               ),
               decoration: InputDecoration(
                 hintText: placeholder,
                 hintStyle: AppTextStyle.satoshi(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -65,7 +61,7 @@ class AppSearch extends StatelessWidget {
 
           // Vertical divider
           Container(
-            height: 24.h,
+            height: 20.h,
             width: 1,
             color: Colors.white,
             margin: EdgeInsets.symmetric(horizontal: 12.w),
