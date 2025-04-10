@@ -4,8 +4,6 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/experience_top_bar.dart';
-import 'package:better_breaks/ui/widgets/app_search.dart';
-import 'package:better_breaks/ui/widgets/app_tab_bar.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 
 class ExperienceView extends StatefulWidget {
@@ -30,12 +28,12 @@ class _ExperienceViewState extends State<ExperienceView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           Column(
             children: [
-              // Experience Top Bar with "Experiences for you" heading
+              // Experience Top Bar with "Experiences for you" heading, search, and tabs
               ExperienceTopBar(
                 title: 'Experiences for you',
                 onBackTap: () {
@@ -47,34 +45,21 @@ class _ExperienceViewState extends State<ExperienceView> {
                     ),
                   );
                 },
-              ),
-
-              // Search bar
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                child: AppSearch(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    // Handle search
-                  },
-                  onFilterTap: () {
-                    // Handle filter tap
-                  },
-                ),
-              ),
-
-              // Tab bar
-              AppTabBar(
+                searchController: _searchController,
+                onSearchChanged: (value) {
+                  // Handle search
+                },
+                onFilterTap: () {
+                  // Handle filter tap
+                },
                 tabs: _tabs,
-                selectedIndex: _selectedTabIndex,
+                selectedTabIndex: _selectedTabIndex,
                 onTabSelected: (index) {
                   setState(() {
                     _selectedTabIndex = index;
                   });
                 },
               ),
-
-              SizedBox(height: 16.h),
 
               // Content area (light blue background with rounded corners)
               Expanded(
@@ -83,8 +68,8 @@ class _ExperienceViewState extends State<ExperienceView> {
                   decoration: BoxDecoration(
                     color: AppColors.lightPrimary,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.r),
-                      topRight: Radius.circular(20.r),
+                      topLeft: Radius.circular(24.r),
+                      topRight: Radius.circular(24.r),
                     ),
                   ),
                   child: Center(
