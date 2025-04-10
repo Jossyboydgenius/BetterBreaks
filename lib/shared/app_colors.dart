@@ -8,15 +8,14 @@ class AppColors {
   static const Color orange = Color(0xFFFF9A6D);
   static const Color lightGreen = Color(0xFFB3D069);
   static const Color green = Color(0xFF16A34A);
-  
+
   // Orange shades
   static const Color orange100 = Color(0xFFFE8D6B);
   static const Color orange200 = Color(0xFFFFDBD0);
   static const Color orange300 = Color(0xFFFF3B30);
-  
+
   // Green shades
   static const Color lightGreen100 = Color(0xFFDCFCE7);
-
 
   // Error/Failure Colors
   static const Color red100 = Color(0xFFDC3545);
@@ -27,7 +26,7 @@ class AppColors {
   static const Color green100 = Color(0xFF198754);
   static const Color bgGreen = Color(0xFFF1F9F5);
   static const Color lightGreen200 = Color(0xFFD1E7DD);
-  
+
   // Grey shades
   static const Color lightGrey = Color(0xFFA3A3A3);
   static const Color greyLight = Color(0xFFFFFFFF);
@@ -40,18 +39,18 @@ class AppColors {
   static const Color grey600 = Color(0xFF595D62);
   static const Color grey700 = Color(0xFF888888);
   static const Color grey800 = Color(0xFF666666);
-  
+
   // Black shades
   static const Color lightBlack = Color(0xFF1E232C);
   static const Color lightBlack100 = Color(0xFF4B5563);
-  
+
   // Background colors
   static const Color background = Color(0xFFCFF7FF);
-  
+
   // Purple shades
   static const Color lightPurple = Color(0xFF7092F2);
   static const Color lightPurple100 = Color(0xFFDEE7FF);
-  
+
   // Additional colors
   static const Color lightBlue = Color(0xFF00BBFF);
   static const Color blue = Color(0xFF007AFF);
@@ -89,13 +88,36 @@ class AppColors {
     stops: [0.4455, 0.9496],
   );
 
+  // Search field and tab bar gradient
+  static const LinearGradient searchFieldGradient = LinearGradient(
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+    colors: [
+      Color(0x99FFFFFF), // 60% white
+      Color(0x66FFFFFF), // 40% white
+    ],
+  );
+
+  // Selected tab gradient (appealing white with visible gradient)
+  static const LinearGradient selectedTabGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.white,
+      Color(0xFFE1F5FF), // More noticeable blue tint
+      Color(0xFFD6F0FF), // Even more noticeable blue tint
+    ],
+    stops: [0.0, 0.6, 1.0],
+  );
+
   // Box shadow
   static BoxShadow innerShadow = BoxShadow(
     color: const Color(0x40000000), // 40% opacity
     offset: const Offset(5, 4),
     blurRadius: 5.4,
     spreadRadius: -1, // Use negative spread radius to simulate inset
-    blurStyle: BlurStyle.inner, // Use inner blur style instead of inset parameter
+    blurStyle:
+        BlurStyle.inner, // Use inner blur style instead of inset parameter
   );
 
   static const LinearGradient calendarBorderGradient = LinearGradient(
@@ -115,4 +137,4 @@ class AppColors {
       Color(0xFFFBBC04), // #FBBC04
     ],
   );
-} 
+}
