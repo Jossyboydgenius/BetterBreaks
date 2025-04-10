@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
-import 'package:better_breaks/ui/widgets/app_top_bar.dart';
-import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/ui/widgets/experience_top_bar.dart';
+import 'package:better_breaks/ui/widgets/app_search.dart';
+import 'package:better_breaks/ui/widgets/app_tab_bar.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 
 class ExperienceView extends StatefulWidget {
@@ -16,69 +17,97 @@ class ExperienceView extends StatefulWidget {
 
 class _ExperienceViewState extends State<ExperienceView> {
   int _selectedNavIndex = 2; // Experience tab
+  int _selectedTabIndex = 0; // First tab in the tab bar
+  final List<String> _tabs = ['Top picks', 'All', 'Music', 'Movies', 'Health'];
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.primary,
       body: Stack(
         children: [
           Column(
             children: [
-              AppTopBar(
-                heading: 'Experience',
-                headingFontSize: 16,
-                subheading: 'Serah Lopez',
-                subheadingFontSize: 24,
-                subheadingFontWeight: FontWeight.w700,
-                icon: AppIconData.settings,
-                iconSize: 46,
-                onIconTap: () {
-                  // Open settings
+              // Experience Top Bar with "Experiences for you" heading
+              ExperienceTopBar(
+                title: 'Experiences for you',
+                onBackTap: () {
+                  Navigator.pop(context);
                 },
               ),
+
+              // Search bar
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                child: AppSearch(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    // Handle search
+                  },
+                  onFilterTap: () {
+                    // Handle filter tap
+                  },
+                ),
+              ),
+
+              // Tab bar
+              AppTabBar(
+                tabs: _tabs,
+                selectedIndex: _selectedTabIndex,
+                onTabSelected: (index) {
+                  setState(() {
+                    _selectedTabIndex = index;
+                  });
+                },
+              ),
+
+              SizedBox(height: 16.h),
+
+              // Content area (placeholder for now)
               Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.celebration_outlined,
-                        size: 100.r,
-                        color: AppColors.primary,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Experience content coming soon',
+                      style: AppTextStyle.satoshi(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.lightBlack,
                       ),
-                      SizedBox(height: 20.h),
-                      Text(
-                        'Experience Coming Soon',
-                        style: AppTextStyle.raleway(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.lightBlack,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'This feature is under development',
-                        style: AppTextStyle.satoshi(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.lightBlack100,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-              SizedBox(height: 80.h),
             ],
           ),
-          AppBottomNav(
-            selectedIndex: _selectedNavIndex,
-            onItemSelected: (index) {
-              if (index != _selectedNavIndex) {
-                _navigateToPage(index);
-              }
-            },
+
+          // Bottom navigation
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: AppBottomNav(
+              selectedIndex: _selectedNavIndex,
+              onItemSelected: (index) {
+                if (index != _selectedNavIndex) {
+                  _navigateToPage(index);
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -97,4 +126,4 @@ class _ExperienceViewState extends State<ExperienceView> {
     }
     // Other navigation options will be added later
   }
-} 
+}
