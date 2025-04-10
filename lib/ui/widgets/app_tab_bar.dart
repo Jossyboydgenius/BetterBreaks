@@ -22,13 +22,18 @@ class AppTabBar extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: tabs.length,
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        padding: EdgeInsets.zero,
         itemBuilder: (context, index) {
           final isSelected = index == selectedIndex;
           return GestureDetector(
             onTap: () => onTabSelected(index),
             child: Container(
-              margin: EdgeInsets.only(right: 10.w),
+              margin: EdgeInsets.only(
+                right: 10.w,
+                left: index == 0
+                    ? 0
+                    : 0, // Add a bit of left padding for the first item
+              ),
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               decoration: BoxDecoration(
                 color: null, // No solid color for any tab
