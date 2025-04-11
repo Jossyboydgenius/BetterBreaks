@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:better_breaks/ui/widgets/suggestion_card.dart';
-import 'package:better_breaks/ui/views/planner/planner_view.dart';
+import 'package:better_breaks/ui/views/setup/setup_planner_view.dart';
 
 class SuggestionsContent extends StatelessWidget {
   final VoidCallback? onBack;
-  
+
   const SuggestionsContent({
     super.key,
     this.onBack,
@@ -23,9 +23,8 @@ class SuggestionsContent extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlannerView(
+                builder: (context) => SetupPlannerView(
                   onBack: onBack,
-                  isSetup: true,
                 ),
               ),
             );
@@ -61,4 +60,4 @@ class SuggestionsContent extends StatelessWidget {
       ],
     );
   }
-} 
+}
