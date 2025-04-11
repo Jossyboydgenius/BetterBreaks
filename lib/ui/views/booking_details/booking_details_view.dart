@@ -9,6 +9,7 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
+import 'package:better_breaks/ui/views/payment_method/payment_method_view.dart';
 
 class BookingDetailsView extends StatefulWidget {
   final String eventTitle;
@@ -73,15 +74,16 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                     text: 'Make Payment',
                     backgroundColor: AppColors.primary,
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Payment processed for ${widget.eventTitle}!'),
-                          backgroundColor: AppColors.primary,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentMethodView(
+                            eventTitle: widget.eventTitle,
+                            quantity: widget.quantity,
+                            totalAmount: widget.price * widget.quantity,
+                          ),
                         ),
                       );
-                      Navigator.pop(context);
-                      Navigator.pop(context);
                     },
                   ),
                   SizedBox(height: 24.h),
