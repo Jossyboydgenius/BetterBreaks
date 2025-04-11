@@ -99,7 +99,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Padding(
-                    padding: EdgeInsets.all(24.r),
+                    padding: EdgeInsets.fromLTRB(24.r, 0, 24.r, 24.r),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -173,7 +173,14 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(32.r),
-              border: Border.all(color: Colors.white.withOpacity(0.3)),
+              border: Border.all(color: Colors.white.withOpacity(0.2)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Row(
               children: [
@@ -183,7 +190,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
                       : 'Select date',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.lightBlack,
                   ),
                 ),
@@ -214,7 +221,14 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(32.r),
-              border: Border.all(color: Colors.white.withOpacity(0.3)),
+              border: Border.all(color: Colors.white.withOpacity(0.2)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Row(
               children: [
@@ -224,7 +238,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
                       : 'Select date',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.lightBlack,
                   ),
                 ),
