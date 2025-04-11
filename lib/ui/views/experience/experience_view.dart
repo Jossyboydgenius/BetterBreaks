@@ -358,10 +358,7 @@ class _ExperienceViewState extends State<ExperienceView> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const PlannerView(
-            isSetup: false,
-            showBottomNav: true,
-          ),
+          builder: (context) => const PlannerView(),
         ),
       );
     }
