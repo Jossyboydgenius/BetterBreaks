@@ -6,6 +6,7 @@ import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/ui/views/booking_details/booking_details_view.dart';
 
 class EventDetailsView extends StatefulWidget {
   final String image;
@@ -369,12 +370,16 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                       text: 'Book Now',
                       backgroundColor: AppColors.primary,
                       onPressed: () {
-                        // Handle booking logic
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'Booked $_quantity tickets for ${widget.title}!'),
-                            backgroundColor: AppColors.primary,
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookingDetailsView(
+                              eventTitle: widget.title,
+                              location: widget.location,
+                              date: widget.date,
+                              price: _unitPrice,
+                              quantity: _quantity,
+                            ),
                           ),
                         );
                       },
