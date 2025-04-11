@@ -150,12 +150,12 @@ class AppColors {
 
   // Premium features gradient
   static const LinearGradient premiumGradient = LinearGradient(
-    begin: Alignment(-0.5, 0.5),
-    end: Alignment(1, 1),
+    begin: Alignment.topLeft,
+    end: Alignment.bottomCenter,
     colors: [
       Color(0xFF009AD6),
       Color(0xFF6DFFFA),
     ],
-    stops: [0.4455, 0.9496],
+    stops: [0.5, 1.0],
   );
 }
