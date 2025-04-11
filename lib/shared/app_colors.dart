@@ -88,6 +88,16 @@ class AppColors {
     stops: [0.4455, 0.9496],
   );
 
+  // Filter events gradient
+  static const LinearGradient filterGradient = LinearGradient(
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+    colors: [
+      Color(0x99009AD6), // 60% opacity
+      Color(0x66009AD6), // 40% opacity
+    ],
+  );
+
   // Search field and tab bar gradient
   static const LinearGradient searchFieldGradient = LinearGradient(
     begin: Alignment.bottomCenter,
