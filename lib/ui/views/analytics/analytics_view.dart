@@ -250,10 +250,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PlannerView(
-              isSetup: false,
-              showBottomNav: true,
-            ),
+            builder: (context) => const PlannerView(),
           ),
         );
         break;
