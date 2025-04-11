@@ -35,6 +35,10 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
     {
       'cardNumber': '5642987654321234',
       'cardHolderName': 'Adam Gregory',
+    },
+    {
+      'cardNumber': '6464123456789784',
+      'cardHolderName': 'Femi',
     }
   ];
 
@@ -73,30 +77,20 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
                         onSave: _saveNewCard,
                       ),
                     ] else ...[
-                      // Saved cards + Add new card button
-                      GlassyContainer(
-                        backgroundColor: Colors.white,
-                        borderColor: Colors.white,
-                        padding: EdgeInsets.all(16.r),
-                        child: Column(
-                          children: [
-                            // Show saved cards
-                            ..._savedCards.map((card) => SavedCardWidget(
-                                  cardNumber: card['cardNumber']!,
-                                  cardHolderName: card['cardHolderName']!,
-                                  onTap: () => _processPayment('Credit Card'),
-                                )),
+                      // Show saved cards individually
+                      ..._savedCards.map((card) => SavedCard(
+                            cardNumber: card['cardNumber']!,
+                            cardHolderName: card['cardHolderName']!,
+                            onTap: () => _processPayment('Credit Card'),
+                          )),
 
-                            // Add new card button
-                            AddCardWidget(
-                              onTap: () {
-                                setState(() {
-                                  _showAddCardForm = true;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
+                      // Add new card button
+                      AddCard(
+                        onTap: () {
+                          setState(() {
+                            _showAddCardForm = true;
+                          });
+                        },
                       ),
                     ],
                   ] else ...[
@@ -231,7 +225,7 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
             AppIcons(
               icon: icon,
               size: title.contains('Google') || title.contains('Apple')
-                  ? 32.r
+                  ? 42.r
                   : 24.r,
               color: AppColors.lightBlack,
             ),
@@ -252,7 +246,7 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
             // Right arrow
             AppIcons(
               icon: AppIconData.rightArrow,
-              size: 20.r,
+              size: 16.r,
               color: AppColors.grey800,
             ),
           ],
