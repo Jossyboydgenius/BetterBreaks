@@ -129,10 +129,7 @@ class _DashboardViewState extends State<DashboardView> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => PlannerView(
-              isSetup: false,
-              showBottomNav: true,
-            ),
+            builder: (context) => const PlannerView(),
           ),
         );
         break;
