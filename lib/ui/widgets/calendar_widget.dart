@@ -27,10 +27,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   late DateTime _currentMonth;
   late DateTime? _startDate;
   late DateTime? _endDate;
-  
+
   // Page controller for month swipe
   late PageController _pageController;
-  
+
   // Keep track of the page index to manage the infinitely scrolling PageView
   int _currentPageIndex = 1000; // Start with an arbitrary large number
 
@@ -126,14 +126,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             AppIcons(
               icon: AppIconData.leftArrow,
               onPressed: _previousMonth,
-              size: 18.r,
+              size: 12.r,
               color: AppColors.lightBlack,
             ),
             SizedBox(width: 20.w),
             AppIcons(
               icon: AppIconData.rightArrow,
               onPressed: _nextMonth,
-              size: 18.r,
+              size: 12.r,
               color: AppColors.lightBlack,
             ),
           ],
@@ -166,7 +166,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ],
     );
   }
-  
+
   void _handlePageChange(int page) {
     if (page != _currentPageIndex) {
       final monthDiff = page - _currentPageIndex;
@@ -174,7 +174,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         _currentMonth.year,
         _currentMonth.month + monthDiff,
       );
-      
+
       setState(() {
         _currentMonth = newMonth;
         _currentPageIndex = page;
@@ -221,28 +221,29 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       itemBuilder: (context, index) {
         final dayOffset = index - (firstWeekday - 1);
         final day = dayOffset + 1;
-        
+
         if (dayOffset < 0 || day > daysInMonth) {
           return const SizedBox();
         }
 
         final date = DateTime(month.year, month.month, day);
-        final isStartDate = _startDate?.year == date.year && 
-                           _startDate?.month == date.month && 
-                           _startDate?.day == date.day;
-        final isEndDate = _endDate?.year == date.year && 
-                          _endDate?.month == date.month && 
-                          _endDate?.day == date.day;
+        final isStartDate = _startDate?.year == date.year &&
+            _startDate?.month == date.month &&
+            _startDate?.day == date.day;
+        final isEndDate = _endDate?.year == date.year &&
+            _endDate?.month == date.month &&
+            _endDate?.day == date.day;
         final isInRange = _isDateInRange(date);
         final isWeekend = date.weekday == 6 || date.weekday == 7;
-        final isPastDate = date.isBefore(DateTime.now().subtract(const Duration(days: 1)));
+        final isPastDate =
+            date.isBefore(DateTime.now().subtract(const Duration(days: 1)));
 
         return TweenAnimationBuilder(
           tween: ColorTween(
             begin: Colors.transparent,
-            end: isStartDate || isEndDate 
+            end: isStartDate || isEndDate
                 ? AppColors.orange100
-                : isInRange 
+                : isInRange
                     ? AppColors.orange200
                     : Colors.transparent,
           ),
@@ -267,7 +268,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               : isWeekend
                                   ? AppColors.orange300
                                   : AppColors.lightBlack,
-                      fontWeight: (isStartDate || isEndDate) ? FontWeight.w400 : FontWeight.w400,
+                      fontWeight: (isStartDate || isEndDate)
+                          ? FontWeight.w400
+                          : FontWeight.w400,
                     ),
                   ),
                 ),
@@ -320,16 +323,27 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   String _getMonthName(int month) {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return months[month - 1];
   }
 
   void _showMonthPickerDialog() {
     final currentYear = _currentMonth.year;
-    final PageController pageController = PageController(initialPage: 1000); // Large initial page for "infinite" scrolling
-    
+    final PageController pageController = PageController(
+        initialPage: 1000); // Large initial page for "infinite" scrolling
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -342,12 +356,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           builder: (context, setDialogState) {
             // Track current display year separately
             int displayYear = currentYear;
-            
+
             // Calculate responsive height based on design spec (approximately 3 rows of months)
             double gridHeight = MediaQuery.of(context).size.height * 0.16;
             // Ensure height stays within reasonable bounds
             gridHeight = gridHeight.clamp(110.0, 140.0);
-            
+
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
               child: Column(
@@ -374,7 +388,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            size: 18.r,
+                            size: 12.r,
                             color: AppColors.lightBlack,
                           ),
                           SizedBox(width: 20.w),
@@ -386,7 +400,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            size: 18.r,
+                            size: 12.r,
                             color: AppColors.lightBlack,
                           ),
                         ],
@@ -405,11 +419,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       },
                       itemBuilder: (context, pageIndex) {
                         final year = currentYear + (pageIndex - 1000);
-                        
+
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4,
                             mainAxisSpacing: 8.h,
                             crossAxisSpacing: 8.w,
@@ -418,7 +433,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           itemCount: 12,
                           itemBuilder: (context, index) {
                             final month = index + 1;
-                            final isSelected = month == _currentMonth.month && year == _currentMonth.year;
+                            final isSelected = month == _currentMonth.month &&
+                                year == _currentMonth.year;
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -428,7 +444,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: isSelected ? AppColors.orange200 : Colors.transparent,
+                                  color: isSelected
+                                      ? AppColors.orange200
+                                      : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Center(
@@ -460,7 +478,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   void _showYearPickerDialog() {
     final int baseYear = DateTime.now().year;
     final PageController pageController = PageController(initialPage: 1000);
-    
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -475,12 +493,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             int rangeOffset = 0;
             int startYear = baseYear - 5 + (rangeOffset * 12);
             int endYear = baseYear + 6 + (rangeOffset * 12);
-            
+
             // Calculate responsive height based on design spec (approximately 3 rows of years)
             double gridHeight = MediaQuery.of(context).size.height * 0.16;
             // Ensure height stays within reasonable bounds
             gridHeight = gridHeight.clamp(110.0, 130.0);
-            
+
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
               child: Column(
@@ -507,7 +525,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            size: 18.r,
+                            size: 12.r,
                             color: AppColors.lightBlack,
                           ),
                           SizedBox(width: 20.w),
@@ -519,7 +537,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 curve: Curves.easeInOut,
                               );
                             },
-                            size: 18.r,
+                            size: 12.r,
                             color: AppColors.lightBlack,
                           ),
                         ],
@@ -541,12 +559,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       itemBuilder: (context, pageIndex) {
                         final pageOffset = pageIndex - 1000;
                         final pageStartYear = baseYear - 5 + (pageOffset * 12);
-                        final List<int> years = List.generate(12, (index) => pageStartYear + index);
-                        
+                        final List<int> years =
+                            List.generate(12, (index) => pageStartYear + index);
+
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4,
                             mainAxisSpacing: 8.h,
                             crossAxisSpacing: 8.w,
@@ -556,17 +576,20 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           itemBuilder: (context, index) {
                             final year = years[index];
                             final isSelected = year == _currentMonth.year;
-                            
+
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  _currentMonth = DateTime(year, _currentMonth.month);
+                                  _currentMonth =
+                                      DateTime(year, _currentMonth.month);
                                 });
                                 Navigator.pop(context);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: isSelected ? AppColors.orange200 : Colors.transparent,
+                                  color: isSelected
+                                      ? AppColors.orange200
+                                      : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Center(
@@ -597,10 +620,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   String _getMonthAbbreviation(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[month - 1];
   }
 }
-  
