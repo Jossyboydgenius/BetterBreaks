@@ -5,8 +5,9 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/ui/widgets/app_buttons.dart';
 
-class EventDetailsView extends StatelessWidget {
+class EventDetailsView extends StatefulWidget {
   final String image;
   final String title;
   final String location;
@@ -23,6 +24,39 @@ class EventDetailsView extends StatelessWidget {
     required this.price,
     this.description,
   });
+
+  @override
+  State<EventDetailsView> createState() => _EventDetailsViewState();
+}
+
+class _EventDetailsViewState extends State<EventDetailsView> {
+  int _quantity = 1;
+  late double _unitPrice;
+  late double _totalPrice;
+
+  @override
+  void initState() {
+    super.initState();
+    // Extract numeric price value from string (e.g. '$25' → 25)
+    _unitPrice = double.parse(widget.price.replaceAll(RegExp(r'[^0-9.]'), ''));
+    _totalPrice = _unitPrice * _quantity;
+  }
+
+  void _increaseQuantity() {
+    setState(() {
+      _quantity++;
+      _totalPrice = _unitPrice * _quantity;
+    });
+  }
+
+  void _decreaseQuantity() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+        _totalPrice = _unitPrice * _quantity;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +82,7 @@ class EventDetailsView extends StatelessWidget {
           children: [
             // Header Image
             AppImages(
-              imagePath: image,
+              imagePath: widget.image,
               width: double.infinity,
               height: 300.h,
               fit: BoxFit.cover,
@@ -67,7 +101,7 @@ class EventDetailsView extends StatelessWidget {
                   children: [
                     // Title
                     Text(
-                      title,
+                      widget.title,
                       style: AppTextStyle.raleway(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w700,
@@ -92,7 +126,7 @@ class EventDetailsView extends StatelessWidget {
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: Text(
-                                  location,
+                                  widget.location,
                                   style: AppTextStyle.satoshi(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.w400,
@@ -132,7 +166,7 @@ class EventDetailsView extends StatelessWidget {
                               ),
                               SizedBox(width: 8.w),
                               Text(
-                                date,
+                                widget.date,
                                 style: AppTextStyle.satoshi(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w400,
@@ -145,7 +179,7 @@ class EventDetailsView extends StatelessWidget {
 
                         // Price Value
                         Text(
-                          price,
+                          widget.price,
                           style: AppTextStyle.interVariable(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w600,
@@ -175,7 +209,7 @@ class EventDetailsView extends StatelessWidget {
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      description ??
+                      widget.description ??
                           'Lorem ipsum dolor sit amet consectetur. Neque semper ultrices tempor facilisi viverra. Tellus congue id lacinia leo rutrum tellus. Quis quis eget volutpat sapien faucibus quam lacus in fermentum.',
                       style: AppTextStyle.satoshi(
                         fontSize: 14.sp,
@@ -205,7 +239,7 @@ class EventDetailsView extends StatelessWidget {
                         SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
-                            location,
+                            widget.location,
                             style: AppTextStyle.satoshi(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w400,
@@ -215,11 +249,116 @@ class EventDetailsView extends StatelessWidget {
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 24.h),
+
+                    // Divider
+                    Container(
+                      height: 1,
+                      color: Colors.white.withOpacity(0.3),
+                    ),
+                    SizedBox(height: 24.h),
+
+                    // Booking section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Price',
+                          style: AppTextStyle.satoshi(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.grey800,
+                          ),
+                        ),
+                        Text(
+                          '\$${_totalPrice.toStringAsFixed(0)}',
+                          style: AppTextStyle.interVariable(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.lightBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 16.h),
+
+                    // Quantity selector
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildQuantityButton(
+                          icon: Icons.remove,
+                          onTap: _decreaseQuantity,
+                        ),
+                        Container(
+                          width: 50.w,
+                          alignment: Alignment.center,
+                          child: Text(
+                            _quantity.toString(),
+                            style: AppTextStyle.satoshi(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.lightBlack,
+                            ),
+                          ),
+                        ),
+                        _buildQuantityButton(
+                          icon: Icons.add,
+                          onTap: _increaseQuantity,
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24.h),
+
+                    // Book Now button
+                    AppButton(
+                      text: 'Book Now',
+                      backgroundColor: AppColors.primary,
+                      onPressed: () {
+                        // Handle booking logic
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Booked $_quantity tickets for ${widget.title}!'),
+                            backgroundColor: AppColors.primary,
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40.w,
+        height: 40.w,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(
+            color: AppColors.grey200,
+            width: 1,
+          ),
+        ),
+        child: Icon(
+          icon,
+          color: AppColors.lightBlack,
+          size: 24.r,
         ),
       ),
     );
