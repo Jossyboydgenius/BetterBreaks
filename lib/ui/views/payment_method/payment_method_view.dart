@@ -8,6 +8,7 @@ import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/views/payment_method/widgets/saved_card.dart';
 import 'package:better_breaks/ui/views/payment_method/widgets/add_card.dart';
 import 'package:better_breaks/ui/views/payment_method/widgets/card_form.dart';
+import 'package:better_breaks/ui/views/booking_success/booking_success_view.dart';
 
 class PaymentMethodView extends StatefulWidget {
   final String eventTitle;
@@ -369,16 +370,14 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
   }
 
   void _processPayment(String paymentMethod) {
-    // Show payment confirmation
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-            'Payment processed via $paymentMethod for ${widget.eventTitle}!'),
-        backgroundColor: AppColors.primary,
+    // Navigate to booking success view
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookingSuccessView(
+          eventTitle: widget.eventTitle,
+        ),
       ),
     );
-
-    // Return to home screen
-    Navigator.popUntil(context, (route) => route.isFirst);
   }
 }
