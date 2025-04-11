@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
-import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
-import 'package:better_breaks/shared/app_images.dart';
-import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:better_breaks/ui/widgets/event_card.dart';
-import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
 class SummaryBottomSheet extends StatefulWidget {
   final DateTime? startDate;
   final DateTime? endDate;
   final Function(DateTime) onStartDateChanged;
   final Function(DateTime) onEndDateChanged;
-  final VoidCallback onConfirm;
-  final VoidCallback? onComplete;
+  final VoidCallback onComplete;
+  final VoidCallback? onConfirm;
+  final int totalBreakDays;
+  final int selectedDays;
+  final int remainingDays;
 
   const SummaryBottomSheet({
     super.key,
-    this.startDate,
-    this.endDate,
+    required this.startDate,
+    required this.endDate,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
-    required this.onConfirm,
-    this.onComplete,
+    required this.onComplete,
+    this.onConfirm,
+    required this.totalBreakDays,
+    required this.selectedDays,
+    required this.remainingDays,
   });
 
   @override
@@ -33,101 +34,116 @@ class SummaryBottomSheet extends StatefulWidget {
 }
 
 class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
-  final _dateFormat = DateFormat('dd/MM/yyyy');
-  final int _totalBreak = 12;
-  final int _selectedDays = 5;
-  final PageController _pageController = PageController();
-  int _currentEventIndex = 0;
+  static final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  final DraggableScrollableController _dragController =
+      DraggableScrollableController();
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _dragController.dispose();
     super.dispose();
-  }
-
-  void _showDatePicker(BuildContext context, bool isStartDate) async {
-    final DateTime? picked = await showDialog(
-      context: context,
-      builder: (context) => AppCalendar(
-        selectedDate: isStartDate
-            ? (widget.startDate ?? DateTime.now())
-            : (widget.endDate ?? DateTime.now()),
-        onDateSelected: (date) {
-          if (isStartDate) {
-            widget.onStartDateChanged(date);
-          } else {
-            widget.onEndDateChanged(date);
-          }
-          Navigator.pop(context);
-        },
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.9,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.r),
-          topRight: Radius.circular(24.r),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Draggable indicator
-          Center(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 12.h),
-              width: 120.w,
-              height: 5.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(3.r),
-              ),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.4, // 40% of screen height
+      minChildSize: 0.3, // Minimum 30% of screen height
+      maxChildSize: 0.8, // Maximum 80% of screen height
+      snap: true,
+      snapSizes: const [0.3, 0.4, 0.8],
+      controller: _dragController,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
             ),
           ),
-          Flexible(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildDateSelectionContainer(),
-                  SizedBox(height: 24.h),
-                  _buildLeaveRemainingContainer(),
-                  SizedBox(height: 24.h),
-                  _buildExperienceSection(),
-                  SizedBox(height: 24.h),
-                ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Draggable indicator with gesture detection
+              GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  // Calculate new size based on drag
+                  final newSize = _dragController.size -
+                      (details.delta.dy / MediaQuery.of(context).size.height);
+                  // Clamp to min/max bounds
+                  final clampedSize = newSize.clamp(0.3, 0.8);
+                  // Update controller
+                  if (_dragController.size != clampedSize &&
+                      clampedSize >= 0.3 &&
+                      clampedSize <= 0.8) {
+                    _dragController.jumpTo(clampedSize);
+                  }
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 12.h),
+                    width: 120.w,
+                    height: 5.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(3.r),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
-            child: AppButton(
-              text: 'Confirm Selection',
-              backgroundColor: AppColors.primary,
-              onPressed: () {
-                widget.onConfirm();
-                if (widget.onComplete != null) {
-                  widget.onComplete!();
-                }
-              },
-              prefix: AppImages(
-                imagePath: AppImageData.starEyes,
-                width: 20.r,
-                height: 20.r,
+
+              // Content
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Padding(
+                    padding: EdgeInsets.all(24.r),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Date inputs in GlassyContainer
+                        _buildDateSelectionContainer(),
+
+                        SizedBox(height: 24.h),
+
+                        // Leave Remaining
+                        _buildLeaveRemainingContainer(),
+
+                        // Next button
+                        SizedBox(height: 24.h),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: widget.onComplete,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -141,54 +157,88 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDateInput('Start Date', widget.startDate, true),
-          SizedBox(height: 16.h),
-          _buildDateInput('End Date', widget.endDate, false),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDateInput(String label, DateTime? date, bool isStartDate) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyle.satoshi(
-            fontSize: 14.sp,
-            color: AppColors.lightBlack,
+          // Start Date
+          Text(
+            'Start Date',
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.lightBlack,
+            ),
           ),
-        ),
-        SizedBox(height: 8.h),
-        GestureDetector(
-          onTap: () => _showDatePicker(context, isStartDate),
-          child: Container(
+          SizedBox(height: 8.h),
+          Container(
+            width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(32.r),
+              border: Border.all(color: Colors.white.withOpacity(0.3)),
             ),
             child: Row(
               children: [
                 Text(
-                  date != null ? _dateFormat.format(date) : 'DD/MM/YYYY',
-                  style: AppTextStyle.satoshi(
+                  widget.startDate != null
+                      ? _dateFormat.format(widget.startDate!)
+                      : 'Select date',
+                  style: TextStyle(
                     fontSize: 16.sp,
+                    fontWeight: FontWeight.normal,
                     color: AppColors.lightBlack,
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 AppIcons(
                   icon: AppIconData.calendar,
                   size: 20.r,
-                  color: AppColors.primaryLight,
+                  color: AppColors.primary,
                 ),
               ],
             ),
           ),
-        ),
-      ],
+
+          // End Date
+          SizedBox(height: 16.h),
+          Text(
+            'End Date',
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32.r),
+              border: Border.all(color: Colors.white.withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  widget.endDate != null
+                      ? _dateFormat.format(widget.endDate!)
+                      : 'Select date',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.normal,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+                Spacer(),
+                AppIcons(
+                  icon: AppIconData.calendar,
+                  size: 20.r,
+                  color: AppColors.primary,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -198,7 +248,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
       children: [
         Text(
           'Leave Remaining',
-          style: AppTextStyle.satoshi(
+          style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.lightBlack,
@@ -214,24 +264,23 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildLeaveColumn('Total Break', _totalBreak),
+              _buildLeaveColumn('Total Break', widget.totalBreakDays),
               Text(
                 '-',
-                style: AppTextStyle.satoshi(
+                style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.lightBlack,
                 ),
               ),
-              _buildLeaveColumn('Selected Days', _selectedDays),
+              _buildLeaveColumn('Selected Days', widget.selectedDays),
               Text(
                 '=',
-                style: AppTextStyle.satoshi(
+                style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.lightBlack,
                 ),
               ),
-              _buildLeaveColumn(
-                  'Remaining Balance', _totalBreak - _selectedDays),
+              _buildLeaveColumn('Remaining Balance', widget.remainingDays),
             ],
           ),
         ),
@@ -246,7 +295,7 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
           width: 85.w,
           child: Text(
             label,
-            style: AppTextStyle.satoshi(
+            style: TextStyle(
               fontSize: 12.sp,
               color: AppColors.lightBlack,
             ),
@@ -256,72 +305,10 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
         ),
         Text(
           '$days days',
-          style: AppTextStyle.satoshi(
+          style: TextStyle(
             fontSize: 14.sp,
             color: AppColors.orange100,
             fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildExperienceSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Experience',
-          style: AppTextStyle.raleway(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        SizedBox(height: 16.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 2.w),
-          child: SizedBox(
-            height: 240.h,
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentEventIndex = index;
-                });
-              },
-              children: [
-                EventCard(
-                  image: AppImageData.image,
-                  title: 'Beach Yoga festival',
-                  location: 'Gelora Bung Karno Stadium..',
-                  date: 'November 15 2023',
-                  price: '\$60',
-                ),
-                EventCard(
-                  image: AppImageData.image1,
-                  title: 'Beach Yoga festival',
-                  location: 'Gelora Bung Karno Stadium..',
-                  date: 'November 15 2023',
-                  price: '\$60',
-                ),
-                EventCard(
-                  image: AppImageData.image2,
-                  title: 'Beach Yoga festival',
-                  location: 'Gelora Bung Karno Stadium..',
-                  date: 'November 15 2023',
-                  price: '\$60',
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: 16.h),
-        Center(
-          child: AppDotsIndicator(
-            dotsCount: 3,
-            position: _currentEventIndex,
-            inactiveColor: Colors.white,
           ),
         ),
       ],
