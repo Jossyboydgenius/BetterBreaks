@@ -12,6 +12,7 @@ import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 import 'package:better_breaks/ui/widgets/suggestions_content.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/views/setup/setup_planner_view.dart';
 
 class SetupView extends StatefulWidget {
   const SetupView({super.key});
@@ -202,6 +203,28 @@ class _SetupViewState extends State<SetupView> {
     );
   }
 
+  void _navigateToPage(int index) {
+    if (index == 0) {
+      // Navigate to Dashboard
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DashboardView(),
+        ),
+      );
+    }
+    if (index == 1) {
+      // Navigate to Planner - use SetupPlannerView instead of PlannerView
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SetupPlannerView(),
+        ),
+      );
+    }
+    // ... existing code ...
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -224,9 +247,14 @@ class _SetupViewState extends State<SetupView> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(2.r),
                     child: LinearProgressIndicator(
-                      value: _currentStep == 0 ? 0.33 : _currentStep == 1 ? 0.66 : 1.0,
+                      value: _currentStep == 0
+                          ? 0.33
+                          : _currentStep == 1
+                              ? 0.66
+                              : 1.0,
                       backgroundColor: Colors.transparent,
-                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryLight),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                          AppColors.primaryLight),
                     ),
                   ),
                 ),
@@ -256,7 +284,8 @@ class _SetupViewState extends State<SetupView> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DashboardView(setupCompleted: false),
+                                  builder: (context) => const DashboardView(
+                                      setupCompleted: false),
                                 ),
                               );
                             },
@@ -372,4 +401,4 @@ class _SetupViewState extends State<SetupView> {
       ),
     );
   }
-} 
+}
