@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final bool enabled;
   final double? height;
   final Widget? prefix;
+  final FontWeight? fontWeight;
 
   const AppButton({
     super.key,
@@ -25,12 +26,13 @@ class AppButton extends StatelessWidget {
     this.enabled = true,
     this.height,
     this.prefix,
+    this.fontWeight,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDisabled = !enabled || loading;
-    
+
     return SizedBox(
       width: double.infinity,
       height: height ?? 48.h,
@@ -57,7 +59,7 @@ class AppButton extends StatelessWidget {
               text,
               style: AppTextStyle.satoshi(
                 fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+                fontWeight: fontWeight ?? FontWeight.w500,
                 color: textColor ?? Colors.white,
               ),
             ),
@@ -94,4 +96,4 @@ class AppTextButton extends StatelessWidget {
       ),
     );
   }
-} 
+}
