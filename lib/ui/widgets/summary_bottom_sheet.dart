@@ -6,7 +6,6 @@ import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
-import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
@@ -50,7 +49,9 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
     final DateTime? picked = await showDialog(
       context: context,
       builder: (context) => AppCalendar(
-        selectedDate: isStartDate ? (widget.startDate ?? DateTime.now()) : (widget.endDate ?? DateTime.now()),
+        selectedDate: isStartDate
+            ? (widget.startDate ?? DateTime.now())
+            : (widget.endDate ?? DateTime.now()),
         onDateSelected: (date) {
           if (isStartDate) {
             widget.onStartDateChanged(date);
@@ -229,7 +230,8 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
                   color: AppColors.lightBlack,
                 ),
               ),
-              _buildLeaveColumn('Remaining Balance', _totalBreak - _selectedDays),
+              _buildLeaveColumn(
+                  'Remaining Balance', _totalBreak - _selectedDays),
             ],
           ),
         ),
@@ -325,4 +327,4 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
       ],
     );
   }
-} 
+}
