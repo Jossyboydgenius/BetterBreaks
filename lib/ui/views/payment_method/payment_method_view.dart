@@ -5,8 +5,11 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/ui/views/payment_method/widgets/saved_card_widget.dart';
+import 'package:better_breaks/ui/views/payment_method/widgets/add_card_widget.dart';
+import 'package:better_breaks/ui/views/payment_method/widgets/card_form.dart';
 
-class PaymentMethodView extends StatelessWidget {
+class PaymentMethodView extends StatefulWidget {
   final String eventTitle;
   final int quantity;
   final double totalAmount;
@@ -19,9 +22,26 @@ class PaymentMethodView extends StatelessWidget {
   });
 
   @override
+  State<PaymentMethodView> createState() => _PaymentMethodViewState();
+}
+
+class _PaymentMethodViewState extends State<PaymentMethodView> {
+  // View states
+  bool _showCreditCardDetails = false;
+  bool _showAddCardForm = false;
+
+  // Card data
+  final List<Map<String, String>> _savedCards = [
+    {
+      'cardNumber': '5642987654321234',
+      'cardHolderName': 'Adam Gregory',
+    }
+  ];
+
+  @override
   Widget build(BuildContext context) {
     final double fee = 5.0; // Standard fee for the order
-    final double orderTotal = totalAmount + fee;
+    final double orderTotal = widget.totalAmount + fee;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -34,10 +54,61 @@ class PaymentMethodView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildPaymentMethodsSection(context),
+                  if (_showCreditCardDetails) ...[
+                    // Credit Card section header
+                    Text(
+                      'Credit card',
+                      style: AppTextStyle.raleway(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.lightBlack,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+
+                    // Credit card form or saved cards list
+                    if (_showAddCardForm) ...[
+                      // Form to add a new card
+                      CardForm(
+                        onSave: _saveNewCard,
+                      ),
+                    ] else ...[
+                      // Saved cards + Add new card button
+                      GlassyContainer(
+                        backgroundColor: Colors.white,
+                        borderColor: Colors.white,
+                        padding: EdgeInsets.all(16.r),
+                        child: Column(
+                          children: [
+                            // Show saved cards
+                            ..._savedCards.map((card) => SavedCardWidget(
+                                  cardNumber: card['cardNumber']!,
+                                  cardHolderName: card['cardHolderName']!,
+                                  onTap: () => _processPayment('Credit Card'),
+                                )),
+
+                            // Add new card button
+                            AddCardWidget(
+                              onTap: () {
+                                setState(() {
+                                  _showAddCardForm = true;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ] else ...[
+                    // Payment methods selection
+                    _buildPaymentMethodsSection(context),
+                  ],
+
                   SizedBox(height: 24.h),
+
+                  // Always show order summary
                   _buildOrderSummarySection(
-                      quantity, totalAmount, fee, orderTotal),
+                      widget.quantity, widget.totalAmount, fee, orderTotal),
                 ],
               ),
             ),
@@ -70,7 +141,19 @@ class PaymentMethodView extends StatelessWidget {
           children: [
             // Back button
             AppBackButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                if (_showAddCardForm) {
+                  setState(() {
+                    _showAddCardForm = false;
+                  });
+                } else if (_showCreditCardDetails) {
+                  setState(() {
+                    _showCreditCardDetails = false;
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
+              },
               color: Colors.white,
               size: 18.r,
             ),
@@ -104,12 +187,18 @@ class PaymentMethodView extends StatelessWidget {
             icon: AppIconData.creditCard,
             title: 'Debit/Credit Card',
             isFirst: true,
+            onTap: () {
+              setState(() {
+                _showCreditCardDetails = true;
+              });
+            },
           ),
           _buildDivider(),
           _buildPaymentMethodItem(
             context,
             icon: AppIconData.googlePay,
             title: 'Google pay',
+            onTap: () => _processPayment('Google Pay'),
           ),
           _buildDivider(),
           _buildPaymentMethodItem(
@@ -117,6 +206,7 @@ class PaymentMethodView extends StatelessWidget {
             icon: AppIconData.applePay,
             title: 'Apple pay',
             isLast: true,
+            onTap: () => _processPayment('Apple Pay'),
           ),
         ],
       ),
@@ -129,19 +219,10 @@ class PaymentMethodView extends StatelessWidget {
     required String title,
     bool isFirst = false,
     bool isLast = false,
+    required VoidCallback onTap,
   }) {
     return InkWell(
-      onTap: () {
-        // Process payment and show confirmation
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Payment processed via $title for $eventTitle!'),
-            backgroundColor: AppColors.primary,
-          ),
-        );
-        // Navigate back to the home screen
-        Navigator.popUntil(context, (route) => route.isFirst);
-      },
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.all(16.r),
         child: Row(
@@ -149,7 +230,9 @@ class PaymentMethodView extends StatelessWidget {
             // Payment method icon
             AppIcons(
               icon: icon,
-              size: 24.r,
+              size: title.contains('Google') || title.contains('Apple')
+                  ? 32.r
+                  : 24.r,
               color: AppColors.lightBlack,
             ),
             SizedBox(width: 16.w),
@@ -253,8 +336,8 @@ class PaymentMethodView extends StatelessWidget {
             Text(
               value,
               style: AppTextStyle.satoshi(
-                fontSize: isTotal ? 20.sp : 16.sp,
-                fontWeight: isTotal ? FontWeight.w900 : FontWeight.w600,
+                fontSize: isTotal ? 18.sp : 16.sp,
+                fontWeight: isTotal ? FontWeight.w700 : FontWeight.w500,
                 color: AppColors.lightBlack,
               ),
             ),
@@ -263,7 +346,7 @@ class PaymentMethodView extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.satoshi(
                   fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.grey800,
                 ),
               ),
@@ -271,5 +354,41 @@ class PaymentMethodView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _saveNewCard(
+      String name, String cardNumber, String cvv, String expiryDate) {
+    setState(() {
+      // Add the new card to saved cards
+      _savedCards.add({
+        'cardNumber': cardNumber.replaceAll(' ', ''),
+        'cardHolderName': name,
+      });
+
+      // Return to saved cards view
+      _showAddCardForm = false;
+    });
+
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Card added successfully!'),
+        backgroundColor: AppColors.primary,
+      ),
+    );
+  }
+
+  void _processPayment(String paymentMethod) {
+    // Show payment confirmation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            'Payment processed via $paymentMethod for ${widget.eventTitle}!'),
+        backgroundColor: AppColors.primary,
+      ),
+    );
+
+    // Return to home screen
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 }
