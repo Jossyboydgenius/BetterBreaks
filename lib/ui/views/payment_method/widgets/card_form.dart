@@ -209,10 +209,10 @@ class _CardFormState extends State<CardForm> {
         hintStyle: AppTextStyle.satoshi(
           fontSize: 14.sp,
           fontWeight: FontWeight.w400,
-          color: AppColors.grey500,
+          color: AppColors.grey600,
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.white.withOpacity(0.4),
         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(24.r),
