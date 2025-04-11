@@ -22,8 +22,8 @@ class _ExperienceViewState extends State<ExperienceView> {
   final List<String> _tabs = ['Top picks', 'All', 'Music', 'Movies', 'Health'];
   final TextEditingController _searchController = TextEditingController();
 
-  // Sample event data - using existing images from assets
-  final List<Map<String, String>> _events = [
+  // Sample event data - using existing images from assets with added categories
+  final List<Map<String, dynamic>> _events = [
     {
       'image': AppImageData.image3,
       'title': 'Jazz Night at The Blue Note',
@@ -31,6 +31,8 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Fri, 15 Jul • 8:00 PM',
       'price': '£25',
       'fullWidth': 'true',
+      'categories': ['Top picks', 'Music'],
+      'isTopPick': true,
     },
     {
       'image': AppImageData.image4,
@@ -39,6 +41,8 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Sat, 16 Jul • 10:00 AM',
       'price': '£15',
       'fullWidth': 'false',
+      'categories': ['All'],
+      'isTopPick': false,
     },
     {
       'image': AppImageData.image5,
@@ -47,6 +51,8 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Sun, 17 Jul • 9:00 AM',
       'price': '£10',
       'fullWidth': 'false',
+      'categories': ['Health'],
+      'isTopPick': true,
     },
     {
       'image': AppImageData.image6,
@@ -55,6 +61,8 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Sat, 23 Jul • 11:00 AM',
       'price': '£20',
       'fullWidth': 'true',
+      'categories': ['All', 'Top picks'],
+      'isTopPick': true,
     },
     {
       'image': AppImageData.image7,
@@ -63,6 +71,8 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Sun, 30 Jul • 2:00 PM',
       'price': '£30',
       'fullWidth': 'false',
+      'categories': ['All'],
+      'isTopPick': false,
     },
     {
       'image': AppImageData.image8,
@@ -71,14 +81,48 @@ class _ExperienceViewState extends State<ExperienceView> {
       'date': 'Fri, 21 Jul • 7:30 PM',
       'price': '£18',
       'fullWidth': 'false',
+      'categories': ['All'],
+      'isTopPick': false,
+    },
+    {
+      'image': AppImageData.image1,
+      'title': 'New Blockbuster Premiere',
+      'location': 'Picturehouse Cinema, London',
+      'date': 'Thu, 20 Jul • 7:00 PM',
+      'price': '£18',
+      'fullWidth': 'true',
+      'categories': ['Movies', 'Top picks'],
+      'isTopPick': true,
+    },
+    {
+      'image': AppImageData.image2,
+      'title': 'Indie Film Festival',
+      'location': 'BFI Southbank, London',
+      'date': 'Sat, 22 Jul • All Day',
+      'price': '£45',
+      'fullWidth': 'false',
+      'categories': ['Movies'],
+      'isTopPick': false,
+    },
+    {
+      'image': AppImageData.image3,
+      'title': 'Classical Music Concert',
+      'location': 'Royal Albert Hall, London',
+      'date': 'Sun, 23 Jul • 7:30 PM',
+      'price': '£35',
+      'fullWidth': 'false',
+      'categories': ['Music'],
+      'isTopPick': false,
     },
     {
       'image': AppImageData.image4,
-      'title': 'Chelsea\'s Match',
-      'location': 'Gelora Bung Karno Stadium',
-      'date': 'November 15 2023',
-      'price': '\$60',
-      'fullWidth': 'false',
+      'title': 'Wellness Retreat Day',
+      'location': 'The Shard, London',
+      'date': 'Sat, 29 Jul • 10:00 AM',
+      'price': '£80',
+      'fullWidth': 'true',
+      'categories': ['Health'],
+      'isTopPick': true,
     },
   ];
 
@@ -111,6 +155,9 @@ class _ExperienceViewState extends State<ExperienceView> {
                 searchController: _searchController,
                 onSearchChanged: (value) {
                   // Handle search
+                  setState(() {
+                    // Rebuild UI when search text changes
+                  });
                 },
                 onFilterTap: () {
                   // Handle filter tap
@@ -134,10 +181,6 @@ class _ExperienceViewState extends State<ExperienceView> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.lightPrimary,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24.r),
-                            topRight: Radius.circular(24.r),
-                          ),
                         ),
                         padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 0),
                         child: _buildEventsList(),
@@ -166,11 +209,40 @@ class _ExperienceViewState extends State<ExperienceView> {
   }
 
   Widget _buildEventsList() {
+    // Filter events based on selected tab
+    List<Map<String, dynamic>> filteredEvents = _filterEventsByTab();
+
+    // Filter by search text if search is not empty
+    if (_searchController.text.isNotEmpty) {
+      final searchText = _searchController.text.toLowerCase();
+      filteredEvents = filteredEvents.where((event) {
+        return event['title'].toString().toLowerCase().contains(searchText) ||
+            event['location'].toString().toLowerCase().contains(searchText);
+      }).toList();
+    }
+
+    // If no events match filters, show a message
+    if (filteredEvents.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 40.h),
+          child: Text(
+            'No events found',
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.lightBlack,
+            ),
+          ),
+        ),
+      );
+    }
+
     // Create a list of widgets containing both full-width and half-width cards
     final List<Widget> rows = [];
 
-    for (int i = 0; i < _events.length; i++) {
-      final event = _events[i];
+    for (int i = 0; i < filteredEvents.length; i++) {
+      final event = filteredEvents[i];
       final isFullWidth = event['fullWidth'] == 'true';
 
       if (isFullWidth) {
@@ -191,7 +263,8 @@ class _ExperienceViewState extends State<ExperienceView> {
         );
       } else {
         // Add half-width card, possibly pairing with the next item
-        if (i + 1 < _events.length && _events[i + 1]['fullWidth'] != 'true') {
+        if (i + 1 < filteredEvents.length &&
+            filteredEvents[i + 1]['fullWidth'] != 'true') {
           // We have two half-width cards to display in a row
           rows.add(
             Padding(
@@ -211,11 +284,11 @@ class _ExperienceViewState extends State<ExperienceView> {
                   SizedBox(width: 6.w),
                   Expanded(
                     child: EventCard(
-                      image: _events[i + 1]['image']!,
-                      title: _events[i + 1]['title']!,
-                      location: _events[i + 1]['location']!,
-                      date: _events[i + 1]['date']!,
-                      price: _events[i + 1]['price']!,
+                      image: filteredEvents[i + 1]['image']!,
+                      title: filteredEvents[i + 1]['title']!,
+                      location: filteredEvents[i + 1]['location']!,
+                      date: filteredEvents[i + 1]['date']!,
+                      price: filteredEvents[i + 1]['price']!,
                       useGradientOverlay: true,
                     ),
                   ),
@@ -251,6 +324,25 @@ class _ExperienceViewState extends State<ExperienceView> {
     );
   }
 
+  // Filter events based on selected tab
+  List<Map<String, dynamic>> _filterEventsByTab() {
+    final selectedCategory = _tabs[_selectedTabIndex];
+
+    if (selectedCategory == 'All') {
+      // Return all events for the "All" tab
+      return _events;
+    } else if (selectedCategory == 'Top picks') {
+      // Return only top picks
+      return _events.where((event) => event['isTopPick'] == true).toList();
+    } else {
+      // Filter by category for other tabs
+      return _events.where((event) {
+        List<String> categories = List<String>.from(event['categories']);
+        return categories.contains(selectedCategory);
+      }).toList();
+    }
+  }
+
   void _navigateToPage(int index) {
     if (index == 0) {
       // Navigate to Dashboard
@@ -273,7 +365,7 @@ class _ExperienceViewState extends State<ExperienceView> {
         ),
       );
     }
-    if (index == 2) {
+    if (index == 3) {
       // Navigate to Analytics
       Navigator.pushReplacement(
         context,
