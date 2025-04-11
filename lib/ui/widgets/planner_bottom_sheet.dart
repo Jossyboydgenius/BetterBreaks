@@ -7,7 +7,6 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/weather_forecast_card.dart';
-import 'dart:ui';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:intl/intl.dart';
@@ -36,14 +35,16 @@ class PlannerBottomSheet extends StatefulWidget {
   State<PlannerBottomSheet> createState() => _PlannerBottomSheetState();
 }
 
-class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTickerProviderStateMixin {
+class _PlannerBottomSheetState extends State<PlannerBottomSheet>
+    with SingleTickerProviderStateMixin {
   final _dateFormat = DateFormat('dd/MM/yyyy');
-  final DraggableScrollableController _dragController = DraggableScrollableController();
-  
+  final DraggableScrollableController _dragController =
+      DraggableScrollableController();
+
   // Animation controller for weather expand/collapse
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
-  
+
   bool _isExpanded = false;
   bool _showSummary = false;
   DateTime? _startDate;
@@ -54,19 +55,19 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTick
     super.initState();
     _startDate = widget.startDate;
     _endDate = widget.endDate;
-    
+
     // Setup animation controller
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    
+
     _expandAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -114,10 +115,10 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTick
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4, // 40% of screen height
-      minChildSize: 0.2, // Minimum 20% of screen height
+      minChildSize: 0.3, // Minimum 30% of screen height
       maxChildSize: 0.8, // Maximum 80% of screen height
       snap: true,
-      snapSizes: const [0.2, 0.4, 0.8],
+      snapSizes: const [0.3, 0.4, 0.8],
       controller: _dragController,
       builder: (context, scrollController) {
         return Container(
@@ -135,18 +136,21 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet> with SingleTick
               GestureDetector(
                 onVerticalDragUpdate: (details) {
                   // Calculate new size based on drag
-                  final newSize = _dragController.size - (details.delta.dy / MediaQuery.of(context).size.height);
+                  final newSize = _dragController.size -
+                      (details.delta.dy / MediaQuery.of(context).size.height);
                   // Clamp to min/max bounds
-                  final clampedSize = newSize.clamp(0.2, 0.8);
+                  final clampedSize = newSize.clamp(0.3, 0.8);
                   // Update controller
-                  if (_dragController.size != clampedSize && clampedSize >= 0.2 && clampedSize <= 0.8) {
+                  if (_dragController.size != clampedSize &&
+                      clampedSize >= 0.3 &&
+                      clampedSize <= 0.8) {
                     _dragController.jumpTo(clampedSize);
                   }
                 },
                 behavior: HitTestBehavior.translucent,
                 child: DraggableIndicator(),
               ),
-              
+
               // Scrollable content
               Expanded(
                 child: SingleChildScrollView(
@@ -344,8 +348,18 @@ class PlannerDateRangeSection extends StatelessWidget {
 
   String _getMonthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[month - 1];
   }
@@ -375,11 +389,12 @@ class WeatherForecastSection extends StatelessWidget {
           return AnimatedCrossFade(
             firstChild: _buildCollapsedView(),
             secondChild: ExpandedWeatherForecast(onCollapse: onCollapse),
-            crossFadeState: isExpanded 
-                ? CrossFadeState.showSecond 
+            crossFadeState: isExpanded
+                ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 300),
-            layoutBuilder: (topChild, topChildKey, bottomChild, bottomChildKey) {
+            layoutBuilder:
+                (topChild, topChildKey, bottomChild, bottomChildKey) {
               return Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
@@ -616,4 +631,4 @@ class PlannerActionButtons extends StatelessWidget {
       ],
     );
   }
-} 
+}
