@@ -37,129 +37,135 @@ class _CardFormState extends State<CardForm> {
 
   @override
   Widget build(BuildContext context) {
-    return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
-      padding: EdgeInsets.all(16.r),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Card Name
-            _buildInputLabel('Card Name'),
-            SizedBox(height: 8.h),
-            _buildTextFormField(
-              controller: _nameController,
-              hintText: 'Name on card',
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter card holder name';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 16.h),
-
-            // Card Number
-            _buildInputLabel('Card Number'),
-            SizedBox(height: 8.h),
-            _buildTextFormField(
-              controller: _cardNumberController,
-              hintText: '1234 5678 9012 3456',
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(16),
-                _CardNumberFormatter(),
-              ],
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter card number';
-                }
-                if (value.replaceAll(' ', '').length < 16) {
-                  return 'Please enter a valid 16-digit card number';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 16.h),
-
-            // CVV and Expiry Date (side by side)
-            Row(
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GlassyContainer(
+            backgroundColor: Colors.white,
+            borderColor: Colors.white,
+            padding: EdgeInsets.all(16.r),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // CVV
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInputLabel('CVV'),
-                      SizedBox(height: 8.h),
-                      _buildTextFormField(
-                        controller: _cvvController,
-                        hintText: '123',
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(3),
-                        ],
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter CVV';
-                          }
-                          if (value.length < 3) {
-                            return 'Enter valid CVV';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
+                // Card Name
+                _buildInputLabel('Card Name'),
+                SizedBox(height: 8.h),
+                _buildTextFormField(
+                  controller: _nameController,
+                  hintText: 'Name on card',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter card holder name';
+                    }
+                    return null;
+                  },
                 ),
-                SizedBox(width: 16.w),
-                // Expiry Date
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInputLabel('Expiry date'),
-                      SizedBox(height: 8.h),
-                      _buildTextFormField(
-                        controller: _expiryDateController,
-                        hintText: 'MM/YY',
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(4),
-                          _ExpiryDateFormatter(),
+                SizedBox(height: 16.h),
+
+                // Card Number
+                _buildInputLabel('Card Number'),
+                SizedBox(height: 8.h),
+                _buildTextFormField(
+                  controller: _cardNumberController,
+                  hintText: '1234 5678 9012 3456',
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                    _CardNumberFormatter(),
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter card number';
+                    }
+                    if (value.replaceAll(' ', '').length < 16) {
+                      return 'Please enter a valid 16-digit card number';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.h),
+
+                // CVV and Expiry Date (side by side)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // CVV
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildInputLabel('CVV'),
+                          SizedBox(height: 8.h),
+                          _buildTextFormField(
+                            controller: _cvvController,
+                            hintText: '123',
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(3),
+                            ],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter CVV';
+                              }
+                              if (value.length < 3) {
+                                return 'Enter valid CVV';
+                              }
+                              return null;
+                            },
+                          ),
                         ],
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter expiry date';
-                          }
-                          if (value.length < 5) {
-                            // MM/YY format = 5 chars
-                            return 'Enter valid date';
-                          }
-                          return null;
-                        },
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: 16.w),
+                    // Expiry Date
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildInputLabel('Expiry date'),
+                          SizedBox(height: 8.h),
+                          _buildTextFormField(
+                            controller: _expiryDateController,
+                            hintText: 'MM/YY',
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(4),
+                              _ExpiryDateFormatter(),
+                            ],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter expiry date';
+                              }
+                              if (value.length < 5) {
+                                // MM/YY format = 5 chars
+                                return 'Enter valid date';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            SizedBox(height: 24.h),
+          ),
 
-            // Save Button
-            AppButton(
-              text: 'Save',
-              backgroundColor: AppColors.primary,
-              onPressed: _saveCard,
-            ),
-          ],
-        ),
+          SizedBox(height: 24.h),
+
+          // Save Button - Now outside the GlassyContainer
+          AppButton(
+            text: 'Save',
+            backgroundColor: AppColors.primary,
+            onPressed: _saveCard,
+          ),
+        ],
       ),
     );
   }
