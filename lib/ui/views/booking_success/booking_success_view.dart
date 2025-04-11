@@ -31,60 +31,11 @@ class BookingSuccessView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Success Icon in a circular container
-                  Container(
-                    width: 120.r,
-                    height: 120.r,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        // Main success icon
-                        Center(
-                          child: AppIcons(
-                            icon: AppIconData.success,
-                            size: 60.r,
-                            color: AppColors.primary,
-                          ),
-                        ),
-
-                        // Party icon at the top right
-                        Positioned(
-                          top: 10.r,
-                          right: 10.r,
-                          child: Container(
-                            width: 36.r,
-                            height: 36.r,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppColors.orange,
-                                  AppColors.primary,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Center(
-                              child: AppIcons(
-                                icon: AppIconData.party,
-                                size: 20.r,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  // Main success icon
+                  Center(
+                    child: AppIcons(
+                      icon: AppIconData.success,
+                      size: 150.r,
                     ),
                   ),
                   SizedBox(height: 40.h),
@@ -93,7 +44,7 @@ class BookingSuccessView extends StatelessWidget {
                   Text(
                     'Success!',
                     style: AppTextStyle.raleway(
-                      fontSize: 28.sp,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.w700,
                       color: AppColors.lightBlack,
                     ),
@@ -105,7 +56,7 @@ class BookingSuccessView extends StatelessWidget {
                   Text(
                     'Your booking is confirmed',
                     style: AppTextStyle.raleway(
-                      fontSize: 18.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.lightBlack,
                     ),
@@ -117,7 +68,7 @@ class BookingSuccessView extends StatelessWidget {
                   Text(
                     'We\'ve sent your booking details via email.',
                     style: AppTextStyle.satoshi(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                       color: AppColors.grey800,
                     ),
