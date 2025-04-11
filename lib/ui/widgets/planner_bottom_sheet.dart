@@ -196,6 +196,9 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
 
                       // Confirm & Back buttons
                       _buildButtons(),
+
+                      // Add bottom padding to avoid buttons being hidden by the bottom nav
+                      SizedBox(height: 100.h),
                     ],
                   ),
                 ),
