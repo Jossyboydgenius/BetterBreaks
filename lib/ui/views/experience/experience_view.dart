@@ -21,7 +21,14 @@ class ExperienceView extends StatefulWidget {
 class _ExperienceViewState extends State<ExperienceView> {
   int _selectedNavIndex = 2; // Experience tab
   int _selectedTabIndex = 0; // First tab in the tab bar
-  final List<String> _tabs = ['Top picks', 'All', 'Music', 'Movies', 'Health'];
+  final List<String> _tabs = [
+    'Top picks',
+    'All',
+    'Sports',
+    'Music',
+    'Movies',
+    'Health'
+  ];
   final TextEditingController _searchController = TextEditingController();
 
   // Event repository instance
