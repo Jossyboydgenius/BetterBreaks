@@ -109,7 +109,8 @@ class BreakRepository {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BreakDetailView(breakItem: BreakItem(
+            builder: (context) => BreakDetailView(
+                breakItem: BreakItem(
               title: title,
               month: month,
               day: day,
@@ -123,4 +124,4 @@ class BreakRepository {
       },
     );
   }
-} 
+}
