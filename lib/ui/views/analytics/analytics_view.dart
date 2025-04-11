@@ -14,6 +14,7 @@ import 'package:better_breaks/ui/views/analytics/widgets/break_balance_analysis.
 import 'package:better_breaks/ui/views/analytics/widgets/holiday_distribution_chart.dart';
 import 'package:better_breaks/ui/widgets/optimization_timeline_chart.dart';
 import 'package:better_breaks/ui/views/analytics/widgets/holiday_stress_chart.dart';
+import 'package:better_breaks/ui/views/profile/profile_settings_view.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -50,7 +51,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 icon: AppIconData.settings,
                 iconSize: 46,
                 onIconTap: () {
-                  // Open settings
+                  // Navigate to settings
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileSettingsView(),
+                    ),
+                  );
                 },
               ),
               Expanded(
