@@ -12,6 +12,7 @@ class AppInput extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final Color? iconColor;
+  final Color? fillColor;
 
   const AppInput({
     super.key,
@@ -22,6 +23,7 @@ class AppInput extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.iconColor,
+    this.fillColor,
   });
 
   @override
@@ -33,6 +35,7 @@ class AppInput extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           decoration: BoxDecoration(
+            color: fillColor,
             border: Border.all(color: AppColors.grey),
             borderRadius: BorderRadius.circular(30.r),
           ),
@@ -76,4 +79,4 @@ class AppInput extends StatelessWidget {
       ),
     );
   }
-} 
+}
