@@ -95,8 +95,9 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   Widget _buildAnalyticsSection() {
     // Calculate container height based on screen width for consistent sizing
     final screenWidth = MediaQuery.of(context).size.width;
-    final containerHeight = screenWidth * 0.65; // Same size ratio as BreakAnalysisSlider
-    
+    final containerHeight =
+        screenWidth * 0.65; // Same size ratio as BreakAnalysisSlider
+
     return GlassyContainer(
       backgroundColor: Colors.white,
       borderColor: Colors.white,
@@ -111,7 +112,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
             iconColor: _getColorForCurrentPage(),
           ),
           SizedBox(height: 24.h),
-          
+
           // Slider content
           SizedBox(
             height: containerHeight,
@@ -130,7 +131,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   secondaryLabel: "Optimization\nscore",
                   progressColor: AppColors.orange100,
                 ),
-                
+
                 // Total Optimization Days
                 AppCircularProgress(
                   progress: 0.6, // 60%
@@ -139,7 +140,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   progressColor: AppColors.lightGreen,
                   maxValueText: "days",
                 ),
-                
+
                 // Break Score
                 AppCircularProgress(
                   progress: 0.1, // 10%
@@ -152,9 +153,9 @@ class _AnalyticsViewState extends State<AnalyticsView> {
               ],
             ),
           ),
-          
+
           SizedBox(height: 16.h),
-          
+
           // Dots indicator
           Center(
             child: AppDotsIndicator(
@@ -268,4 +269,4 @@ class _AnalyticsViewState extends State<AnalyticsView> {
       // Already on Analytics tab
     }
   }
-} 
+}
