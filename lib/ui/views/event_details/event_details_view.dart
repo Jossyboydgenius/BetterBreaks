@@ -260,8 +260,8 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                     SizedBox(height: 24.h),
 
                     // Booking section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Price',
@@ -271,42 +271,93 @@ class _EventDetailsViewState extends State<EventDetailsView> {
                             color: AppColors.grey800,
                           ),
                         ),
-                        Text(
-                          '\$${_totalPrice.toStringAsFixed(0)}',
-                          style: AppTextStyle.interVariable(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.lightBlack,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 16.h),
-
-                    // Quantity selector
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildQuantityButton(
-                          icon: Icons.remove,
-                          onTap: _decreaseQuantity,
-                        ),
-                        Container(
-                          width: 50.w,
-                          alignment: Alignment.center,
-                          child: Text(
-                            _quantity.toString(),
-                            style: AppTextStyle.satoshi(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.lightBlack,
+                        SizedBox(height: 4.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '\$${_totalPrice.toStringAsFixed(0)}',
+                              style: AppTextStyle.interVariable(
+                                fontSize: 32.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.lightBlack,
+                              ),
                             ),
-                          ),
-                        ),
-                        _buildQuantityButton(
-                          icon: Icons.add,
-                          onTap: _increaseQuantity,
+                            // Quantity selector
+                            Container(
+                              height: 44.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(22.r),
+                                border: Border.all(
+                                  color: AppColors.grey200,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Minus button
+                                  InkWell(
+                                    onTap: _decreaseQuantity,
+                                    child: Container(
+                                      width: 44.w,
+                                      height: 44.h,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: Colors.grey,
+                                        size: 24.r,
+                                      ),
+                                    ),
+                                  ),
+
+                                  // Vertical divider
+                                  Container(
+                                    width: 1,
+                                    height: 24.h,
+                                    color: AppColors.grey200,
+                                  ),
+
+                                  // Quantity
+                                  Container(
+                                    width: 44.w,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      _quantity.toString(),
+                                      style: AppTextStyle.satoshi(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+
+                                  // Vertical divider
+                                  Container(
+                                    width: 1,
+                                    height: 24.h,
+                                    color: AppColors.grey200,
+                                  ),
+
+                                  // Plus button
+                                  InkWell(
+                                    onTap: _increaseQuantity,
+                                    child: Container(
+                                      width: 44.w,
+                                      height: 44.h,
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.add,
+                                        color: Colors.grey,
+                                        size: 24.r,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -333,32 +384,6 @@ class _EventDetailsViewState extends State<EventDetailsView> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuantityButton({
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40.w,
-        height: 40.w,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            color: AppColors.grey200,
-            width: 1,
-          ),
-        ),
-        child: Icon(
-          icon,
-          color: AppColors.lightBlack,
-          size: 24.r,
         ),
       ),
     );
