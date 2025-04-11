@@ -281,3 +281,21 @@ class ConfettiPainter extends CustomPainter {
     return oldDelegate.animationValue != animationValue;
   }
 }
+
+// Immediate visibility improvements:
+// Increased the number of confetti pieces from 100 to 150 for a more dramatic effect
+// Positioned confetti pieces throughout the visible screen at startup (from -70% screen height to top)
+// Removed delay for the first third of confetti pieces so they appear instantly
+// Speed enhancements:
+// Doubled the falling speed (from 0.3-0.7 to 0.6-1.2 range)
+// This makes the confetti drop much faster and more noticeable right away
+// Visual improvements:
+// Increased rotation speed by 50% for more dynamic movement
+// Increased the minimum opacity from 0.4 to 0.6 for better visibility
+// Staggered effect:
+// Kept a minimal delay (up to 0.2 seconds) for some pieces to maintain a natural staggered falling effect
+// The first third of pieces have zero delay to ensure immediate visibility
+// These changes will make the confetti:
+// Appear immediately when the success screen loads (no waiting)
+// Fall much faster and more visibly
+// Create a more dynamic and engaging celebration effect
