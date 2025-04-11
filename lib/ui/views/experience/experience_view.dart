@@ -1,3 +1,5 @@
+import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
+import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
@@ -259,6 +261,26 @@ class _ExperienceViewState extends State<ExperienceView> {
         ),
       );
     }
-    // Other navigation options will be added later
+    if (index == 1) {
+      // Navigate to Planner
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PlannerView(
+            isSetup: false,
+            showBottomNav: true,
+          ),
+        ),
+      );
+    }
+    if (index == 2) {
+      // Navigate to Analytics
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AnalyticsView(),
+        ),
+      );
+    }
   }
 }
