@@ -4,7 +4,6 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'dart:ui';
 
 class ProfileSettingsView extends StatelessWidget {
   final VoidCallback? onBackPressed;
@@ -148,87 +147,82 @@ class ProfileSettingsView extends StatelessWidget {
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24.r),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 23.3, sigmaY: 23.3),
-          child: Padding(
-            padding: EdgeInsets.all(24.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Premium header with crown icon
+            Row(
               children: [
-                // Premium header with crown icon
-                Row(
+                Container(
+                  width: 42.r,
+                  height: 42.r,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: AppIcons(
+                      icon: AppIconData.crown,
+                      size: 24.r,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 42.r,
-                      height: 42.r,
-                      decoration: BoxDecoration(
+                    Text(
+                      'Premium Features',
+                      style: AppTextStyle.raleway(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: AppIcons(
-                          icon: AppIconData.crown,
-                          size: 24.r,
-                          color: AppColors.primary,
-                        ),
                       ),
                     ),
-                    SizedBox(width: 16.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Premium Features',
-                          style: AppTextStyle.raleway(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Unlock advanced breaks optimization',
-                          style: AppTextStyle.satoshi(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Unlock advanced breaks optimization',
+                      style: AppTextStyle.satoshi(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
-
-                // Divider
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24.h),
-                  child: Container(
-                    height: 1,
-                    color: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-
-                // Premium features list
-                _buildPremiumFeatureItem('Advance holiday recommendation'),
-                SizedBox(height: 16.h),
-                _buildPremiumFeatureItem('Export Analytic data'),
-                SizedBox(height: 16.h),
-                _buildPremiumFeatureItem('Team calendar integration'),
-
-                // Upgrade button
-                SizedBox(height: 24.h),
-                AppButton(
-                  text: 'Upgrade to premium',
-                  backgroundColor: Colors.white,
-                  textColor: AppColors.primary,
-                  onPressed: () {
-                    // Handle upgrade
-                  },
-                ),
               ],
             ),
-          ),
+
+            // Divider
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              child: Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.2),
+              ),
+            ),
+
+            // Premium features list
+            _buildPremiumFeatureItem('Advance holiday recommendation'),
+            SizedBox(height: 16.h),
+            _buildPremiumFeatureItem('Export Analytic data'),
+            SizedBox(height: 16.h),
+            _buildPremiumFeatureItem('Team calendar integration'),
+
+            // Upgrade button
+            SizedBox(height: 24.h),
+            AppButton(
+              text: 'Upgrade to premium',
+              backgroundColor: Colors.white,
+              textColor: AppColors.primary,
+              fontWeight: FontWeight.w600,
+              onPressed: () {
+                // Handle upgrade
+              },
+            ),
+          ],
         ),
       ),
     );
