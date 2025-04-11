@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/views/experience/experience_view.dart';
+import 'package:better_breaks/ui/widgets/confetti.dart';
 
 class BookingSuccessView extends StatelessWidget {
   final String eventTitle;
@@ -21,7 +22,7 @@ class BookingSuccessView extends StatelessWidget {
       body: Stack(
         children: [
           // Confetti-like colorful circles in the background
-          ..._buildConfettiBackground(),
+          Confetti(),
 
           // Main content
           SafeArea(
@@ -98,47 +99,5 @@ class BookingSuccessView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  // Generate confetti-like decorative elements
-  List<Widget> _buildConfettiBackground() {
-    // Create a list of confetti pieces with different colors, sizes and positions
-    final random =
-        List.generate(20, (index) => index); // Just to create 20 items
-
-    return random.map((i) {
-      // Different colors for the confetti
-      final colors = [
-        AppColors.primary,
-        AppColors.lightGreen,
-        AppColors.orange,
-        AppColors.lightPurple,
-      ];
-
-      // Pick a random color
-      final color = colors[i % colors.length];
-
-      // Random position on the screen
-      final top = (i * 40).toDouble().h % (1.sh - 30.h);
-      final left = (i * 33).toDouble().w % (1.sw - 30.w);
-      final size = (10 + (i % 10) * 2).r;
-
-      return Positioned(
-        top: top,
-        left: left,
-        child: Opacity(
-          opacity: 0.3 + (i % 5) * 0.1, // Vary the opacity
-          child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: color,
-              shape: i % 3 == 0 ? BoxShape.circle : BoxShape.rectangle,
-              borderRadius: i % 3 == 0 ? null : BorderRadius.circular(2.r),
-            ),
-          ),
-        ),
-      );
-    }).toList();
   }
 }
