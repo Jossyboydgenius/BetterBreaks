@@ -17,6 +17,7 @@ import 'package:better_breaks/ui/views/dashboard/widgets/all_recommendations_vie
 import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:better_breaks/ui/views/analytics/analytics_view.dart';
 import 'package:better_breaks/ui/views/experience/experience_view.dart';
+import 'package:better_breaks/ui/views/profile/profile_settings_view.dart';
 
 class DashboardView extends StatefulWidget {
   final bool setupCompleted;
@@ -78,7 +79,13 @@ class _DashboardViewState extends State<DashboardView> {
                   icon: AppIconData.settings,
                   iconSize: 46,
                   onIconTap: () {
-                    // Open settings
+                    // Navigate to settings
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileSettingsView(),
+                      ),
+                    );
                   },
                 ),
               Expanded(
