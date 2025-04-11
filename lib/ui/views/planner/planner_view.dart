@@ -84,12 +84,14 @@ class _PlannerViewState extends State<PlannerView> {
                         onDateSelected: (date) {
                           setState(() {
                             _startDate = date;
+                            // If we have a single date selected, use it for both start and end
+                            _endDate ??= date;
                           });
                         },
                         onRangeSelected: (start, end) {
                           setState(() {
                             _startDate = start;
-                            _endDate = end;
+                            _endDate = end ?? start;
                           });
                         },
                       ),
@@ -130,6 +132,8 @@ class _PlannerViewState extends State<PlannerView> {
                     },
                   )
                 : SummaryBottomSheet(
+                    key: ValueKey(
+                        '${_startDate?.toString()}-${_endDate?.toString()}'),
                     startDate: _startDate,
                     endDate: _endDate,
                     totalBreakDays: _totalBreakDays,
