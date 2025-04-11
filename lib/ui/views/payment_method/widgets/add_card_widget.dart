@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
-class AddCardWidget extends StatelessWidget {
+class AddCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const AddCardWidget({
+  const AddCard({
     super.key,
     required this.onTap,
   });
@@ -15,21 +16,10 @@ class AddCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.h),
+      child: GlassyContainer(
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
         padding: EdgeInsets.all(16.r),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
         child: Row(
           children: [
             // Plus icon in circle
