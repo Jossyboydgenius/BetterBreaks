@@ -28,7 +28,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   await setUpLocator(AppFlavorConfig(
     name: 'BetterBreaks',
     apiBaseUrl: dotenv.env['BASE_URL_PROD']!,
@@ -53,7 +53,7 @@ class MainApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         // Since we don't have any BLoC providers yet, we'll use MaterialApp directly
         // instead of MultiBlocProvider with an empty list (which causes an error)
-    return MaterialApp(
+        return MaterialApp(
           title: 'BetterBreaks',
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
@@ -62,7 +62,8 @@ class MainApp extends StatelessWidget {
           onGenerateRoute: (settings) {
             if (settings.name == '/') {
               return MaterialPageRoute(
-                builder: (context) => const SetupView(), // Or whatever view you want as root
+                builder: (context) =>
+                    const SetupView(), // Or whatever view you want as root
               );
             }
             // Add routing for bottom navigation views
@@ -70,18 +71,15 @@ class MainApp extends StatelessWidget {
               return MaterialPageRoute(
                 builder: (context) => const DashboardView(),
               );
-            }
-            else if (settings.name == '/planner') {
+            } else if (settings.name == '/planner') {
               return MaterialPageRoute(
-                builder: (context) => const PlannerView(showBottomNav: true, isSetup: false),
+                builder: (context) => const PlannerView(),
               );
-            }
-            else if (settings.name == '/experience') {
+            } else if (settings.name == '/experience') {
               return MaterialPageRoute(
                 builder: (context) => const ExperienceView(),
               );
-            }
-            else if (settings.name == '/analytics') {
+            } else if (settings.name == '/analytics') {
               return MaterialPageRoute(
                 builder: (context) => const AnalyticsView(),
               );
@@ -106,7 +104,7 @@ class MainApp extends StatelessWidget {
           },
           navigatorObservers: [BotToastNavigatorObserver()],
         );
-        
+
         // When you're ready to add BLoC providers, you can uncomment this code:
         /*
         return MultiBlocProvider(
