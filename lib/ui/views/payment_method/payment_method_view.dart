@@ -5,8 +5,8 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
-import 'package:better_breaks/ui/views/payment_method/widgets/saved_card_widget.dart';
-import 'package:better_breaks/ui/views/payment_method/widgets/add_card_widget.dart';
+import 'package:better_breaks/ui/views/payment_method/widgets/saved_card.dart';
+import 'package:better_breaks/ui/views/payment_method/widgets/add_card.dart';
 import 'package:better_breaks/ui/views/payment_method/widgets/card_form.dart';
 
 class PaymentMethodView extends StatefulWidget {
@@ -36,10 +36,6 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
       'cardNumber': '5642987654321234',
       'cardHolderName': 'Adam Gregory',
     },
-    {
-      'cardNumber': '6464123456789784',
-      'cardHolderName': 'Femi',
-    }
   ];
 
   @override
