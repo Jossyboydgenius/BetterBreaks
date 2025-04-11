@@ -31,8 +31,8 @@ class AppRoutes {
   static const String dashboardView = '/dashboard-view';
   static const String analyticsView = '/analytics-view';
   static const String experienceView = '/experience-view';
-  
-  static const String initialRoute = setupView;
+
+  static const String initialRoute = experienceView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
@@ -67,4 +67,4 @@ class AppRoutes {
       ),
     ),
   );
-} 
+}
