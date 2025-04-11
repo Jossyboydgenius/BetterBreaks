@@ -10,6 +10,7 @@ import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:better_breaks/data/models/break_models.dart';
 import 'package:better_breaks/data/repositories/event_repository.dart';
 import 'package:better_breaks/ui/widgets/filter_events_bottom_sheet.dart';
+import 'dart:async';
 
 class ExperienceView extends StatefulWidget {
   const ExperienceView({super.key});
@@ -30,6 +31,7 @@ class _ExperienceViewState extends State<ExperienceView> {
     'Health'
   ];
   final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   // Event repository instance
   final EventRepository _eventRepository = EventRepository();
@@ -49,11 +51,18 @@ class _ExperienceViewState extends State<ExperienceView> {
     super.initState();
     _filteredEvents =
         _eventRepository.getEventsByCategory(_tabs[_selectedTabIndex]);
+    _searchController.addListener(() {
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(const Duration(milliseconds: 500), () {
+        _updateFilteredEvents();
+      });
+    });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -177,8 +186,11 @@ class _ExperienceViewState extends State<ExperienceView> {
     if (_searchController.text.isNotEmpty) {
       final searchText = _searchController.text.toLowerCase();
       events = events.where((event) {
+        // Search in title, location, and description
         return event.title.toLowerCase().contains(searchText) ||
-            event.location.toLowerCase().contains(searchText);
+            event.location.toLowerCase().contains(searchText) ||
+            (event.description != null &&
+                event.description!.toLowerCase().contains(searchText));
       }).toList();
     }
 
@@ -193,16 +205,24 @@ class _ExperienceViewState extends State<ExperienceView> {
 
     // Apply date range filter
     if (_startDateFilter != null && _endDateFilter != null) {
-      // This is a simplified implementation since we'd need to parse the date strings
-      // For a real implementation, we'd need to convert event.date to DateTime
-      // and compare with _startDateFilter and _endDateFilter
+      events = events.where((event) {
+        try {
+          // Parse the event date string to DateTime
+          final eventDate = DateTime.parse(event.date);
+          return eventDate.isAfter(_startDateFilter!) &&
+              eventDate.isBefore(_endDateFilter!);
+        } catch (e) {
+          // If date parsing fails, include the event
+          return true;
+        }
+      }).toList();
     }
 
     // Apply price filter
     if (_minPriceFilter != null && _maxPriceFilter != null) {
       events = events.where((event) {
         // Extract numeric price value from string (e.g. '£25' → 25)
-        final priceStr = event.price.replaceAll(RegExp(r'[^0-9]'), '');
+        final priceStr = event.price.replaceAll(RegExp(r'[^0-9.]'), '');
         if (priceStr.isEmpty) return false;
 
         final price = double.parse(priceStr);
