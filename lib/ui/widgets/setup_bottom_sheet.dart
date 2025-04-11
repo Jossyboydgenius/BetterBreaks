@@ -337,9 +337,9 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
               ],
             ),
           ),
-          
+
           // Header section
-          if (_currentStep < 2) ... [
+          if (_currentStep < 2) ...[
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
@@ -370,7 +370,7 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
               ),
             ),
           ],
-          
+
           // Content section
           Flexible(
             child: SingleChildScrollView(
@@ -387,4 +387,4 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
       ),
     );
   }
-} 
+}
