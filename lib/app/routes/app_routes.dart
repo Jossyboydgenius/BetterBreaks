@@ -44,7 +44,7 @@ class AppRoutes {
     createNewPassword: (context) => const CreateNewPasswordView(),
     passwordSuccess: (context) => const PasswordSuccessView(),
     setupView: (context) => const SetupView(),
-    plannerView: (context) => const PlannerView(showBottomNav: true),
+    plannerView: (context) => const PlannerView(),
     dashboardView: (context) => const DashboardView(),
     analyticsView: (context) => const AnalyticsView(),
     experienceView: (context) => const ExperienceView(),
