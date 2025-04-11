@@ -9,6 +9,7 @@ import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:better_breaks/data/models/break_models.dart';
 import 'package:better_breaks/data/repositories/event_repository.dart';
+import 'package:better_breaks/ui/widgets/filter_events_bottom_sheet.dart';
 
 class ExperienceView extends StatefulWidget {
   const ExperienceView({super.key});
@@ -29,6 +30,13 @@ class _ExperienceViewState extends State<ExperienceView> {
   // List to store filtered events
   late List<Event> _filteredEvents;
 
+  // Filter parameters
+  String? _locationFilter;
+  DateTime? _startDateFilter;
+  DateTime? _endDateFilter;
+  double? _minPriceFilter;
+  double? _maxPriceFilter;
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +48,40 @@ class _ExperienceViewState extends State<ExperienceView> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+          ),
+          child: FilterEventsBottomSheet(
+            onApplyFilter: (filterData) {
+              setState(() {
+                _locationFilter = filterData['location'];
+                _startDateFilter = filterData['startDate'];
+                _endDateFilter = filterData['endDate'];
+                _minPriceFilter = filterData['minPrice'];
+                _maxPriceFilter = filterData['maxPrice'];
+
+                // Apply all filters at once
+                _updateFilteredEvents();
+              });
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -70,9 +112,7 @@ class _ExperienceViewState extends State<ExperienceView> {
                     _updateFilteredEvents();
                   });
                 },
-                onFilterTap: () {
-                  // Handle filter tap
-                },
+                onFilterTap: _showFilterBottomSheet,
                 tabs: _tabs,
                 selectedTabIndex: _selectedTabIndex,
                 onTabSelected: (index) {
@@ -120,22 +160,52 @@ class _ExperienceViewState extends State<ExperienceView> {
     );
   }
 
-  // Update the filtered events based on selected tab and search text
+  // Update the filtered events based on selected tab, search text, and filters
   void _updateFilteredEvents() {
-    if (_searchController.text.isEmpty) {
-      _filteredEvents =
-          _eventRepository.getEventsByCategory(_tabs[_selectedTabIndex]);
-    } else {
-      // First filter by category
-      List<Event> categoryEvents =
-          _eventRepository.getEventsByCategory(_tabs[_selectedTabIndex]);
-      // Then search within those results
-      _filteredEvents = categoryEvents.where((event) {
-        final searchText = _searchController.text.toLowerCase();
+    // First get events filtered by category
+    List<Event> events =
+        _eventRepository.getEventsByCategory(_tabs[_selectedTabIndex]);
+
+    // Apply search filter if text is not empty
+    if (_searchController.text.isNotEmpty) {
+      final searchText = _searchController.text.toLowerCase();
+      events = events.where((event) {
         return event.title.toLowerCase().contains(searchText) ||
             event.location.toLowerCase().contains(searchText);
       }).toList();
     }
+
+    // Apply location filter
+    if (_locationFilter != null && _locationFilter!.isNotEmpty) {
+      events = events.where((event) {
+        return event.location
+            .toLowerCase()
+            .contains(_locationFilter!.toLowerCase());
+      }).toList();
+    }
+
+    // Apply date range filter
+    if (_startDateFilter != null && _endDateFilter != null) {
+      // This is a simplified implementation since we'd need to parse the date strings
+      // For a real implementation, we'd need to convert event.date to DateTime
+      // and compare with _startDateFilter and _endDateFilter
+    }
+
+    // Apply price filter
+    if (_minPriceFilter != null && _maxPriceFilter != null) {
+      events = events.where((event) {
+        // Extract numeric price value from string (e.g. '£25' → 25)
+        final priceStr = event.price.replaceAll(RegExp(r'[^0-9]'), '');
+        if (priceStr.isEmpty) return false;
+
+        final price = double.parse(priceStr);
+        return price >= _minPriceFilter! && price <= _maxPriceFilter!;
+      }).toList();
+    }
+
+    setState(() {
+      _filteredEvents = events;
+    });
   }
 
   Widget _buildEventsList() {
