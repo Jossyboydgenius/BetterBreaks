@@ -16,19 +16,19 @@ import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 class PlannerBottomSheet extends StatefulWidget {
   final DateTime? startDate;
   final DateTime? endDate;
-  final VoidCallback? onExpand;
   final String? description;
   final List<String> holidays;
   final VoidCallback? onComplete;
+  final VoidCallback? onBack;
 
   const PlannerBottomSheet({
     super.key,
     this.startDate,
     this.endDate,
-    this.onExpand,
     this.description,
     this.holidays = const [],
     this.onComplete,
+    this.onBack,
   });
 
   @override
@@ -49,6 +49,8 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
   bool _showSummary = false;
   DateTime? _startDate;
   DateTime? _endDate;
+  final PageController _pageController = PageController();
+  int _currentEventIndex = 0;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
   void dispose() {
     _animationController.dispose();
     _dragController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -106,7 +109,10 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
             Navigator.pop(context);
           }
         },
-        onComplete: widget.onComplete,
+        onComplete: widget.onComplete ?? () {},
+        totalBreakDays: 12,
+        selectedDays: 5,
+        remainingDays: 7,
       ),
     );
   }
@@ -114,11 +120,11 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.4, // 40% of screen height
-      minChildSize: 0.3, // Minimum 30% of screen height
-      maxChildSize: 0.8, // Maximum 80% of screen height
+      initialChildSize: 0.6, // 60% of screen height
+      minChildSize: 0.4, // Minimum 40% of screen height
+      maxChildSize: 0.9, // Maximum 90% of screen height
       snap: true,
-      snapSizes: const [0.3, 0.4, 0.8],
+      snapSizes: const [0.4, 0.6, 0.9],
       controller: _dragController,
       builder: (context, scrollController) {
         return Container(
@@ -132,23 +138,33 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Draggable indicator - Now wrapped in GestureDetector
+              // Draggable indicator
               GestureDetector(
                 onVerticalDragUpdate: (details) {
                   // Calculate new size based on drag
                   final newSize = _dragController.size -
                       (details.delta.dy / MediaQuery.of(context).size.height);
                   // Clamp to min/max bounds
-                  final clampedSize = newSize.clamp(0.3, 0.8);
+                  final clampedSize = newSize.clamp(0.4, 0.9);
                   // Update controller
                   if (_dragController.size != clampedSize &&
-                      clampedSize >= 0.3 &&
-                      clampedSize <= 0.8) {
+                      clampedSize >= 0.4 &&
+                      clampedSize <= 0.9) {
                     _dragController.jumpTo(clampedSize);
                   }
                 },
                 behavior: HitTestBehavior.translucent,
-                child: DraggableIndicator(),
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 12.h),
+                    width: 120.w,
+                    height: 5.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(3.r),
+                    ),
+                  ),
+                ),
               ),
 
               // Scrollable content
@@ -159,39 +175,27 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (!_showSummary) ...[
-                        PlannerForecastContainer(
-                          startDate: widget.startDate,
-                          endDate: widget.endDate,
-                          description: widget.description,
-                          holidays: widget.holidays,
-                          isExpanded: _isExpanded,
-                          expandAnimation: _expandAnimation,
-                          onExpand: _toggleExpanded,
-                          onCollapse: _toggleExpanded,
-                        ),
-                        SizedBox(height: 24.h),
-                        ExperienceSection(),
-                        SizedBox(height: 24.h),
-                        PlannerActionButtons(
-                          onAccept: _onAccept,
-                          onDecline: () => Navigator.pop(context),
-                        ),
-                      ] else ...[
-                        AppButton(
-                          text: 'Confirm Selection',
-                          backgroundColor: AppColors.primary,
-                          onPressed: () {
-                            // Handle confirm selection
-                          },
-                          prefix: AppImages(
-                            imagePath: AppImageData.starEyes,
-                            width: 20.r,
-                            height: 20.r,
-                          ),
-                        ),
-                      ],
+                      // Forecast container
+                      PlannerForecastContainer(
+                        startDate: widget.startDate,
+                        endDate: widget.endDate,
+                        description: widget.description,
+                        holidays: widget.holidays,
+                        isExpanded: _isExpanded,
+                        expandAnimation: _expandAnimation,
+                        onExpand: _toggleExpanded,
+                        onCollapse: _toggleExpanded,
+                      ),
+
                       SizedBox(height: 24.h),
+
+                      // Experience section
+                      ExperienceSection(),
+
+                      SizedBox(height: 24.h),
+
+                      // Confirm & Back buttons
+                      _buildButtons(),
                     ],
                   ),
                 ),
@@ -200,6 +204,112 @@ class _PlannerBottomSheetState extends State<PlannerBottomSheet>
           ),
         );
       },
+    );
+  }
+
+  Widget _buildExperienceSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Experience',
+          style: AppTextStyle.raleway(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        SizedBox(height: 16.h),
+        SizedBox(
+          height: 240.h,
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentEventIndex = index;
+              });
+            },
+            children: [
+              EventCard(
+                image: AppImageData.image,
+                title: 'Beach Yoga festival',
+                location: 'Gelora Bung Karno Stadium..',
+                date: 'November 15 2023',
+                price: '\$60',
+              ),
+              EventCard(
+                image: AppImageData.image1,
+                title: 'Beach Yoga festival',
+                location: 'Gelora Bung Karno Stadium..',
+                date: 'November 15 2023',
+                price: '\$60',
+              ),
+              EventCard(
+                image: AppImageData.image2,
+                title: 'Beach Yoga festival',
+                location: 'Gelora Bung Karno Stadium..',
+                date: 'November 15 2023',
+                price: '\$60',
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16.h),
+        Center(
+          child: AppDotsIndicator(
+            dotsCount: 3,
+            position: _currentEventIndex,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButtons() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Confirm Selection button
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: widget.onComplete,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.r),
+              ),
+            ),
+            child: Text(
+              'Confirm Selection',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+
+        // Back button
+        if (widget.onBack != null) ...[
+          SizedBox(height: 12.h),
+          Center(
+            child: TextButton(
+              onPressed: widget.onBack,
+              child: Text(
+                'Back',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.lightBlack,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
@@ -607,14 +717,9 @@ class PlannerActionButtons extends StatelessWidget {
     return Column(
       children: [
         AppButton(
-          text: 'Accept',
+          text: 'Confirm Selection',
           backgroundColor: AppColors.primary,
           onPressed: onAccept,
-          prefix: AppImages(
-            imagePath: AppImageData.starEyes,
-            width: 20.r,
-            height: 20.r,
-          ),
         ),
         SizedBox(height: 12.h),
         AppButton(
@@ -622,11 +727,6 @@ class PlannerActionButtons extends StatelessWidget {
           backgroundColor: Colors.white,
           textColor: AppColors.lightBlack,
           onPressed: onDecline,
-          prefix: AppImages(
-            imagePath: AppImageData.sadPensiveFace,
-            width: 20.r,
-            height: 20.r,
-          ),
         ),
       ],
     );
