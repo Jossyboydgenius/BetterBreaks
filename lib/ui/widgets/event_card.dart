@@ -14,6 +14,7 @@ class EventCard extends StatelessWidget {
   final String price;
   final bool useGradientOverlay;
   final bool isFullWidth;
+  final String? description;
 
   const EventCard({
     super.key,
@@ -24,6 +25,7 @@ class EventCard extends StatelessWidget {
     required this.price,
     this.useGradientOverlay = false,
     this.isFullWidth = false,
+    this.description,
   });
 
   @override
@@ -39,6 +41,7 @@ class EventCard extends StatelessWidget {
               location: location,
               date: date,
               price: price,
+              description: description,
             ),
           ),
         );
