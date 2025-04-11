@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
-class SavedCardWidget extends StatelessWidget {
+class SavedCard extends StatelessWidget {
   final String cardNumber;
   final String cardHolderName;
   final VoidCallback onTap;
 
-  const SavedCardWidget({
+  const SavedCard({
     super.key,
     required this.cardNumber,
     required this.cardHolderName,
@@ -28,21 +29,11 @@ class SavedCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.h),
+      child: GlassyContainer(
+        margin: EdgeInsets.only(bottom: 16.h),
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
         padding: EdgeInsets.all(16.r),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
         child: Row(
           children: [
             // Card icon in circle
