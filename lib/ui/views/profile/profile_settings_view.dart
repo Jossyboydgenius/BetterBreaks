@@ -3,9 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
-import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
+
+// Import the extracted widgets
+import 'package:better_breaks/ui/views/profile/widgets/premium_features_widget.dart';
+import 'package:better_breaks/ui/views/profile/widgets/break_score_widget.dart';
+import 'package:better_breaks/ui/views/profile/widgets/section_container.dart';
+import 'package:better_breaks/ui/views/profile/widgets/section_header.dart';
+import 'package:better_breaks/ui/views/profile/widgets/section_divider.dart';
 
 class ProfileSettingsView extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -44,12 +49,20 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Premium Features Container (now first)
-                  _buildPremiumFeaturesContainer(),
+                  PremiumFeaturesWidget(
+                    onUpgradePressed: () {
+                      // Handle upgrade
+                    },
+                  ),
 
                   SizedBox(height: 16.h),
 
                   // Break Score section
-                  _buildBreakScoreSection(),
+                  BreakScoreWidget(
+                    onTap: () {
+                      // Handle break score tap
+                    },
+                  ),
 
                   SizedBox(height: 16.h),
 
@@ -123,7 +136,7 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
             'Profile & Settings',
             style: AppTextStyle.raleway(
               fontSize: 24.sp,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
           ),
@@ -132,241 +145,98 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
     );
   }
 
-  Widget _buildBreakScoreSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row with icon and chevron
-            Row(
-              children: [
-                // Work icon in circle
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.work,
-                      size: 24.r,
+  Widget _buildUserProfileSection() {
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // User profile header
+          Row(
+            children: [
+              // User initials circle
+              Container(
+                width: 70.r,
+                height: 70.r,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    'SL',
+                    style: AppTextStyle.satoshi(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(width: 16.w),
-                Text(
-                  'Break score',
-                  style: AppTextStyle.raleway(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
+              ),
+              SizedBox(width: 16.w),
+              // Name and email
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sarah Lopez',
+                      style: AppTextStyle.raleway(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.lightBlack,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      'Serahanderson@gmail.com',
+                      style: AppTextStyle.satoshi(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.grey800,
+                      ),
+                    ),
+                  ],
                 ),
-                Spacer(),
-                AppIcons(
-                  icon: AppIconData.rightArrow,
+              ),
+              // Edit button with pen icon
+              SizedBox(
+                width: 24.r,
+                height: 24.r,
+                child: AppIcons(
+                  icon: AppIconData.pencilEdit,
                   size: 14.r,
                   color: AppColors.grey800,
                 ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
               ),
-            ),
+            ],
+          ),
 
-            // Score display - using the style from break analysis
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppIcons(
-                  icon: AppIconData.zapFilled,
-                  size: 24.r,
-                  color: AppColors.orange100,
-                ),
-                SizedBox(width: 8.w),
-                Text(
-                  '10',
-                  style: AppTextStyle.raleway(
-                    fontSize: 40.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-                Text(
-                  '/100',
-                  style: AppTextStyle.raleway(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.grey500,
-                  ),
-                ),
-              ],
-            ),
+          // Divider
+          const SectionDivider(),
 
-            SizedBox(height: 16.h),
+          // Contact information with correct icon colors
+          _buildContactInfoItem(
+            AppIconData.mail,
+            'Serahanderson@gmail.com',
+            AppColors.orange100,
+          ),
 
-            // Motivational text
-            Text(
-              'You are acing this!',
-              style: AppTextStyle.raleway(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.lightBlack,
-              ),
-            ),
+          SizedBox(height: 16.h),
 
-            SizedBox(height: 8.h),
+          _buildContactInfoItem(
+            AppIconData.location01,
+            'London, UK(GMT+1)',
+            AppColors.darkGreen,
+          ),
 
-            Text(
-              'You have levelled up. Unlock more badges to keep that score soaring',
-              style: AppTextStyle.satoshi(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.lightBlack,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+          SizedBox(height: 16.h),
 
-  Widget _buildUserProfileSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+          _buildContactInfoItem(
+            AppIconData.calendar,
+            '25 BetterBreaks day (2024)',
+            AppColors.blue100,
           ),
         ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // User profile header
-            Row(
-              children: [
-                // User initials circle
-                Container(
-                  width: 70.r,
-                  height: 70.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'SL',
-                      style: AppTextStyle.satoshi(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                // Name and email
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sarah Lopez',
-                        style: AppTextStyle.raleway(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.lightBlack,
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        'Serahanderson@gmail.com',
-                        style: AppTextStyle.satoshi(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.grey800,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Edit button with pen icon
-                SizedBox(
-                  width: 24.r,
-                  height: 24.r,
-                  child: AppIcons(
-                    icon: AppIconData.pencilEdit,
-                    size: 14.r,
-                    color: AppColors.grey800,
-                  ),
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-
-            // Contact information with correct icon colors
-            _buildContactInfoItem(
-              AppIconData.mail,
-              'Serahanderson@gmail.com',
-              AppColors.orange100,
-            ),
-
-            SizedBox(height: 16.h),
-
-            _buildContactInfoItem(
-              AppIconData.location01,
-              'London, UK(GMT+1)',
-              AppColors.darkGreen,
-            ),
-
-            SizedBox(height: 16.h),
-
-            _buildContactInfoItem(
-              AppIconData.calendar,
-              '25 BetterBreaks day (2024)',
-              AppColors.blue100,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -402,391 +272,179 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
     );
   }
 
-  Widget _buildPremiumFeaturesContainer() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: AppColors.premiumGradient,
-        borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            blurRadius: 30,
-            spreadRadius: 1,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Premium header with crown icon
-            Row(
-              children: [
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.crown,
-                      size: 24.r,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Premium Features',
-                      style: AppTextStyle.raleway(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'Unlock advanced breaks optimization',
-                      style: AppTextStyle.satoshi(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 24.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.2),
-              ),
-            ),
-
-            // Premium features list
-            _buildPremiumFeatureItem('Advance holiday recommendation'),
-            SizedBox(height: 16.h),
-            _buildPremiumFeatureItem('Export Analytic data'),
-            SizedBox(height: 16.h),
-            _buildPremiumFeatureItem('Team calendar integration'),
-
-            // Upgrade button
-            SizedBox(height: 24.h),
-            AppButton(
-              text: 'Upgrade to premium',
-              backgroundColor: Colors.white,
-              textColor: AppColors.primary,
-              fontWeight: FontWeight.w600,
-              onPressed: () {
-                // Handle upgrade
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPremiumFeatureItem(String feature) {
-    return Row(
-      children: [
-        AppIcons(
-          icon: AppIconData.checkmarkBadge,
-          size: 20.r,
-          color: Colors.white,
-        ),
-        SizedBox(width: 12.w),
-        Expanded(
-          child: Text(
-            feature,
-            style: AppTextStyle.satoshi(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildWorkScheduleSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with section header widget
+          SectionHeader(
+            title: 'Work Schedule',
+            icon: AppIconData.work,
+            trailing: SizedBox(
+              width: 24.r,
+              height: 24.r,
+              child: AppIcons(
+                icon: AppIconData.pencilEdit,
+                size: 14.r,
+                color: AppColors.grey800,
+              ),
+            ),
+          ),
+
+          // Divider
+          const SectionDivider(),
+
+          // Working Days
+          Text(
+            'Working Days',
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            'Monday - Friday',
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.grey800,
+            ),
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Blackout Dates
+          Text(
+            'Blackout Dates',
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            '3 days set',
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.grey800,
+            ),
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Maximum consecutive days
+          Text(
+            'Maximum consecutive days',
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            '3 days',
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.grey800,
+            ),
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Optimization goals
+          Text(
+            'Optimisation goals',
+            style: AppTextStyle.raleway(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            'long breaks, peak season',
+            style: AppTextStyle.satoshi(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.grey800,
+            ),
           ),
         ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row with icon and pencil edit
-            Row(
-              children: [
-                // Work schedule icon in circle
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.work,
-                      size: 24.r,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Text(
-                  'Work Schedule',
-                  style: AppTextStyle.raleway(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-                Spacer(),
-                SizedBox(
-                  width: 24.r,
-                  height: 24.r,
-                  child: AppIcons(
-                    icon: AppIconData.pencilEdit,
-                    size: 14.r,
-                    color: AppColors.grey800,
-                  ),
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-
-            // Working Days
-            Text(
-              'Working Days',
-              style: AppTextStyle.raleway(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.lightBlack,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              'Monday - Friday',
-              style: AppTextStyle.satoshi(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey800,
-              ),
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Blackout Dates
-            Text(
-              'Blackout Dates',
-              style: AppTextStyle.raleway(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.lightBlack,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              '3 days set',
-              style: AppTextStyle.satoshi(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey800,
-              ),
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Maximum consecutive days
-            Text(
-              'Maximum consecutive days',
-              style: AppTextStyle.raleway(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.lightBlack,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              '3 days',
-              style: AppTextStyle.satoshi(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey800,
-              ),
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Optimization goals
-            Text(
-              'Optimisation goals',
-              style: AppTextStyle.raleway(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.lightBlack,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              'long breaks, peak season',
-              style: AppTextStyle.satoshi(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey800,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
   Widget _buildNotificationSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with section header widget
+          SectionHeader(
+            title: 'Notification',
+            icon: AppIconData.notification,
+          ),
+
+          // Divider
+          const SectionDivider(),
+
+          // Breaks Reminder
+          _buildNotificationItem(
+            title: 'Breaks Reminder',
+            enabled: _breaksReminderEnabled,
+            onChanged: (value) {
+              setState(() {
+                _breaksReminderEnabled = value;
+              });
+            },
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Suggestions
+          _buildNotificationItem(
+            title: 'Suggestions',
+            enabled: _suggestionsEnabled,
+            onChanged: (value) {
+              setState(() {
+                _suggestionsEnabled = value;
+              });
+            },
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Deadline Alerts
+          _buildNotificationItem(
+            title: 'Deadline Alerts',
+            enabled: _deadlineAlertsEnabled,
+            onChanged: (value) {
+              setState(() {
+                _deadlineAlertsEnabled = value;
+              });
+            },
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Weekly digest
+          _buildNotificationItem(
+            title: 'Weekly digest',
+            enabled: _weeklyDigestEnabled,
+            onChanged: (value) {
+              setState(() {
+                _weeklyDigestEnabled = value;
+              });
+            },
           ),
         ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row with icon
-            Row(
-              children: [
-                // Notification icon in circle
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.notification,
-                      size: 24.r,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Text(
-                  'Notification',
-                  style: AppTextStyle.raleway(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-
-            // Breaks Reminder
-            _buildNotificationItem(
-              title: 'Breaks Reminder',
-              enabled: _breaksReminderEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _breaksReminderEnabled = value;
-                });
-              },
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Suggestions
-            _buildNotificationItem(
-              title: 'Suggestions',
-              enabled: _suggestionsEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _suggestionsEnabled = value;
-                });
-              },
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Deadline Alerts
-            _buildNotificationItem(
-              title: 'Deadline Alerts',
-              enabled: _deadlineAlertsEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _deadlineAlertsEnabled = value;
-                });
-              },
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Weekly digest
-            _buildNotificationItem(
-              title: 'Weekly digest',
-              enabled: _weeklyDigestEnabled,
-              onChanged: (value) {
-                setState(() {
-                  _weeklyDigestEnabled = value;
-                });
-              },
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -831,178 +489,86 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
   }
 
   Widget _buildSupportSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with section header widget
+          SectionHeader(
+            title: 'Support',
+            icon: AppIconData.customerSupport,
+          ),
+
+          // Divider
+          const SectionDivider(),
+
+          // Send us a message option
+          GestureDetector(
+            onTap: () {
+              // Handle sending a message
+            },
+            child: Text(
+              'Send us a message',
+              style: AppTextStyle.raleway(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.lightBlack,
+              ),
+            ),
           ),
         ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row with icon
-            Row(
-              children: [
-                // Support icon in circle
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.customerSupport,
-                      size: 24.r,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Text(
-                  'Support',
-                  style: AppTextStyle.raleway(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-
-            // Send us a message option
-            GestureDetector(
-              onTap: () {
-                // Handle sending a message
-              },
-              child: Text(
-                'Send us a message',
-                style: AppTextStyle.raleway(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.lightBlack,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
   Widget _buildAccountSection() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with section header widget
+          SectionHeader(
+            title: 'Account',
+            icon: AppIconData.user,
+          ),
+
+          // Divider
+          const SectionDivider(),
+
+          // Payment Method
+          _buildAccountOption(
+            icon: AppIconData.creditCard,
+            title: 'Payment Method',
+            showChevron: true,
+            onTap: () {
+              // Handle payment method
+            },
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Privacy policy
+          _buildAccountOption(
+            icon: AppIconData.lockPassword,
+            title: 'Privacy policy',
+            showChevron: true,
+            onTap: () {
+              // Handle privacy policy
+            },
+          ),
+
+          SizedBox(height: 16.h),
+
+          // Log out
+          _buildAccountOption(
+            icon: AppIconData.logout,
+            title: 'Log out',
+            textColor: AppColors.red100,
+            onTap: () {
+              // Handle logout
+            },
           ),
         ],
-      ),
-      child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row with icon
-            Row(
-              children: [
-                // User icon in circle
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.user,
-                      size: 24.r,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Text(
-                  'Account',
-                  style: AppTextStyle.raleway(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-              ],
-            ),
-
-            // Divider
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Container(
-                height: 1,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-
-            // Payment Method
-            _buildAccountOption(
-              icon: AppIconData.creditCard,
-              title: 'Payment Method',
-              showChevron: true,
-              onTap: () {
-                // Handle payment method
-              },
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Privacy policy
-            _buildAccountOption(
-              icon: AppIconData.lock,
-              title: 'Privacy policy',
-              showChevron: true,
-              onTap: () {
-                // Handle privacy policy
-              },
-            ),
-
-            SizedBox(height: 16.h),
-
-            // Log out
-            _buildAccountOption(
-              icon: AppIconData.logout,
-              title: 'Log out',
-              textColor: AppColors.red100,
-              onTap: () {
-                // Handle logout
-              },
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -1018,22 +584,10 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
       onTap: onTap,
       child: Row(
         children: [
-          Container(
-            width: 36.r,
-            height: 36.r,
-            decoration: BoxDecoration(
-              color: textColor == AppColors.red100
-                  ? AppColors.red100.withOpacity(0.1)
-                  : AppColors.background.withOpacity(0.3),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: AppIcons(
-                icon: icon,
-                size: 16.r,
-                color: textColor ?? AppColors.grey800,
-              ),
-            ),
+          AppIcons(
+            icon: icon,
+            size: 24.r,
+            color: textColor ?? AppColors.grey800,
           ),
           SizedBox(width: 12.w),
           Expanded(
