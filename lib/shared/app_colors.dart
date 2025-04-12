@@ -6,8 +6,10 @@ class AppColors {
   static const Color primaryLight = Color(0xFF1AB9E5);
   static const Color lightPrimary = Color(0xFFC7EFFF);
   static const Color orange = Color(0xFFFF9A6D);
+  static const Color blue100 = Color(0xFF3C6FFF);
   static const Color lightGreen = Color(0xFFB3D069);
   static const Color green = Color(0xFF16A34A);
+  static const Color darkGreen = Color(0xFF6C9700);
 
   // Orange shades
   static const Color orange100 = Color(0xFFFE8D6B);
