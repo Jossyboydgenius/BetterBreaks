@@ -65,6 +65,19 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
 
                   // Notification section
                   _buildNotificationSection(),
+
+                  SizedBox(height: 16.h),
+
+                  // Support section
+                  _buildSupportSection(),
+
+                  SizedBox(height: 16.h),
+
+                  // Account section
+                  _buildAccountSection(),
+
+                  // Add some space at the bottom
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),
@@ -814,6 +827,233 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
           onChanged: onChanged,
         ),
       ],
+    );
+  }
+
+  Widget _buildSupportSection() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: GlassyContainer(
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row with icon
+            Row(
+              children: [
+                // Support icon in circle
+                Container(
+                  width: 42.r,
+                  height: 42.r,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: AppIcons(
+                      icon: AppIconData.customerSupport,
+                      size: 24.r,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Text(
+                  'Support',
+                  style: AppTextStyle.raleway(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+              ],
+            ),
+
+            // Divider
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.3),
+              ),
+            ),
+
+            // Send us a message option
+            GestureDetector(
+              onTap: () {
+                // Handle sending a message
+              },
+              child: Text(
+                'Send us a message',
+                style: AppTextStyle.raleway(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.lightBlack,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountSection() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: GlassyContainer(
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row with icon
+            Row(
+              children: [
+                // User icon in circle
+                Container(
+                  width: 42.r,
+                  height: 42.r,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: AppIcons(
+                      icon: AppIconData.user,
+                      size: 24.r,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Text(
+                  'Account',
+                  style: AppTextStyle.raleway(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+              ],
+            ),
+
+            // Divider
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.3),
+              ),
+            ),
+
+            // Payment Method
+            _buildAccountOption(
+              icon: AppIconData.creditCard,
+              title: 'Payment Method',
+              showChevron: true,
+              onTap: () {
+                // Handle payment method
+              },
+            ),
+
+            SizedBox(height: 16.h),
+
+            // Privacy policy
+            _buildAccountOption(
+              icon: AppIconData.lock,
+              title: 'Privacy policy',
+              showChevron: true,
+              onTap: () {
+                // Handle privacy policy
+              },
+            ),
+
+            SizedBox(height: 16.h),
+
+            // Log out
+            _buildAccountOption(
+              icon: AppIconData.logout,
+              title: 'Log out',
+              textColor: AppColors.red100,
+              onTap: () {
+                // Handle logout
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountOption({
+    required String icon,
+    required String title,
+    bool showChevron = false,
+    Color? textColor,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Container(
+            width: 36.r,
+            height: 36.r,
+            decoration: BoxDecoration(
+              color: textColor == AppColors.red100
+                  ? AppColors.red100.withOpacity(0.1)
+                  : AppColors.background.withOpacity(0.3),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: AppIcons(
+                icon: icon,
+                size: 16.r,
+                color: textColor ?? AppColors.grey800,
+              ),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              title,
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: textColor ?? AppColors.lightBlack,
+              ),
+            ),
+          ),
+          if (showChevron)
+            AppIcons(
+              icon: AppIconData.rightArrow,
+              size: 14.r,
+              color: AppColors.grey800,
+            ),
+        ],
+      ),
     );
   }
 }
