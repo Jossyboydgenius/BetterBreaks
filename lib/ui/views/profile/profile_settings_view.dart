@@ -4,6 +4,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
+import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
 class ProfileSettingsView extends StatelessWidget {
   final VoidCallback? onBackPressed;
@@ -30,55 +31,18 @@ class ProfileSettingsView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Premium Features Container
+                  // Premium Features Container (now first)
                   _buildPremiumFeaturesContainer(),
 
                   SizedBox(height: 24.h),
 
-                  // Settings Sections - can be expanded later
-                  _buildSettingsSection('Account', [
-                    SettingsItem(
-                      icon: AppIconData.user,
-                      title: 'Personal Information',
-                      onTap: () {},
-                    ),
-                    SettingsItem(
-                      icon: AppIconData.lockPassword,
-                      title: 'Password & Security',
-                      onTap: () {},
-                    ),
-                  ]),
+                  // Break Score section
+                  _buildBreakScoreSection(),
 
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 24.h),
 
-                  _buildSettingsSection('Preferences', [
-                    SettingsItem(
-                      icon: AppIconData.calendar,
-                      title: 'Calendar Settings',
-                      onTap: () {},
-                    ),
-                    SettingsItem(
-                      icon: AppIconData.notification,
-                      title: 'Notifications',
-                      onTap: () {},
-                    ),
-                  ]),
-
-                  SizedBox(height: 16.h),
-
-                  _buildSettingsSection('Other', [
-                    SettingsItem(
-                      icon: AppIconData.sidebarTop,
-                      title: 'About BetterBreaks',
-                      onTap: () {},
-                    ),
-                    SettingsItem(
-                      icon: AppIconData.logout,
-                      title: 'Logout',
-                      onTap: () {},
-                      showDivider: false,
-                    ),
-                  ]),
+                  // User Profile section
+                  _buildUserProfileSection(),
                 ],
               ),
             ),
@@ -112,7 +76,7 @@ class ProfileSettingsView extends StatelessWidget {
             onTap: onBackPressed ?? () => Navigator.pop(context),
             child: AppIcons(
               icon: AppIconData.back,
-              size: 18.r,
+              size: 16.r,
               color: Colors.white,
             ),
           ),
@@ -130,6 +94,276 @@ class ProfileSettingsView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBreakScoreSection() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: GlassyContainer(
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row with icon and chevron
+            Row(
+              children: [
+                // Work icon in circle
+                Container(
+                  width: 42.r,
+                  height: 42.r,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: AppIcons(
+                      icon: AppIconData.work,
+                      size: 24.r,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Text(
+                  'Break score',
+                  style: AppTextStyle.raleway(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+                Spacer(),
+                AppIcons(
+                  icon: AppIconData.rightArrow,
+                  size: 14.r,
+                  color: AppColors.grey800,
+                ),
+              ],
+            ),
+
+            // Divider
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.3),
+              ),
+            ),
+
+            // Score display - using the style from break analysis
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AppIcons(
+                  icon: AppIconData.zapFilled,
+                  size: 24.r,
+                  color: AppColors.orange100,
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  '10',
+                  style: AppTextStyle.raleway(
+                    fontSize: 40.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.lightBlack,
+                  ),
+                ),
+                Text(
+                  '/100',
+                  style: AppTextStyle.raleway(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.grey500,
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 16.h),
+
+            // Motivational text
+            Text(
+              'You are acing this!',
+              style: AppTextStyle.raleway(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.lightBlack,
+              ),
+            ),
+
+            SizedBox(height: 8.h),
+
+            Text(
+              'You have levelled up. Unlock more badges to keep that score soaring',
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.lightBlack,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserProfileSection() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: GlassyContainer(
+        backgroundColor: Colors.white,
+        borderColor: Colors.white,
+        padding: EdgeInsets.all(24.r),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // User profile header
+            Row(
+              children: [
+                // User initials circle
+                Container(
+                  width: 70.r,
+                  height: 70.r,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'SL',
+                      style: AppTextStyle.satoshi(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                // Name and email
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Sarah Lopez',
+                        style: AppTextStyle.raleway(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.lightBlack,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Serahanderson@gmail.com',
+                        style: AppTextStyle.satoshi(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.grey800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Edit button with pen icon
+                SizedBox(
+                  width: 24.r,
+                  height: 24.r,
+                  child: AppIcons(
+                    icon: AppIconData.pencilEdit,
+                    size: 14.r,
+                    color: AppColors.grey800,
+                  ),
+                ),
+              ],
+            ),
+
+            // Divider
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Container(
+                height: 1,
+                color: Colors.white.withOpacity(0.3),
+              ),
+            ),
+
+            // Contact information with correct icon colors
+            _buildContactInfoItem(
+              AppIconData.mail,
+              'Serahanderson@gmail.com',
+              AppColors.orange100,
+            ),
+
+            SizedBox(height: 16.h),
+
+            _buildContactInfoItem(
+              AppIconData.location01,
+              'London, UK(GMT+1)',
+              AppColors.darkGreen,
+            ),
+
+            SizedBox(height: 16.h),
+
+            _buildContactInfoItem(
+              AppIconData.calendar,
+              '25 BetterBreaks day (2024)',
+              AppColors.blue100,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactInfoItem(String icon, String text, Color iconColor) {
+    return Row(
+      children: [
+        Container(
+          width: 36.r,
+          height: 36.r,
+          decoration: BoxDecoration(
+            color: iconColor.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: AppIcons(
+              icon: icon,
+              size: 16.r,
+              color: iconColor,
+            ),
+          ),
+        ),
+        SizedBox(width: 12.w),
+        Text(
+          text,
+          style: AppTextStyle.satoshi(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.lightBlack,
+          ),
+        ),
+      ],
     );
   }
 
@@ -247,104 +481,6 @@ class ProfileSettingsView extends StatelessWidget {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildSettingsSection(String title, List<SettingsItem> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section title
-        Text(
-          title,
-          style: AppTextStyle.raleway(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        SizedBox(height: 8.h),
-
-        // Settings container
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: items,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SettingsItem extends StatelessWidget {
-  final String icon;
-  final String title;
-  final VoidCallback onTap;
-  final bool showDivider;
-
-  const SettingsItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    this.showDivider = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-            child: Row(
-              children: [
-                AppIcons(
-                  icon: icon,
-                  size: 20.r,
-                  color: AppColors.lightBlack,
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: AppTextStyle.satoshi(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.lightBlack,
-                    ),
-                  ),
-                ),
-                AppIcons(
-                  icon: AppIconData.rightArrow,
-                  size: 16.r,
-                  color: AppColors.grey800,
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (showDivider)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Divider(
-              height: 1,
-              color: AppColors.grey200,
-            ),
-          ),
       ],
     );
   }
