@@ -5,9 +5,9 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
+import 'package:better_breaks/ui/widgets/app_dropdown.dart';
 import 'package:intl/intl.dart';
 
 class SetupBottomSheet extends StatefulWidget {
@@ -26,11 +26,12 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
   final _leaveBalanceController = TextEditingController();
   final _dateController = TextEditingController();
   String? _selectedPreference;
+  String? _selectedWorkPattern;
+  List<String> _selectedDays = ['Mon', 'Tues', 'Wed'];
   bool _alignWithSchool = false;
   bool _alignWithPeak = false;
   int _currentStep = 0; // 0: Leave Balance, 1: Preferences, 2: Completed
   DateTime _selectedDate = DateTime.now();
-  bool _showDropdownOptions = false;
   final _dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
@@ -44,36 +45,6 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
     _leaveBalanceController.dispose();
     _dateController.dispose();
     super.dispose();
-  }
-
-  void _showPreferenceDropdown() {
-    setState(() {
-      _showDropdownOptions = !_showDropdownOptions;
-    });
-  }
-
-  Widget _dropdownItem(String text) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedPreference = text;
-          _showDropdownOptions = false;
-        });
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        child: AppRadioButton(
-          text: text,
-          isSelected: _selectedPreference == text,
-          onTap: () {
-            setState(() {
-              _selectedPreference = text;
-              _showDropdownOptions = false;
-            });
-          },
-        ),
-      ),
-    );
   }
 
   void _showCalendar() {
@@ -141,6 +112,36 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
             readOnly: true,
             onTap: _showCalendar,
           ),
+          SizedBox(height: 24.h),
+          Text(
+            'Working Pattern',
+            style: AppTextStyle.satoshi(
+              fontSize: 16.sp,
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          AppDropdown(
+            hintText: 'Select working pattern',
+            selectedValue: _selectedWorkPattern,
+            options: const [
+              'Standard pattern (Mon -fri)',
+              'Custom pattern',
+              'Shift pattern',
+            ],
+            onOptionSelected: (value) {
+              setState(() {
+                _selectedWorkPattern = value;
+              });
+            },
+            onDaysSelected: (days) {
+              setState(() {
+                _selectedDays = days;
+              });
+            },
+            initialSelectedDays: _selectedDays,
+            showDaysOfWeek: true,
+          ),
           SizedBox(height: 32.h),
           AppButton(
             text: 'Continue',
@@ -166,64 +167,48 @@ class _SetupBottomSheetState extends State<SetupBottomSheet> {
             ),
           ),
           SizedBox(height: 8.h),
-          Column(
-            children: [
-              GestureDetector(
-                onTap: _showPreferenceDropdown,
-                child: AppInput(
-                  hintText: 'Select preference',
-                  isDropdown: true,
-                  readOnly: true,
-                  controller: TextEditingController(text: _selectedPreference),
-                ),
-              ),
-              if (_showDropdownOptions) ...[
-                SizedBox(height: 8.h),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: AppColors.grey),
-                  ),
-                  child: Column(
-                    children: [
-                      _dropdownItem('Long Weekends'),
-                      _dropdownItem('Extended Breaks'),
-                      _dropdownItem('Mix of both'),
-                    ],
-                  ),
-                ),
-              ],
-              if (_selectedPreference != null) ...[
-                SizedBox(height: 24.h),
-                AppBooleanSwitch(
-                  text: 'Align with school vacations',
-                  value: _alignWithSchool,
-                  onChanged: (value) {
-                    setState(() {
-                      _alignWithSchool = value;
-                      if (value) {
-                        _alignWithPeak = false;
-                      }
-                    });
-                  },
-                ),
-                SizedBox(height: 16.h),
-                AppBooleanSwitch(
-                  text: 'Align with peak travel season',
-                  value: _alignWithPeak,
-                  onChanged: (value) {
-                    setState(() {
-                      _alignWithPeak = value;
-                      if (value) {
-                        _alignWithSchool = false;
-                      }
-                    });
-                  },
-                ),
-              ],
+          AppDropdown(
+            hintText: 'Select preference',
+            selectedValue: _selectedPreference,
+            options: const [
+              'Long Weekends',
+              'Extended Breaks',
+              'Mix of both',
             ],
+            onOptionSelected: (value) {
+              setState(() {
+                _selectedPreference = value;
+              });
+            },
           ),
+          if (_selectedPreference != null) ...[
+            SizedBox(height: 24.h),
+            AppBooleanSwitch(
+              text: 'Align with school vacations',
+              value: _alignWithSchool,
+              onChanged: (value) {
+                setState(() {
+                  _alignWithSchool = value;
+                  if (value) {
+                    _alignWithPeak = false;
+                  }
+                });
+              },
+            ),
+            SizedBox(height: 16.h),
+            AppBooleanSwitch(
+              text: 'Align with peak travel season',
+              value: _alignWithPeak,
+              onChanged: (value) {
+                setState(() {
+                  _alignWithPeak = value;
+                  if (value) {
+                    _alignWithSchool = false;
+                  }
+                });
+              },
+            ),
+          ],
           SizedBox(height: 32.h),
           AppButton(
             text: 'Finish',
