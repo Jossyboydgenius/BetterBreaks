@@ -50,11 +50,11 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.8, // 80% of screen height
+      initialChildSize: 0.7, // 70% of screen height
       minChildSize: 0.4, // Minimum 40% of screen height
       maxChildSize: 0.95, // Maximum 95% of screen height
       snap: true,
-      snapSizes: const [0.4, 0.8, 0.95],
+      snapSizes: const [0.4, 0.7, 0.95],
       controller: _dragController,
       builder: (context, scrollController) {
         return Container(
@@ -125,8 +125,8 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
                         // Selected date display
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 12.h),
+                          height: 48.h, // Fixed height to match the design
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(32.r),
@@ -154,14 +154,25 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
 
                         SizedBox(height: 24.h),
 
-                        // Calendar
+                        // Calendar - key point: we need to pass the current selected dates
                         CalendarWidget(
                           startDate: _startDate,
                           endDate: _endDate,
                           onDateSelected: (date) {
                             setState(() {
-                              _startDate = date;
-                              _endDate = date; // For single date selection
+                              if (_startDate == null || _endDate != null) {
+                                // Start new selection
+                                _startDate = date;
+                                _endDate = null;
+                              } else {
+                                // Complete the range
+                                if (date.isBefore(_startDate!)) {
+                                  _endDate = _startDate;
+                                  _startDate = date;
+                                } else {
+                                  _endDate = date;
+                                }
+                              }
                             });
                           },
                           onRangeSelected: (start, end) {
@@ -174,13 +185,14 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
 
                         SizedBox(height: 24.h),
 
-                        // Save button
+                        // Save button - Updated to always enable if startDate is set
                         AppButton(
                           text: 'Save',
                           backgroundColor: AppColors.primary,
                           onPressed: _startDate == null
                               ? null
                               : () {
+                                  // If only startDate is selected, use it for both start and end
                                   final end = _endDate ?? _startDate!;
                                   widget.onSave(_startDate!, end);
                                   Navigator.pop(context);
