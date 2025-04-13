@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:better_breaks/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
@@ -7,31 +8,31 @@ import 'package:better_breaks/shared/app_icons.dart';
 class AppCircularProgress extends StatelessWidget {
   /// The progress value (0.0 to 1.0)
   final double progress;
-  
+
   /// Primary label to display in the center
   final String primaryLabel;
-  
+
   /// Optional secondary label to display below primary label
   final String secondaryLabel;
-  
+
   /// Optional icon to display before primary label
   final IconData? iconData;
-  
+
   /// Optional icon to display (as string path for AppIcons)
   final String? iconPath;
-  
+
   /// Primary color for the progress arc
   final Color progressColor;
-  
+
   /// Background color for the progress arc
   final Color backgroundColor;
-  
+
   /// Width of the progress arc
   final double strokeWidth;
-  
+
   /// Optional text for max value (like "/100")
   final String? maxValueText;
-  
+
   const AppCircularProgress({
     super.key,
     required this.progress,
@@ -50,7 +51,7 @@ class AppCircularProgress extends StatelessWidget {
     // Use MediaQuery to get screen width for responsive sizing
     final screenWidth = MediaQuery.of(context).size.width;
     final containerSize = screenWidth * 0.62; // 62% of screen width
-    
+
     return Container(
       width: containerSize,
       height: containerSize,
@@ -66,12 +67,14 @@ class AppCircularProgress extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(containerSize * 0.06), // Reduced padding to make content larger
+      padding: EdgeInsets.all(
+          containerSize * 0.06), // Reduced padding to make content larger
       child: Stack(
         alignment: Alignment.center,
         children: [
           CustomPaint(
-            size: Size(containerSize * 0.88, containerSize * 0.88), // Increased proportion of container
+            size: Size(containerSize * 0.88,
+                containerSize * 0.88), // Increased proportion of container
             painter: CircleProgressPainter(
               progress: progress,
               progressColor: progressColor,
@@ -91,7 +94,7 @@ class AppCircularProgress extends StatelessWidget {
                   if (iconData != null || iconPath != null) ...[
                     Padding(
                       padding: EdgeInsets.only(right: 6.w),
-                      child: iconPath != null 
+                      child: iconPath != null
                           ? AppIcons(
                               icon: iconPath!,
                               size: 25.r,
@@ -114,7 +117,7 @@ class AppCircularProgress extends StatelessWidget {
                       style: AppTextStyle.raleway(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black.withOpacity(0.5),
+                        color: AppColors.grey500,
                       ),
                     ),
                   ],
@@ -144,7 +147,7 @@ class CircleProgressPainter extends CustomPainter {
   final Color backgroundColor;
   final double activeStrokeWidth;
   final double inactiveStrokeWidth;
-  
+
   CircleProgressPainter({
     required this.progress,
     required this.progressColor,
@@ -152,30 +155,30 @@ class CircleProgressPainter extends CustomPainter {
     required this.activeStrokeWidth,
     required this.inactiveStrokeWidth,
   });
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - activeStrokeWidth) / 2;
-    
+
     // Background circle (thinner)
     final backgroundPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = inactiveStrokeWidth
       ..strokeCap = StrokeCap.round;
-    
+
     canvas.drawCircle(center, radius, backgroundPaint);
-    
+
     // Progress arc (wider)
     final progressPaint = Paint()
       ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = activeStrokeWidth
       ..strokeCap = StrokeCap.round;
-    
+
     final progressAngle = 2 * pi * progress; // Convert to radians
-    
+
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -pi / 2, // Start from top (minus pi/2)
@@ -184,7 +187,7 @@ class CircleProgressPainter extends CustomPainter {
       progressPaint,
     );
   }
-  
+
   @override
   bool shouldRepaint(CircleProgressPainter oldDelegate) {
     return oldDelegate.progress != progress ||
@@ -193,4 +196,4 @@ class CircleProgressPainter extends CustomPainter {
         oldDelegate.activeStrokeWidth != activeStrokeWidth ||
         oldDelegate.inactiveStrokeWidth != inactiveStrokeWidth;
   }
-} 
+}
