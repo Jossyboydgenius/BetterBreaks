@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
 import 'package:better_breaks/ui/views/profile/edit_profile_view.dart';
+import 'package:better_breaks/ui/views/profile/edit_schedule_view.dart';
 
 // Import the extracted widgets
 import 'package:better_breaks/ui/views/profile/widgets/premium_features_widget.dart';
@@ -301,13 +302,29 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
           SectionHeader(
             title: 'Work Schedule',
             icon: AppIconData.work,
-            trailing: SizedBox(
-              width: 24.r,
-              height: 24.r,
-              child: AppIcons(
-                icon: AppIconData.pencilEdit,
-                size: 14.r,
-                color: AppColors.grey800,
+            trailing: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditScheduleView(
+                      initialWorkingPattern: 'Standard pattern (Mon-fri)',
+                      onSave: (pattern, days) {
+                        // Here you could update the work schedule data
+                        // For now, we'll just navigate back
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: SizedBox(
+                width: 24.r,
+                height: 24.r,
+                child: AppIcons(
+                  icon: AppIconData.pencilEdit,
+                  size: 14.r,
+                  color: AppColors.grey800,
+                ),
               ),
             ),
           ),
