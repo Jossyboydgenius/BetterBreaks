@@ -4,6 +4,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:intl/intl.dart';
+import 'package:better_breaks/ui/widgets/blackout_period_bottom_sheet.dart';
 
 class BlackoutDatesContainer extends StatefulWidget {
   final List<DateTime> blackoutDates;
@@ -22,6 +23,14 @@ class BlackoutDatesContainer extends StatefulWidget {
 }
 
 class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
+  late List<DateTime> _blackoutDates;
+
+  @override
+  void initState() {
+    super.initState();
+    _blackoutDates = List.from(widget.blackoutDates);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
@@ -64,14 +73,14 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
   }
 
   Widget _buildBlackoutDatesGrid() {
-    if (widget.blackoutDates.isEmpty) {
+    if (_blackoutDates.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return Wrap(
       spacing: 16.w,
       runSpacing: 16.h,
-      children: widget.blackoutDates.map((date) {
+      children: _blackoutDates.map((date) {
         return _buildBlackoutDateChip(date);
       }).toList(),
     );
@@ -122,7 +131,7 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
 
   Widget _buildAddBlackoutButton() {
     return GestureDetector(
-      onTap: widget.onAddBlackoutPeriod,
+      onTap: _showAddBlackoutPeriodDialog,
       child: Container(
         height: 56.h,
         decoration: BoxDecoration(
@@ -152,5 +161,51 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
         ),
       ),
     );
+  }
+
+  void _showAddBlackoutPeriodDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BlackoutPeriodBottomSheet(
+        onSave: (startDate, endDate) {
+          setState(() {
+            // Check if the dates overlap with existing blackout dates
+            if (_datesOverlap(startDate, endDate)) {
+              // You could show a warning toast or dialog here
+              return;
+            }
+
+            // If it's a range, add each day in the range
+            if (!_isSameDay(startDate, endDate)) {
+              for (DateTime date = startDate;
+                  !date.isAfter(endDate);
+                  date = date.add(const Duration(days: 1))) {
+                if (!_blackoutDates.any((d) => _isSameDay(d, date))) {
+                  _blackoutDates.add(date);
+                }
+              }
+            } else {
+              // Single date
+              if (!_blackoutDates.any((d) => _isSameDay(d, startDate))) {
+                _blackoutDates.add(startDate);
+              }
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  bool _datesOverlap(DateTime startDate, DateTime endDate) {
+    return _blackoutDates.any((date) {
+      return (date.isAtSameMomentAs(startDate) || date.isAfter(startDate)) &&
+          (date.isAtSameMomentAs(endDate) || date.isBefore(endDate));
+    });
   }
 }
