@@ -86,9 +86,7 @@ class _AppDropdownState extends State<AppDropdown> {
     } else {
       _startDateController.text =
           DateFormat('dd/MM/yyyy').format(DateTime.now());
-      // Default to empty string unless shift pattern is already selected
-      _selectedRotation =
-          widget.selectedValue == 'Shift pattern' ? "2-weeks rotation" : "";
+      _selectedRotation = "";
     }
   }
 
@@ -97,15 +95,6 @@ class _AppDropdownState extends State<AppDropdown> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedValue != widget.selectedValue) {
       _controller.text = widget.selectedValue ?? '';
-
-      // When switching to shift pattern, set default rotation if none selected
-      if (widget.selectedValue == 'Shift pattern' &&
-          _selectedRotation.isEmpty) {
-        setState(() {
-          _selectedRotation = "2-weeks rotation";
-          _updateShiftPattern();
-        });
-      }
     }
   }
 
@@ -500,10 +489,39 @@ class _AppDropdownState extends State<AppDropdown> {
         int cycleDayIndex = (rowIndex * daysPerRow + dayIndex) % totalCycleDays;
         bool isOn = cycleDayIndex < daysOn;
 
+        final int dayPosition = rowIndex * daysPerRow + dayIndex;
+
         rowItems.add(
           Padding(
             padding: EdgeInsets.only(right: 8.w),
-            child: _buildDayIndicator(isOn),
+            child: _buildDayIndicator(isOn, () {
+              setState(() {
+                // Toggle this specific day
+                if (isOn) {
+                  // If it's ON, add one to daysOff and subtract one from daysOn
+                  int newDaysOn = daysOn - 1;
+                  int newDaysOff = daysOff + 1;
+
+                  if (newDaysOn >= 1) {
+                    // Ensure at least 1 day ON
+                    _daysOnController.text = "$newDaysOn days";
+                    _daysOffController.text = "$newDaysOff days";
+                    _updateShiftPattern();
+                  }
+                } else {
+                  // If it's OFF, add one to daysOn and subtract one from daysOff
+                  int newDaysOn = daysOn + 1;
+                  int newDaysOff = daysOff - 1;
+
+                  if (newDaysOff >= 1) {
+                    // Ensure at least 1 day OFF
+                    _daysOnController.text = "$newDaysOn days";
+                    _daysOffController.text = "$newDaysOff days";
+                    _updateShiftPattern();
+                  }
+                }
+              });
+            }),
           ),
         );
       }
@@ -528,21 +546,24 @@ class _AppDropdownState extends State<AppDropdown> {
     );
   }
 
-  Widget _buildDayIndicator(bool isOn) {
-    return Container(
-      width: 45.r,
-      height: 45.r,
-      decoration: BoxDecoration(
-        color: isOn ? AppColors.primary : Colors.white.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Center(
-        child: Text(
-          isOn ? "ON" : "OFF",
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-            color: isOn ? Colors.white : Colors.grey,
+  Widget _buildDayIndicator(bool isOn, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 45.r,
+        height: 45.r,
+        decoration: BoxDecoration(
+          color: isOn ? AppColors.primary : Colors.white.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Center(
+          child: Text(
+            isOn ? "ON" : "OFF",
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: isOn ? Colors.white : Colors.grey,
+            ),
           ),
         ),
       ),
