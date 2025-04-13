@@ -22,7 +22,6 @@ class SetupPlannerView extends StatefulWidget {
 class _SetupPlannerViewState extends State<SetupPlannerView> {
   DateTime? _startDate;
   DateTime? _endDate;
-  final int _currentStep = 2;
 
   @override
   Widget build(BuildContext context) {
