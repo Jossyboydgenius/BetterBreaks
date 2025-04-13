@@ -26,6 +26,12 @@ class _SetupViewState extends State<SetupView> {
   String? _selectedPreference;
   String? _selectedWorkPattern;
   List<String> _selectedDays = ['Mon', 'Tues', 'Wed'];
+  Map<String, dynamic> _shiftPattern = {
+    'daysOn': '3 days',
+    'daysOff': '5 days',
+    'startDate': DateFormat('dd/MM/yyyy').format(DateTime.now()),
+    'rotation': '2-weeks rotation',
+  };
   bool _alignWithSchool = false;
   bool _alignWithPeak = false;
   int _currentStep = 0;
@@ -121,7 +127,13 @@ class _SetupViewState extends State<SetupView> {
               _selectedDays = days;
             });
           },
+          onShiftPatternSelected: (shiftPattern) {
+            setState(() {
+              _shiftPattern = shiftPattern;
+            });
+          },
           initialSelectedDays: _selectedDays,
+          initialShiftPattern: _shiftPattern,
           showDaysOfWeek: true,
         ),
       ],
