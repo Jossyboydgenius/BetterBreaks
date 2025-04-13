@@ -82,11 +82,11 @@ class _AppDropdownState extends State<AppDropdown> {
           widget.initialShiftPattern!['daysOff'] ?? "5 days";
       _startDateController.text = widget.initialShiftPattern!['startDate'] ??
           DateFormat('dd/MM/yyyy').format(DateTime.now());
-      _selectedRotation =
-          widget.initialShiftPattern!['rotation'] ?? "2-weeks rotation";
+      _selectedRotation = widget.initialShiftPattern!['rotation'] ?? "";
     } else {
       _startDateController.text =
           DateFormat('dd/MM/yyyy').format(DateTime.now());
+      _selectedRotation = "";
     }
   }
 
@@ -392,11 +392,12 @@ class _AppDropdownState extends State<AppDropdown> {
               ),
               SizedBox(height: 8.h),
 
-              // Dropdown input that shows the current selection
+              // Dropdown input that shows the current selection or placeholder
               GestureDetector(
                 onTap: _toggleRotationDropdown,
                 child: AppInput(
-                  controller: TextEditingController(text: _selectedRotation),
+                  controller: TextEditingController(
+                      text: _selectedRotation.isEmpty ? "" : _selectedRotation),
                   hintText: "Select rotation pattern",
                   fillColor: Colors.white.withOpacity(0.7),
                   isDropdown: true,
@@ -449,10 +450,90 @@ class _AppDropdownState extends State<AppDropdown> {
                     }).toList(),
                   ),
                 ),
-              ]
+              ],
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPatternPreview() {
+    // Get the number of days ON and OFF from the controllers
+    int daysOn =
+        int.tryParse(_daysOnController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+            3;
+    int daysOff = int.tryParse(
+            _daysOffController.text.replaceAll(RegExp(r'[^\d]'), '')) ??
+        5;
+    int totalCycleDays = daysOn + daysOff;
+
+    // Determine number of weeks to show based on rotation pattern
+    int weeksToShow = 1;
+    if (_selectedRotation.contains('2')) {
+      weeksToShow = 2;
+    } else if (_selectedRotation.contains('3')) {
+      weeksToShow = 3;
+    }
+
+    // Calculate total days to show - we'll display 7 days per row to match screenshot
+    int daysPerRow = 7;
+
+    // Build rows of day indicators with horizontal scrolling
+    List<Widget> rows = [];
+    for (int rowIndex = 0; rowIndex < weeksToShow; rowIndex++) {
+      List<Widget> rowItems = [];
+
+      // Create days for this row - ensuring we display the right pattern
+      for (int dayIndex = 0; dayIndex < daysPerRow; dayIndex++) {
+        int cycleDayIndex = (rowIndex * daysPerRow + dayIndex) % totalCycleDays;
+        bool isOn = cycleDayIndex < daysOn;
+
+        rowItems.add(
+          Padding(
+            padding: EdgeInsets.only(right: 8.w),
+            child: _buildDayIndicator(isOn),
+          ),
+        );
+      }
+
+      rows.add(
+        Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: rowItems,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: rows,
+    );
+  }
+
+  Widget _buildDayIndicator(bool isOn) {
+    return Container(
+      width: 45.r,
+      height: 45.r,
+      decoration: BoxDecoration(
+        color: isOn ? AppColors.primary : Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Center(
+        child: Text(
+          isOn ? "ON" : "OFF",
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+            color: isOn ? Colors.white : Colors.grey,
+          ),
+        ),
       ),
     );
   }
@@ -508,6 +589,21 @@ class _AppDropdownState extends State<AppDropdown> {
             color: Colors.white.withOpacity(0.3),
           ),
           _buildShiftPatternSelector(),
+        ],
+
+        // Pattern Preview section - only show when rotation is selected
+        if (_selectedRotation.isNotEmpty) ...[
+          SizedBox(height: 24.h),
+          Text(
+            "Pattern preview",
+            style: AppTextStyle.satoshi(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 16.h),
+          _buildPatternPreview(),
         ],
       ],
     );
