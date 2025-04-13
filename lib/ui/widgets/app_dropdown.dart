@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:intl/intl.dart';
@@ -301,7 +302,7 @@ class _AppDropdownState extends State<AppDropdown> {
                   children: [
                     Text(
                       "Days On",
-                      style: TextStyle(
+                      style: AppTextStyle.satoshi(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
@@ -310,7 +311,7 @@ class _AppDropdownState extends State<AppDropdown> {
                     SizedBox(height: 8.h),
                     AppInput(
                       controller: _daysOnController,
-                      hintText: "3 days",
+                      hintText: "Enter days",
                       fillColor: Colors.white.withOpacity(0.7),
                       onTap: () {
                         // Show a number picker if needed
@@ -327,7 +328,7 @@ class _AppDropdownState extends State<AppDropdown> {
                   children: [
                     Text(
                       "Days Off",
-                      style: TextStyle(
+                      style: AppTextStyle.satoshi(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
@@ -336,7 +337,7 @@ class _AppDropdownState extends State<AppDropdown> {
                     SizedBox(height: 8.h),
                     AppInput(
                       controller: _daysOffController,
-                      hintText: "5 days",
+                      hintText: "Enter days",
                       fillColor: Colors.white.withOpacity(0.7),
                       onTap: () {
                         // Show a number picker if needed
@@ -349,12 +350,6 @@ class _AppDropdownState extends State<AppDropdown> {
           ),
 
           SizedBox(height: 16.h),
-          // Divider
-          Container(
-            height: 1,
-            color: Colors.grey.withOpacity(0.3),
-          ),
-          SizedBox(height: 16.h),
 
           // Start date section
           Column(
@@ -362,7 +357,7 @@ class _AppDropdownState extends State<AppDropdown> {
             children: [
               Text(
                 "Start date",
-                style: TextStyle(
+                style: AppTextStyle.satoshi(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -382,12 +377,6 @@ class _AppDropdownState extends State<AppDropdown> {
           ),
 
           SizedBox(height: 16.h),
-          // Divider
-          Container(
-            height: 1,
-            color: Colors.grey.withOpacity(0.3),
-          ),
-          SizedBox(height: 16.h),
 
           // Rotation Pattern section
           Column(
@@ -395,7 +384,7 @@ class _AppDropdownState extends State<AppDropdown> {
             children: [
               Text(
                 "Rotation Pattern",
-                style: TextStyle(
+                style: AppTextStyle.satoshi(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -403,7 +392,7 @@ class _AppDropdownState extends State<AppDropdown> {
               ),
               SizedBox(height: 8.h),
 
-              // Always show the dropdown trigger
+              // Dropdown input that shows the current selection
               GestureDetector(
                 onTap: _toggleRotationDropdown,
                 child: AppInput(
@@ -444,43 +433,16 @@ class _AppDropdownState extends State<AppDropdown> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 16.w, vertical: 12.h),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 24.w,
-                                height: 24.h,
-                                margin: EdgeInsets.only(right: 12.w),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: _selectedRotation == option
-                                        ? AppColors.primary
-                                        : Colors.grey,
-                                    width: 2.w,
-                                  ),
-                                ),
-                                child: _selectedRotation == option
-                                    ? Center(
-                                        child: Container(
-                                          width: 12.w,
-                                          height: 12.h,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AppColors.primary,
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                              ),
-                              Text(
-                                option,
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
+                          child: AppRadioButton(
+                            text: option,
+                            isSelected: _selectedRotation == option,
+                            onTap: () {
+                              setState(() {
+                                _selectedRotation = option;
+                                _showRotationOptions = false;
+                                _updateShiftPattern();
+                              });
+                            },
                           ),
                         ),
                       );
@@ -538,8 +500,15 @@ class _AppDropdownState extends State<AppDropdown> {
           _buildDaysOfWeekSelector(),
 
         // Show shift pattern selector if shift pattern is selected
-        if (widget.selectedValue == 'Shift pattern')
+        if (widget.selectedValue == 'Shift pattern') ...[
+          // Add top divider for shift pattern
+          SizedBox(height: 16.h),
+          Container(
+            height: 1,
+            color: Colors.white.withOpacity(0.3),
+          ),
           _buildShiftPatternSelector(),
+        ],
       ],
     );
   }
