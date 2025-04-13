@@ -34,7 +34,7 @@ class AppRoutes {
   static const String experienceView = '/experience-view';
   static const String profileSettingsView = '/profile-settings-view';
 
-  static const String initialRoute = profileSettingsView;
+  static const String initialRoute = splashScreenView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
