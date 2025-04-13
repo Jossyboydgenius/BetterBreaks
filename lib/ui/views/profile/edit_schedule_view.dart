@@ -63,7 +63,7 @@ class _EditScheduleViewState extends State<EditScheduleView> {
                       children: [
                         Text(
                           'Working Week up',
-                          style: AppTextStyle.raleway(
+                          style: AppTextStyle.satoshi(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.lightBlack,
@@ -157,7 +157,7 @@ class _EditScheduleViewState extends State<EditScheduleView> {
             'Schedule',
             style: AppTextStyle.raleway(
               fontSize: 24.sp,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
           ),
