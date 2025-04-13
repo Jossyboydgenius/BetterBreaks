@@ -309,7 +309,7 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
                   MaterialPageRoute(
                     builder: (context) => EditScheduleView(
                       initialWorkingPattern: 'Standard pattern (Mon-fri)',
-                      onSave: (pattern, days) {
+                      onSave: (pattern, days, blackoutDates) {
                         // Here you could update the work schedule data
                         // For now, we'll just navigate back
                       },
