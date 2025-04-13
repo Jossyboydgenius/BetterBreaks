@@ -86,7 +86,9 @@ class _AppDropdownState extends State<AppDropdown> {
     } else {
       _startDateController.text =
           DateFormat('dd/MM/yyyy').format(DateTime.now());
-      _selectedRotation = "";
+      // Default to empty string unless shift pattern is already selected
+      _selectedRotation =
+          widget.selectedValue == 'Shift pattern' ? "2-weeks rotation" : "";
     }
   }
 
@@ -95,6 +97,15 @@ class _AppDropdownState extends State<AppDropdown> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedValue != widget.selectedValue) {
       _controller.text = widget.selectedValue ?? '';
+
+      // When switching to shift pattern, set default rotation if none selected
+      if (widget.selectedValue == 'Shift pattern' &&
+          _selectedRotation.isEmpty) {
+        setState(() {
+          _selectedRotation = "2-weeks rotation";
+          _updateShiftPattern();
+        });
+      }
     }
   }
 
@@ -269,7 +280,7 @@ class _AppDropdownState extends State<AppDropdown> {
         width: buttonWidth,
         height: 45.h,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.7),
+          color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.5),
           borderRadius: BorderRadius.circular(25.r),
         ),
         child: Center(
@@ -589,21 +600,21 @@ class _AppDropdownState extends State<AppDropdown> {
             color: Colors.white.withOpacity(0.3),
           ),
           _buildShiftPatternSelector(),
-        ],
 
-        // Pattern Preview section - only show when rotation is selected
-        if (_selectedRotation.isNotEmpty) ...[
-          SizedBox(height: 24.h),
-          Text(
-            "Pattern preview",
-            style: AppTextStyle.satoshi(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
+          // Pattern Preview section - only show when rotation is selected and shift pattern is active
+          if (_selectedRotation.isNotEmpty) ...[
+            SizedBox(height: 24.h),
+            Text(
+              "Pattern preview",
+              style: AppTextStyle.satoshi(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          _buildPatternPreview(),
+            SizedBox(height: 16.h),
+            _buildPatternPreview(),
+          ],
         ],
       ],
     );
