@@ -13,6 +13,7 @@ import 'package:better_breaks/ui/views/profile/widgets/break_score_widget.dart';
 import 'package:better_breaks/ui/views/profile/widgets/section_container.dart';
 import 'package:better_breaks/ui/views/profile/widgets/section_header.dart';
 import 'package:better_breaks/ui/views/profile/widgets/section_divider.dart';
+import 'package:better_breaks/ui/views/support/support_message_view.dart';
 
 class ProfileSettingsView extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -552,7 +553,13 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
           // Send us a message option
           GestureDetector(
             onTap: () {
-              // Handle sending a message
+              // Navigate to the support message view
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SupportMessageView(),
+                ),
+              );
             },
             child: Text(
               'Send us a message',
