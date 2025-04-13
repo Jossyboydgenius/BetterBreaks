@@ -7,19 +7,24 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/blackout_dates_container.dart';
 import 'package:better_breaks/ui/widgets/working_week_container.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
+import 'package:better_breaks/ui/widgets/optimization_goals_container.dart';
 
 class EditScheduleView extends StatefulWidget {
   final String? initialWorkingPattern;
   final List<String>? initialSelectedDays;
   final List<DateTime>? initialBlackoutDates;
-  final Function(String?, List<String>, List<DateTime>)? onSave;
+  final List<String>? initialOptimizationGoals;
+  final Function(String?, List<String>, List<DateTime>, List<String>)? onSave;
+  final Function(List<String>)? onOptimizationGoalsChanged;
 
   const EditScheduleView({
     super.key,
     this.initialWorkingPattern,
     this.initialSelectedDays,
     this.initialBlackoutDates,
+    this.initialOptimizationGoals,
     this.onSave,
+    this.onOptimizationGoalsChanged,
   });
 
   @override
@@ -31,6 +36,7 @@ class _EditScheduleViewState extends State<EditScheduleView> {
   List<String> _selectedDays = ['Mon', 'Tues', 'Wed'];
   List<DateTime> _blackoutDates = [];
   Map<String, dynamic>? _shiftPattern;
+  List<String> _optimizationGoals = [];
 
   @override
   void initState() {
@@ -49,6 +55,9 @@ class _EditScheduleViewState extends State<EditScheduleView> {
         DateTime(now.year, now.month, now.day + 10),
         DateTime(now.year, now.month, now.day + 15),
       ];
+    }
+    if (widget.initialOptimizationGoals != null) {
+      _optimizationGoals = widget.initialOptimizationGoals!;
     }
   }
 
@@ -84,6 +93,26 @@ class _EditScheduleViewState extends State<EditScheduleView> {
         },
       ),
     );
+  }
+
+  void _addOptimizationGoal(String goal) {
+    setState(() {
+      if (!_optimizationGoals.contains(goal)) {
+        _optimizationGoals.add(goal);
+      }
+    });
+    if (widget.onOptimizationGoalsChanged != null) {
+      widget.onOptimizationGoalsChanged!(_optimizationGoals);
+    }
+  }
+
+  void _removeOptimizationGoal(String goal) {
+    setState(() {
+      _optimizationGoals.remove(goal);
+    });
+    if (widget.onOptimizationGoalsChanged != null) {
+      widget.onOptimizationGoalsChanged!(_optimizationGoals);
+    }
   }
 
   @override
@@ -133,6 +162,15 @@ class _EditScheduleViewState extends State<EditScheduleView> {
                     onAddBlackoutPeriod: _showAddBlackoutPeriodDialog,
                   ),
 
+                  SizedBox(height: 16.h),
+
+                  // Optimization Goals container
+                  OptimizationGoalsContainer(
+                    selectedPreferences: _optimizationGoals,
+                    onPreferenceRemoved: _removeOptimizationGoal,
+                    onPreferenceAdded: _addOptimizationGoal,
+                  ),
+
                   SizedBox(height: 32.h),
 
                   // Save button
@@ -143,7 +181,7 @@ class _EditScheduleViewState extends State<EditScheduleView> {
                       // Save the schedule
                       if (widget.onSave != null) {
                         widget.onSave!(_selectedWorkPattern, _selectedDays,
-                            _blackoutDates);
+                            _blackoutDates, _optimizationGoals);
                       }
                       Navigator.pop(context);
                     },
