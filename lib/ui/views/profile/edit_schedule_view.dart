@@ -4,18 +4,21 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
-import 'package:better_breaks/ui/widgets/glassy_container.dart';
-import 'package:better_breaks/ui/widgets/app_dropdown.dart';
+import 'package:better_breaks/ui/widgets/blackout_dates_container.dart';
+import 'package:better_breaks/ui/widgets/working_week_container.dart';
+import 'package:better_breaks/ui/widgets/app_calendar.dart';
 
 class EditScheduleView extends StatefulWidget {
   final String? initialWorkingPattern;
   final List<String>? initialSelectedDays;
-  final Function(String?, List<String>)? onSave;
+  final List<DateTime>? initialBlackoutDates;
+  final Function(String?, List<String>, List<DateTime>)? onSave;
 
   const EditScheduleView({
     super.key,
     this.initialWorkingPattern,
     this.initialSelectedDays,
+    this.initialBlackoutDates,
     this.onSave,
   });
 
@@ -26,6 +29,8 @@ class EditScheduleView extends StatefulWidget {
 class _EditScheduleViewState extends State<EditScheduleView> {
   String? _selectedWorkPattern;
   List<String> _selectedDays = ['Mon', 'Tues', 'Wed'];
+  List<DateTime> _blackoutDates = [];
+  Map<String, dynamic>? _shiftPattern;
 
   @override
   void initState() {
@@ -34,6 +39,51 @@ class _EditScheduleViewState extends State<EditScheduleView> {
     if (widget.initialSelectedDays != null) {
       _selectedDays = widget.initialSelectedDays!;
     }
+    if (widget.initialBlackoutDates != null) {
+      _blackoutDates = widget.initialBlackoutDates!;
+    } else {
+      // Demo data - add some sample blackout dates
+      final now = DateTime.now();
+      _blackoutDates = [
+        DateTime(now.year, now.month, now.day + 5),
+        DateTime(now.year, now.month, now.day + 10),
+        DateTime(now.year, now.month, now.day + 15),
+      ];
+    }
+  }
+
+  void _removeBlackoutDate(DateTime date) {
+    setState(() {
+      _blackoutDates.removeWhere(
+        (d) =>
+            d.year == date.year && d.month == date.month && d.day == date.day,
+      );
+    });
+  }
+
+  void _showAddBlackoutPeriodDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AppCalendar(
+        selectedDate: DateTime.now(),
+        onDateSelected: (date) {
+          setState(() {
+            // Check if date already exists
+            final exists = _blackoutDates.any(
+              (d) =>
+                  d.year == date.year &&
+                  d.month == date.month &&
+                  d.day == date.day,
+            );
+
+            if (!exists) {
+              _blackoutDates.add(date);
+            }
+          });
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 
   @override
@@ -53,49 +103,34 @@ class _EditScheduleViewState extends State<EditScheduleView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Working Week section in glassy container
-                  GlassyContainer(
-                    backgroundColor: Colors.white,
-                    borderColor: Colors.white,
-                    padding: EdgeInsets.all(24.r),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Working Week up',
-                          style: AppTextStyle.satoshi(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.lightBlack,
-                          ),
-                        ),
+                  // Working Week container
+                  WorkingWeekContainer(
+                    selectedWorkPattern: _selectedWorkPattern,
+                    selectedDays: _selectedDays,
+                    onWorkPatternSelected: (value) {
+                      setState(() {
+                        _selectedWorkPattern = value;
+                      });
+                    },
+                    onDaysSelected: (days) {
+                      setState(() {
+                        _selectedDays = days;
+                      });
+                    },
+                    onShiftPatternSelected: (shiftPattern) {
+                      setState(() {
+                        _shiftPattern = shiftPattern;
+                      });
+                    },
+                  ),
 
-                        SizedBox(height: 16.h),
+                  SizedBox(height: 16.h),
 
-                        // Working pattern dropdown
-                        AppDropdown(
-                          hintText: 'Select working pattern',
-                          selectedValue: _selectedWorkPattern,
-                          options: const [
-                            'Standard pattern (Mon -fri)',
-                            'Custom pattern',
-                            'Shift pattern',
-                          ],
-                          onOptionSelected: (value) {
-                            setState(() {
-                              _selectedWorkPattern = value;
-                            });
-                          },
-                          onDaysSelected: (days) {
-                            setState(() {
-                              _selectedDays = days;
-                            });
-                          },
-                          initialSelectedDays: _selectedDays,
-                          showDaysOfWeek: true,
-                        ),
-                      ],
-                    ),
+                  // Blackout Dates container
+                  BlackoutDatesContainer(
+                    blackoutDates: _blackoutDates,
+                    onDateRemoved: _removeBlackoutDate,
+                    onAddBlackoutPeriod: _showAddBlackoutPeriodDialog,
                   ),
 
                   SizedBox(height: 32.h),
@@ -107,7 +142,8 @@ class _EditScheduleViewState extends State<EditScheduleView> {
                     onPressed: () {
                       // Save the schedule
                       if (widget.onSave != null) {
-                        widget.onSave!(_selectedWorkPattern, _selectedDays);
+                        widget.onSave!(_selectedWorkPattern, _selectedDays,
+                            _blackoutDates);
                       }
                       Navigator.pop(context);
                     },
