@@ -14,6 +14,7 @@ import 'package:better_breaks/ui/views/profile/widgets/section_container.dart';
 import 'package:better_breaks/ui/views/profile/widgets/section_header.dart';
 import 'package:better_breaks/ui/views/profile/widgets/section_divider.dart';
 import 'package:better_breaks/ui/views/support/support_message_view.dart';
+import 'package:better_breaks/ui/views/milestones/milestones_view.dart';
 
 class ProfileSettingsView extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -63,8 +64,14 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
                   // Break Score section
                   BreakScoreWidget(
                     onTap: () {
-                      // Handle break score tap
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MilestonesView(),
+                        ),
+                      );
                     },
+                    useCircularContainer: false,
                   ),
 
                   SizedBox(height: 16.h),
