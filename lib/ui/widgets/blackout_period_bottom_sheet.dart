@@ -59,7 +59,7 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.r),
               topRight: Radius.circular(24.r),
@@ -90,7 +90,7 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
                     width: 120.w,
                     height: 5.h,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.grey,
                       borderRadius: BorderRadius.circular(3.r),
                     ),
                   ),
@@ -130,15 +130,7 @@ class _BlackoutPeriodBottomSheetState extends State<BlackoutPeriodBottomSheet> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(32.r),
-                            border: Border.all(
-                                color: Colors.white.withOpacity(0.2)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                            border: Border.all(color: AppColors.grey),
                           ),
                           child: Row(
                             children: [
