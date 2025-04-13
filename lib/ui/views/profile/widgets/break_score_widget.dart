@@ -88,7 +88,6 @@ class BreakScoreWidget extends StatelessWidget {
                   AppIcons(
                     icon: AppIconData.zapFilled,
                     size: 24.r,
-                    color: AppColors.orange100,
                   ),
                   SizedBox(width: 8.w),
                   Text(
@@ -103,7 +102,7 @@ class BreakScoreWidget extends StatelessWidget {
                     '/100',
                     style: AppTextStyle.raleway(
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.grey500,
                     ),
                   ),
