@@ -23,14 +23,6 @@ class BlackoutDatesContainer extends StatefulWidget {
 }
 
 class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
-  late List<DateTime> _blackoutDates;
-
-  @override
-  void initState() {
-    super.initState();
-    _blackoutDates = List.from(widget.blackoutDates);
-  }
-
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
@@ -73,17 +65,67 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
   }
 
   Widget _buildBlackoutDatesGrid() {
-    if (_blackoutDates.isEmpty) {
+    final dateRanges = _getBlackoutDateRanges();
+
+    if (dateRanges.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return Wrap(
       spacing: 16.w,
       runSpacing: 16.h,
-      children: _blackoutDates.map((date) {
-        return _buildBlackoutDateChip(date);
+      children: dateRanges.map((range) {
+        if (range is DateTime) {
+          return _buildBlackoutDateChip(range);
+        } else {
+          return _buildBlackoutDateRangeChip(range['start'], range['end']);
+        }
       }).toList(),
     );
+  }
+
+  List<dynamic> _getBlackoutDateRanges() {
+    if (widget.blackoutDates.isEmpty) return [];
+
+    // Sort the dates
+    final sortedDates = List<DateTime>.from(widget.blackoutDates)
+      ..sort((a, b) => a.compareTo(b));
+
+    final List<dynamic> ranges = [];
+    DateTime? rangeStart;
+    DateTime? rangeEnd;
+
+    for (int i = 0; i < sortedDates.length; i++) {
+      final current = sortedDates[i];
+
+      if (rangeStart == null) {
+        rangeStart = current;
+        rangeEnd = current;
+      } else if (current.difference(rangeEnd!).inDays == 1) {
+        // Consecutive date, extend the range
+        rangeEnd = current;
+      } else {
+        // Non-consecutive, add the previous range and start a new one
+        if (_isSameDay(rangeStart!, rangeEnd!)) {
+          ranges.add(rangeStart);
+        } else {
+          ranges.add({'start': rangeStart, 'end': rangeEnd});
+        }
+        rangeStart = current;
+        rangeEnd = current;
+      }
+    }
+
+    // Add the last range
+    if (rangeStart != null) {
+      if (_isSameDay(rangeStart, rangeEnd!)) {
+        ranges.add(rangeStart);
+      } else {
+        ranges.add({'start': rangeStart, 'end': rangeEnd});
+      }
+    }
+
+    return ranges;
   }
 
   Widget _buildBlackoutDateChip(DateTime date) {
@@ -129,9 +171,60 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
     );
   }
 
+  Widget _buildBlackoutDateRangeChip(DateTime start, DateTime end) {
+    // Format as DD/MM/YY - DD/MM/YY
+    final dateStr =
+        '${DateFormat('dd/MM/yy').format(start)} - ${DateFormat('dd/MM/yy').format(end)}';
+
+    return Container(
+      height: 48.h,
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            dateStr,
+            style: AppTextStyle.satoshi(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(width: 12.w),
+          GestureDetector(
+            onTap: () {
+              // Remove all dates in the range
+              for (DateTime date = start;
+                  !date.isAfter(end);
+                  date = date.add(const Duration(days: 1))) {
+                widget.onDateRemoved(date);
+              }
+            },
+            child: Icon(
+              Icons.close,
+              color: AppColors.primary,
+              size: 20.r,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAddBlackoutButton() {
     return GestureDetector(
-      onTap: _showAddBlackoutPeriodDialog,
+      onTap: () => _showAddBlackoutPeriodBottomSheet(),
       child: Container(
         height: 56.h,
         decoration: BoxDecoration(
@@ -163,7 +256,7 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
     );
   }
 
-  void _showAddBlackoutPeriodDialog() {
+  void _showAddBlackoutPeriodBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -171,26 +264,20 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
       builder: (context) => BlackoutPeriodBottomSheet(
         onSave: (startDate, endDate) {
           setState(() {
-            // Check if the dates overlap with existing blackout dates
-            if (_datesOverlap(startDate, endDate)) {
-              // You could show a warning toast or dialog here
-              return;
-            }
-
-            // If it's a range, add each day in the range
+            // Simple approach: just add dates to the list
             if (!_isSameDay(startDate, endDate)) {
-              for (DateTime date = startDate;
+              // Date range selected, add each day in the range
+              for (DateTime date =
+                      DateTime(startDate.year, startDate.month, startDate.day);
                   !date.isAfter(endDate);
                   date = date.add(const Duration(days: 1))) {
-                if (!_blackoutDates.any((d) => _isSameDay(d, date))) {
-                  _blackoutDates.add(date);
-                }
+                widget.blackoutDates
+                    .add(DateTime(date.year, date.month, date.day));
               }
             } else {
-              // Single date
-              if (!_blackoutDates.any((d) => _isSameDay(d, startDate))) {
-                _blackoutDates.add(startDate);
-              }
+              // Single date selected, just add it
+              widget.blackoutDates.add(
+                  DateTime(startDate.year, startDate.month, startDate.day));
             }
           });
         },
@@ -200,12 +287,5 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
 
   bool _isSameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
-  }
-
-  bool _datesOverlap(DateTime startDate, DateTime endDate) {
-    return _blackoutDates.any((date) {
-      return (date.isAtSameMomentAs(startDate) || date.isAfter(startDate)) &&
-          (date.isAtSameMomentAs(endDate) || date.isBefore(endDate));
-    });
   }
 }
