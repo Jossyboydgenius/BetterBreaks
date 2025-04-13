@@ -70,6 +70,7 @@ class AppIconData {
   static const String rain = '$_base/rain.svg';
   static const String customerSupport = '$_base/customer-support.svg';
   static const String edit = '$_base/edit.svg';
+  static const String message = '$_base/message.svg';
 }
 
 class AppIcons extends StatelessWidget {
