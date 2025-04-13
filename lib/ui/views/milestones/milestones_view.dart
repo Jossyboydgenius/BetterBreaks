@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
-import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/views/profile/widgets/break_score_widget.dart';
 
@@ -133,15 +132,12 @@ class MilestonesView extends StatelessWidget {
           SizedBox(height: 16.h),
 
           // Description text
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Text(
-              'Use your recommended holiday this month to maintain a perfect streak',
-              style: AppTextStyle.satoshi(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.lightBlack,
-              ),
+          Text(
+            'Use your recommended holiday this month to maintain a perfect streak',
+            style: AppTextStyle.satoshi(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.lightBlack,
             ),
           ),
 
@@ -154,41 +150,174 @@ class MilestonesView extends StatelessWidget {
             color: Colors.white.withOpacity(0.5),
           ),
 
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
 
-          // Streak months with stacked bolt image
-          Center(
+          // Streak months with lightning bolts
+          SizedBox(
+            width: double.infinity,
+            height: 140.h, // Adjusted height to match screenshot better
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Stacked bolt image (using your app image data)
-                Opacity(
-                  opacity: 0.3,
-                  child: SizedBox(
-                    height: 150.h,
-                    width: double.infinity,
-                    child: AppImages(
-                      imagePath: AppImageData.stackBolt,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
+                // Lightning bolt pattern (around the text)
+                _buildLightningBoltPattern(),
 
-                // Text overlay
-                Text(
-                  '6 Months\nStreaks!',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.raleway(
-                    fontSize: 40.sp,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+                // Text overlay (in the center)
+                Center(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    child: Text(
+                      '6 Months\nStreaks!',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.raleway(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+
+          // Description below the streak display
+          SizedBox(height: 16.h),
+          Text(
+            "You've been scheduling breaks for 6 months straight. Keep it up!",
+            textAlign: TextAlign.center,
+            style: AppTextStyle.satoshi(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLightningBoltPattern() {
+    // Create a circular arrangement of lightning bolts
+    return Stack(
+      children: [
+        // Top row
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              7,
+              (index) => AppIcons(
+                icon: AppIconData.zapFilled,
+                size: 24.r,
+                color: AppColors.amber.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+
+        // Left side
+        Positioned(
+          top: 30.h,
+          left: 0,
+          bottom: 30.h,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              3,
+              (index) => AppIcons(
+                icon: AppIconData.zapFilled,
+                size: 24.r,
+                color: AppColors.amber.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+
+        // Right side
+        Positioned(
+          top: 30.h,
+          right: 0,
+          bottom: 30.h,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              3,
+              (index) => AppIcons(
+                icon: AppIconData.zapFilled,
+                size: 24.r,
+                color: AppColors.amber.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+
+        // Bottom row
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(
+              7,
+              (index) => AppIcons(
+                icon: AppIconData.zapFilled,
+                size: 24.r,
+                color: AppColors.amber.withOpacity(0.3),
+              ),
+            ),
+          ),
+        ),
+
+        // Top-left corner
+        Positioned(
+          top: 20.h,
+          left: 20.w,
+          child: AppIcons(
+            icon: AppIconData.zapFilled,
+            size: 24.r,
+            color: AppColors.amber.withOpacity(0.3),
+          ),
+        ),
+
+        // Top-right corner
+        Positioned(
+          top: 20.h,
+          right: 20.w,
+          child: AppIcons(
+            icon: AppIconData.zapFilled,
+            size: 24.r,
+            color: AppColors.amber.withOpacity(0.3),
+          ),
+        ),
+
+        // Bottom-left corner
+        Positioned(
+          bottom: 20.h,
+          left: 20.w,
+          child: AppIcons(
+            icon: AppIconData.zapFilled,
+            size: 24.r,
+            color: AppColors.amber.withOpacity(0.3),
+          ),
+        ),
+
+        // Bottom-right corner
+        Positioned(
+          bottom: 20.h,
+          right: 20.w,
+          child: AppIcons(
+            icon: AppIconData.zapFilled,
+            size: 24.r,
+            color: AppColors.amber.withOpacity(0.3),
+          ),
+        ),
+      ],
     );
   }
 }
