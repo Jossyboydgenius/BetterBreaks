@@ -4,6 +4,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
+import 'package:better_breaks/ui/views/profile/edit_profile_view.dart';
 
 // Import the extracted widgets
 import 'package:better_breaks/ui/views/profile/widgets/premium_features_widget.dart';
@@ -199,13 +200,32 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
                 ),
               ),
               // Edit button with pen icon
-              SizedBox(
-                width: 24.r,
-                height: 24.r,
-                child: AppIcons(
-                  icon: AppIconData.pencilEdit,
-                  size: 14.r,
-                  color: AppColors.grey800,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileView(
+                        initialName: 'Sarah Lopez',
+                        initialEmail: 'Serahanderson@gmail.com',
+                        initialLocation: 'London, UK(GMT+1)',
+                        initialBreakBalance: '25 days',
+                        onSave: () {
+                          // Here you could update the user data in your state management
+                          // For now, we'll just use the hardcoded values
+                        },
+                      ),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  width: 24.r,
+                  height: 24.r,
+                  child: AppIcons(
+                    icon: AppIconData.pencilEdit,
+                    size: 14.r,
+                    color: AppColors.grey800,
+                  ),
                 ),
               ),
             ],
