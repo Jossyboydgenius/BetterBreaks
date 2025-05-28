@@ -99,6 +99,11 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
 
                   SizedBox(height: 16.h),
 
+                  // Appearance section
+                  _buildAppearanceSection(),
+
+                  SizedBox(height: 16.h),
+
                   // Support section
                   _buildSupportSection(),
 
@@ -675,6 +680,65 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
               size: 14.r,
               color: AppColors.grey800,
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppearanceSection() {
+    return SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with section header widget
+          SectionHeader(
+            title: 'Appearance',
+            icon: AppIconData
+                .theme, // Using "sunny" icon which matches brightness/theme concepts
+          ),
+
+          // Divider
+          const SectionDivider(),
+
+          // Theme settings option
+          GestureDetector(
+            onTap: () {
+              // Navigate to the theme settings view
+              Navigator.pushNamed(context, '/theme-settings-view');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Theme',
+                      style: AppTextStyle.raleway(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.lightBlack,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      'Light, Dark, or System default',
+                      style: AppTextStyle.satoshi(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.grey800,
+                      ),
+                    ),
+                  ],
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: AppColors.grey800,
+                  size: 24.r,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
