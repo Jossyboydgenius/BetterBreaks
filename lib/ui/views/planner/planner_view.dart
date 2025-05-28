@@ -95,8 +95,7 @@ class _PlannerViewState extends State<PlannerView> {
                           });
                         },
                       ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.4),
+                      // Remove the fixed height SizedBox that was causing the cut-off
                     ],
                   ),
                 ),
