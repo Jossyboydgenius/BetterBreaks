@@ -7,10 +7,14 @@ import 'package:better_breaks/ui/widgets/app_buttons.dart';
 
 class PremiumFeaturesWidget extends StatelessWidget {
   final VoidCallback onUpgradePressed;
+  final bool isActive;
+  final String price;
 
   const PremiumFeaturesWidget({
     super.key,
     required this.onUpgradePressed,
+    this.isActive = false,
+    this.price = '£4.99',
   });
 
   @override
@@ -67,7 +71,7 @@ class PremiumFeaturesWidget extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Premium Features',
+                              isActive ? 'Premium Active' : 'Premium Features',
                               style: AppTextStyle.raleway(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w700,
@@ -75,7 +79,9 @@ class PremiumFeaturesWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Unlock advanced breaks optimization',
+                              isActive
+                                  ? 'You have access to all premium features'
+                                  : 'Unlock advanced breaks optimization',
                               textAlign: TextAlign.center,
                               style: AppTextStyle.satoshi(
                                 fontSize: 14.sp,
@@ -110,16 +116,34 @@ class PremiumFeaturesWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Premium Features',
-                              style: AppTextStyle.raleway(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  isActive
+                                      ? 'Premium Active'
+                                      : 'Premium Features',
+                                  style: AppTextStyle.raleway(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                if (!isActive)
+                                  Text(
+                                    '£4.99',
+                                    style: AppTextStyle.raleway(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                              ],
                             ),
                             Text(
-                              'Unlock advanced breaks optimization',
+                              isActive
+                                  ? 'You have access to all premium features'
+                                  : 'Unlock advanced breaks optimization',
                               style: AppTextStyle.satoshi(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
@@ -148,14 +172,22 @@ class PremiumFeaturesWidget extends StatelessWidget {
             SizedBox(height: 16.h),
             _buildPremiumFeatureItem('Team calendar integration'),
 
-            // Upgrade button
+            // Subscription status row
             SizedBox(height: 24.h),
-            AppButton(
-              text: 'Upgrade to premium',
-              backgroundColor: Colors.white,
-              textColor: AppColors.primary,
-              fontWeight: FontWeight.w600,
-              onPressed: onUpgradePressed,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: AppButton(
+                    text:
+                        isActive ? 'Cancel subscription' : 'Upgrade to premium',
+                    backgroundColor: Colors.white,
+                    textColor: isActive ? Colors.red : AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    onPressed: onUpgradePressed,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
