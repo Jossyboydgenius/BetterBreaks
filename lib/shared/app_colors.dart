@@ -49,6 +49,7 @@ class AppColors {
 
   // Background colors
   static const Color background = Color(0xFFCFF7FF);
+  static const Color backgroundDark = Color(0xFF102830);
 
   // Purple shades
   static const Color lightPurple = Color(0xFF7092F2);
