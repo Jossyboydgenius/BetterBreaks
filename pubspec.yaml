@@ -69,6 +69,8 @@ dependencies:
   dots_indicator: ^3.0.0
   fl_chart: ^0.70.2
   easy_pie_chart: ^1.0.2
+  appearance: ^0.0.1
+  shared_preferences: ^2.2.3
   
 dev_dependencies:
   flutter_test:
