@@ -15,6 +15,10 @@ class PremiumFeaturesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get device width to check for small screens
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = deviceWidth < 360; // Threshold for small screens
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -34,48 +38,99 @@ class PremiumFeaturesWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Premium header with crown icon
-            Row(
-              children: [
-                Container(
-                  width: 42.r,
-                  height: 42.r,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcons(
-                      icon: AppIconData.crown,
-                      size: 24.r,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Premium Features',
-                      style: AppTextStyle.raleway(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
+            // Premium header with crown icon - make it flexible for small screens
+            isSmallScreen
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Crown icon centered
+                      Center(
+                        child: Container(
+                          width: 42.r,
+                          height: 42.r,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: AppIcons(
+                              icon: AppIconData.crown,
+                              size: 24.r,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Unlock advanced breaks optimization',
-                      style: AppTextStyle.satoshi(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                      SizedBox(height: 16.h),
+                      // Text centered
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Premium Features',
+                              style: AppTextStyle.raleway(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Unlock advanced breaks optimization',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.satoshi(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Container(
+                        width: 42.r,
+                        height: 42.r,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: AppIcons(
+                            icon: AppIconData.crown,
+                            size: 24.r,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Premium Features',
+                              style: AppTextStyle.raleway(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Unlock advanced breaks optimization',
+                              style: AppTextStyle.satoshi(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
 
             // Divider
             Padding(
@@ -110,6 +165,7 @@ class PremiumFeaturesWidget extends StatelessWidget {
 
   Widget _buildPremiumFeatureItem(String feature) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppIcons(
           icon: AppIconData.checkmarkBadge,
