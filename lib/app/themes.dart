@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:better_breaks/shared/app_colors.dart';
 
 class AppTheme {
   // Define font families as constants
@@ -11,6 +12,11 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     fontFamily: ralewayFont, // Set Raleway as default font
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      background: Colors.white,
+      surface: Colors.white,
+    ),
     bottomSheetTheme: const BottomSheetThemeData(
       surfaceTintColor: Colors.white,
     ),
@@ -19,14 +25,38 @@ class AppTheme {
       displayLarge: TextStyle(fontFamily: redRoseFont),
       displayMedium: TextStyle(fontFamily: redRoseFont),
       displaySmall: TextStyle(fontFamily: redRoseFont),
-      
+
       headlineLarge: TextStyle(fontFamily: ralewayFont),
       headlineMedium: TextStyle(fontFamily: ralewayFont),
       headlineSmall: TextStyle(fontFamily: ralewayFont),
-      
+
       bodyLarge: TextStyle(fontFamily: satoshiFont),
       bodyMedium: TextStyle(fontFamily: satoshiFont),
       bodySmall: TextStyle(fontFamily: satoshiFont),
+    ),
+  );
+
+  static ThemeData darkTheme = ThemeData(
+    scaffoldBackgroundColor: AppColors.backgroundDark,
+    fontFamily: ralewayFont,
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primary,
+      background: AppColors.backgroundDark,
+      surface: AppColors.lightBlack,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      surfaceTintColor: AppColors.lightBlack,
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(fontFamily: redRoseFont, color: Colors.white),
+      displayMedium: TextStyle(fontFamily: redRoseFont, color: Colors.white),
+      displaySmall: TextStyle(fontFamily: redRoseFont, color: Colors.white),
+      headlineLarge: TextStyle(fontFamily: ralewayFont, color: Colors.white),
+      headlineMedium: TextStyle(fontFamily: ralewayFont, color: Colors.white),
+      headlineSmall: TextStyle(fontFamily: ralewayFont, color: Colors.white),
+      bodyLarge: TextStyle(fontFamily: satoshiFont, color: Colors.white),
+      bodyMedium: TextStyle(fontFamily: satoshiFont, color: Colors.white),
+      bodySmall: TextStyle(fontFamily: satoshiFont, color: Colors.white),
     ),
   );
 }
