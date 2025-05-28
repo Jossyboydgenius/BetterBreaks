@@ -35,6 +35,9 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
   bool _deadlineAlertsEnabled = false;
   bool _weeklyDigestEnabled = true;
 
+  // Premium subscription state
+  bool _isPremiumActive = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +57,13 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
                 children: [
                   // Premium Features Container (now first)
                   PremiumFeaturesWidget(
+                    isActive: _isPremiumActive,
+                    price: '£7.99/month',
                     onUpgradePressed: () {
-                      // Handle upgrade
+                      setState(() {
+                        // Toggle premium status when button is clicked
+                        _isPremiumActive = !_isPremiumActive;
+                      });
                     },
                   ),
 
