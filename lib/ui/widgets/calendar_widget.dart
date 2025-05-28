@@ -82,6 +82,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       padding: EdgeInsets.all(16.r),
       child: Column(
         mainAxisSize: MainAxisSize.min, // Use minimum space needed
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildCalendarHeader(),
           SizedBox(height: 16.h),
@@ -151,7 +152,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         _buildWeekdayHeader(),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 300.h, // Further increased height to ensure no cutoff
+          height: 340.h, // Increased height to ensure no cutoff
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: _handlePageChange,
