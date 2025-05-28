@@ -1,5 +1,7 @@
 import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:better_breaks/ui/views/profile/profile_settings_view.dart';
+import 'package:better_breaks/ui/views/settings/settings_view.dart';
+import 'package:better_breaks/ui/views/settings/theme_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/ui/views/onboarding/onboarding_view.dart';
 import 'package:better_breaks/ui/views/onboarding/splash_screen_view.dart';
@@ -33,8 +35,10 @@ class AppRoutes {
   static const String analyticsView = '/analytics-view';
   static const String experienceView = '/experience-view';
   static const String profileSettingsView = '/profile-settings-view';
+  static const String settingsView = '/settings-view';
+  static const String themeSettingsView = '/theme-settings-view';
 
-  static const String initialRoute = profileSettingsView;
+  static const String initialRoute = dashboardView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
@@ -51,6 +55,8 @@ class AppRoutes {
     analyticsView: (context) => const AnalyticsView(),
     experienceView: (context) => const ExperienceView(),
     profileSettingsView: (context) => const ProfileSettingsView(),
+    settingsView: (context) => const SettingsView(),
+    themeSettingsView: (context) => const ThemeSettingsView(),
   };
 
   static GoRouter router = GoRouter(
