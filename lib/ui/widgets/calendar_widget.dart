@@ -81,10 +81,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       ),
       padding: EdgeInsets.all(16.r),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // Use minimum space needed
         children: [
           _buildCalendarHeader(),
           SizedBox(height: 16.h),
           _buildCalendarGrid(),
+          SizedBox(height: 8.h), // Add a small bottom padding
         ],
       ),
     );
@@ -144,11 +146,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   Widget _buildCalendarGrid() {
     return Column(
+      mainAxisSize: MainAxisSize.min, // Use minimum required space
       children: [
         _buildWeekdayHeader(),
         SizedBox(height: 16.h),
-        Container(
-          height: 240.h, // Adjusted height
+        SizedBox(
+          height: 300.h, // Further increased height to ensure no cutoff
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: _handlePageChange,
@@ -209,6 +212,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     final firstDayOfMonth = DateTime(month.year, month.month, 1);
     final firstWeekday = firstDayOfMonth.weekday;
 
+    // Calculate number of rows needed (5 or 6)
+    final int rows = ((firstWeekday - 1 + daysInMonth) / 7).ceil();
+    final int totalCells = rows * 7;
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -216,8 +223,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         crossAxisCount: 7,
         mainAxisSpacing: 8.h,
         crossAxisSpacing: 8.w,
+        childAspectRatio: 1.2, // Adjust for better cell sizing
       ),
-      itemCount: 42,
+      itemCount: totalCells,
       itemBuilder: (context, index) {
         final dayOffset = index - (firstWeekday - 1);
         final day = dayOffset + 1;
