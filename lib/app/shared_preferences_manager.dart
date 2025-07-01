@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreferenceManager {
@@ -22,5 +23,17 @@ class AppPreferenceManager {
 
   int getThemeMode() {
     return _prefs.getInt(_themeKey) ?? 0; // 0 = system, 1 = light, 2 = dark
+  }
+
+  ThemeMode getThemeModeEnum() {
+    final value = getThemeMode();
+    switch (value) {
+      case 1:
+        return ThemeMode.light;
+      case 2:
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
   }
 }
