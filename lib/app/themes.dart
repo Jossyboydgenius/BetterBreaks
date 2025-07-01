@@ -10,16 +10,21 @@ class AppTheme {
   static const String interVariableFont = "Inter-Variable";
 
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: AppColors.background,
     fontFamily: ralewayFont, // Set Raleway as default font
     colorScheme: ColorScheme.light(
       primary: AppColors.primary,
-      background: Colors.white,
+      background: AppColors.background,
       surface: Colors.white,
+      onSurface: AppColors.lightBlack,
+      onBackground: AppColors.lightBlack,
     ),
+    cardColor: Colors.white,
     bottomSheetTheme: const BottomSheetThemeData(
       surfaceTintColor: Colors.white,
+      backgroundColor: Colors.white,
     ),
+    dialogBackgroundColor: Colors.white,
     textTheme: const TextTheme(
       // Define default text styles with specific fonts
       displayLarge: TextStyle(fontFamily: redRoseFont),
@@ -43,9 +48,15 @@ class AppTheme {
       primary: AppColors.primary,
       background: AppColors.backgroundDark,
       surface: AppColors.lightBlack,
+      onSurface: Colors.white,
+      onBackground: Colors.white,
+      brightness: Brightness.dark,
     ),
+    cardColor: AppColors.lightBlack,
+    dialogBackgroundColor: AppColors.lightBlack,
     bottomSheetTheme: BottomSheetThemeData(
       surfaceTintColor: AppColors.lightBlack,
+      backgroundColor: AppColors.lightBlack,
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(fontFamily: redRoseFont, color: Colors.white),
