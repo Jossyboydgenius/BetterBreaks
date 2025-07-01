@@ -62,62 +62,81 @@ class _MainAppState extends State<MainApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (BuildContext context, Widget? child) {
+        // Get the saved theme mode from preferences
+        AppPreferenceManager.instance.getThemeMode();
+
         return AppThemeHandler(
           child: Builder(builder: (context) {
-            return MaterialApp(
-              title: 'BetterBreaks',
-              navigatorKey: NavigationService.navigatorKey,
-              debugShowCheckedModeBanner: false,
-              initialRoute: AppRoutes.initialRoute,
-              routes: AppRoutes.routes,
-              onGenerateRoute: (settings) {
-                if (settings.name == '/') {
-                  return MaterialPageRoute(
-                    builder: (context) =>
-                        const SetupView(), // Or whatever view you want as root
+            // We need to use AnimatedBuilder to rebuild when theme changes
+            return AnimatedBuilder(
+                animation: Listenable.merge([
+                  ValueNotifier<Object?>(Appearance.of(context)),
+                ]),
+                builder: (context, _) {
+                  final themeMode =
+                      Appearance.of(context)?.mode ?? ThemeMode.system;
+
+                  return MaterialApp(
+                    title: 'BetterBreaks',
+                    navigatorKey: NavigationService.navigatorKey,
+                    debugShowCheckedModeBanner: false,
+                    initialRoute: AppRoutes.initialRoute,
+                    routes: AppRoutes.routes,
+                    onGenerateRoute: (settings) {
+                      if (settings.name == '/') {
+                        return MaterialPageRoute(
+                          builder: (context) =>
+                              const SetupView(), // Or whatever view you want as root
+                        );
+                      }
+                      // Add routing for bottom navigation views
+                      else if (settings.name == '/dashboard') {
+                        return MaterialPageRoute(
+                          builder: (context) => const DashboardView(),
+                        );
+                      } else if (settings.name == '/planner') {
+                        return MaterialPageRoute(
+                          builder: (context) => const PlannerView(),
+                        );
+                      } else if (settings.name == '/experience') {
+                        return MaterialPageRoute(
+                          builder: (context) => const ExperienceView(),
+                        );
+                      } else if (settings.name == '/analytics') {
+                        return MaterialPageRoute(
+                          builder: (context) => const AnalyticsView(),
+                        );
+                      }
+                      return null;
+                    },
+                    onUnknownRoute: (settings) {
+                      return MaterialPageRoute(
+                        builder: (context) =>
+                            const SplashScreenView(), // Fallback route
+                      );
+                    },
+                    themeMode: themeMode,
+                    theme: AppTheme.lightTheme,
+                    darkTheme: AppTheme.darkTheme,
+                    builder: (context, child) {
+                      // Force theme update on all widgets
+                      child = Theme(
+                        data: Theme.of(context),
+                        child: child ?? const SizedBox(),
+                      );
+
+                      return ConnectionWidget(
+                        dismissOfflineBanner: false,
+                        builder: (BuildContext context, bool isOnline) {
+                          return InActivityDetector(
+                            child: BotToastInit()(context, child),
+                          );
+                        },
+                      );
+                    },
+                    navigatorObservers: [BotToastNavigatorObserver()],
                   );
-                }
-                // Add routing for bottom navigation views
-                else if (settings.name == '/dashboard') {
-                  return MaterialPageRoute(
-                    builder: (context) => const DashboardView(),
-                  );
-                } else if (settings.name == '/planner') {
-                  return MaterialPageRoute(
-                    builder: (context) => const PlannerView(),
-                  );
-                } else if (settings.name == '/experience') {
-                  return MaterialPageRoute(
-                    builder: (context) => const ExperienceView(),
-                  );
-                } else if (settings.name == '/analytics') {
-                  return MaterialPageRoute(
-                    builder: (context) => const AnalyticsView(),
-                  );
-                }
-                return null;
-              },
-              onUnknownRoute: (settings) {
-                return MaterialPageRoute(
-                  builder: (context) =>
-                      const SplashScreenView(), // Fallback route
-                );
-              },
-              themeMode: Appearance.of(context)?.mode,
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              builder: (context, child) {
-                return ConnectionWidget(
-                  dismissOfflineBanner: false,
-                  builder: (BuildContext context, bool isOnline) {
-                    return InActivityDetector(
-                      child: BotToastInit()(context, child),
-                    );
-                  },
-                );
-              },
-              navigatorObservers: [BotToastNavigatorObserver()],
-            );
+                });
           }),
         );
 
