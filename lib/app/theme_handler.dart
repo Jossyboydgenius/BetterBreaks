@@ -21,21 +21,7 @@ class _AppThemeHandlerState extends State<AppThemeHandler> {
   void initState() {
     super.initState();
     // Get the saved theme mode from preferences
-    final savedMode = AppPreferenceManager.instance.getThemeMode();
-    // Convert saved integer to ThemeMode
-    _currentThemeMode = _getThemeModeFromInt(savedMode);
-  }
-
-  /// Convert integer preference value to ThemeMode
-  ThemeMode _getThemeModeFromInt(int value) {
-    switch (value) {
-      case 1:
-        return ThemeMode.light;
-      case 2:
-        return ThemeMode.dark;
-      default:
-        return ThemeMode.system;
-    }
+    _currentThemeMode = AppPreferenceManager.instance.getThemeModeEnum();
   }
 
   /// Convert ThemeMode to integer for storage
@@ -51,11 +37,16 @@ class _AppThemeHandlerState extends State<AppThemeHandler> {
   }
 
   void _handleThemeModeChange(ThemeMode mode) {
-    setState(() {
-      _currentThemeMode = mode;
-    });
-    // Save the new theme mode
-    AppPreferenceManager.instance.saveThemeMode(_getIntFromThemeMode(mode));
+    if (_currentThemeMode != mode) {
+      setState(() {
+        _currentThemeMode = mode;
+      });
+      // Save the new theme mode
+      AppPreferenceManager.instance.saveThemeMode(_getIntFromThemeMode(mode));
+
+      // Log for debugging
+      debugPrint('Theme changed to: $mode');
+    }
   }
 
   @override
