@@ -517,7 +517,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${startYear} - ${endYear}",
+                        "$startYear - $endYear",
                         style: AppTextStyle.satoshi(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
