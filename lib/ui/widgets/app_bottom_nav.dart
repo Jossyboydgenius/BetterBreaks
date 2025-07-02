@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/app/routes/navigation_service.dart';
 
 class AppBottomNav extends StatelessWidget {
@@ -26,7 +27,7 @@ class AppBottomNav extends StatelessWidget {
         curve: Curves.easeInOut,
         height: 72.h,
         decoration: BoxDecoration(
-          color: AppColors.lightPrimary,
+          color: AppThemeColors.getBottomNavColor(context),
           borderRadius: BorderRadius.circular(36.r),
         ),
         child: Row(
