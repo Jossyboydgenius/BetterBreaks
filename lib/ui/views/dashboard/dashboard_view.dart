@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/mood_check_in.dart';
 import 'package:better_breaks/ui/widgets/break_recommendation_widget.dart';
 import 'package:better_breaks/ui/widgets/optimization_timeline_chart.dart';
 import 'package:better_breaks/ui/widgets/upcoming_breaks_widget.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/data/repositories/break_repository.dart';
 import 'package:better_breaks/ui/views/dashboard/widgets/dashboard_top_bar.dart';
 import 'package:better_breaks/ui/views/dashboard/widgets/completed_setup_section.dart';
@@ -31,7 +32,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedNavIndex =
       0; // 0: Dashboard, 1: Plan, 2: Experience, 3: Analytics
-  double _moodValue = 2; // Initial mood (expressionless)
+// Initial mood (expressionless)
   late bool _setupCompleted; // Track if setup is completed
   bool _showAllBreaks = false; // Track if showing all breaks view
   bool _showAllRecommendations =
@@ -52,8 +53,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Stack(
         children: [
           Column(
@@ -189,9 +189,7 @@ class _DashboardViewState extends State<DashboardView> {
         ],
         MoodCheckIn(
           onMoodSelected: (value) {
-            setState(() {
-              _moodValue = value;
-            });
+            setState(() {});
           },
         ),
         if (_setupCompleted) ...[
