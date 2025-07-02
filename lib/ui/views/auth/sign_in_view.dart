@@ -3,6 +3,8 @@ import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:better_breaks/ui/views/auth/forgot_password_view.dart';
 import 'package:better_breaks/ui/views/setup/setup_view.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
@@ -11,7 +13,6 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/utils/form_validators.dart';
-
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -80,8 +81,7 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
@@ -93,18 +93,18 @@ class _SignInViewState extends State<SignInView> {
                 // Back button
                 const AppBackButton(),
                 SizedBox(height: 24.h),
-                
+
                 // Welcome text
                 Text(
                   'Welcome back',
                   style: AppTextStyle.ralewayExtraBold48.copyWith(
-                    color: AppColors.lightBlack,
+                    color: AppThemeColors.getTextColor(context),
                     height: 1.1,
                     fontSize: 24.sp,
                   ),
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Sign up link
                 Row(
                   children: [
@@ -122,7 +122,7 @@ class _SignInViewState extends State<SignInView> {
                       child: Text(
                         "Sign up",
                         style: AppTextStyle.satoshiRegular20.copyWith(
-                          color: AppColors.lightBlack,
+                          color: AppThemeColors.getTextColor(context),
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w700,
                           fontSize: 16.sp,
@@ -157,7 +157,7 @@ class _SignInViewState extends State<SignInView> {
                           child: Text(
                             _obscurePassword ? 'Show' : 'Hide',
                             style: AppTextStyle.satoshiRegular20.copyWith(
-                              color: AppColors.lightBlack,
+                              color: AppThemeColors.getTextColor(context),
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.w500,
                               fontSize: 14.sp,
@@ -205,19 +205,25 @@ class _SignInViewState extends State<SignInView> {
                 // Or divider
                 Row(
                   children: [
-                    Expanded(child: Divider(color: AppColors.grey)),
+                    Expanded(
+                        child: Divider(
+                            color: AppThemeColors.getDividerColor(context))),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
                         'Or',
                         style: AppTextStyle.satoshiRegular20.copyWith(
-                          color: AppColors.grey600,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white70
+                              : AppColors.grey600,
                           fontWeight: FontWeight.w400,
                           fontSize: 14.sp,
                         ),
                       ),
                     ),
-                    Expanded(child: Divider(color: AppColors.grey)),
+                    Expanded(
+                        child: Divider(
+                            color: AppThemeColors.getDividerColor(context))),
                   ],
                 ),
                 SizedBox(height: 24.h),
@@ -258,7 +264,10 @@ class _SignInViewState extends State<SignInView> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.grey),
+          border: Border.all(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.grey600
+                  : AppColors.grey),
           borderRadius: BorderRadius.circular(30.r),
         ),
         child: Stack(
@@ -275,7 +284,7 @@ class _SignInViewState extends State<SignInView> {
               child: Text(
                 text,
                 style: AppTextStyle.satoshiRegular20.copyWith(
-                  color: Colors.black,
+                  color: AppThemeColors.getTextColor(context),
                   fontWeight: FontWeight.w700,
                   fontSize: 16.sp,
                 ),
