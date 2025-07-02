@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 
@@ -28,16 +29,17 @@ class RecommendationCard extends StatelessWidget {
       margin: EdgeInsets.only(right: 12.w),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: AppColors.grey),
+        border: Border.all(color: AppThemeColors.getDividerColor(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBadge(
             text: isHighImpact ? 'High Impact' : 'Low Impact',
-            backgroundColor: isHighImpact ? AppColors.bgRed100 : AppColors.lightGreen100,
+            backgroundColor:
+                isHighImpact ? AppColors.bgRed100 : AppColors.lightGreen100,
             textColor: isHighImpact ? AppColors.red100 : AppColors.green,
           ),
           SizedBox(height: 12.h),
@@ -46,7 +48,7 @@ class RecommendationCard extends StatelessWidget {
             style: AppTextStyle.raleway(
               fontSize: 22.sp,
               fontWeight: FontWeight.w800,
-              color: AppColors.lightBlack,
+              color: AppThemeColors.getTextColor(context),
             ),
           ),
           SizedBox(height: 4.h),
@@ -55,7 +57,7 @@ class RecommendationCard extends StatelessWidget {
             style: AppTextStyle.satoshi(
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.lightBlack100,
+              color: AppThemeColors.getSecondaryTextColor(context),
             ),
           ),
           SizedBox(height: 12.h),
@@ -63,7 +65,8 @@ class RecommendationCard extends StatelessWidget {
             spacing: 8.w,
             runSpacing: 8.h,
             children: holidays
-                .map((holiday) => AppBadge.holiday(text: holiday))
+                .map((holiday) =>
+                    AppBadge.holidayThemed(text: holiday, context: context))
                 .toList(),
           ),
           SizedBox(height: 12.h),
@@ -77,4 +80,4 @@ class RecommendationCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
