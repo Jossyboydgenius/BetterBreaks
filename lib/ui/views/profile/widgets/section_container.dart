@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
 class SectionContainer extends StatelessWidget {
@@ -21,15 +22,15 @@ class SectionContainer extends StatelessWidget {
         boxShadow: [
           customShadow ??
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: AppThemeColors.getShadowColor(context),
                 blurRadius: 4,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
         ],
       ),
       child: GlassyContainer(
-        backgroundColor: Colors.white,
-        borderColor: Colors.white,
+        backgroundColor: AppThemeColors.getCardColor(context),
+        borderColor: AppThemeColors.getDividerColor(context),
         padding: EdgeInsets.all(24.r),
         child: child,
       ),
