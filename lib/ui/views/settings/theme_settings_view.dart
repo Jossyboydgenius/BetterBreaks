@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/app/theme_handler.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class ThemeSettingsView extends StatefulWidget {
   const ThemeSettingsView({super.key});
@@ -16,7 +17,7 @@ class ThemeSettingsView extends StatefulWidget {
 class _ThemeSettingsViewState extends State<ThemeSettingsView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ThemedScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -33,54 +34,65 @@ class _ThemeSettingsViewState extends State<ThemeSettingsView> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(20.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Choose theme',
-                style: AppTextStyle.raleway(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color:
-                      context.isDarkMode ? Colors.white : AppColors.lightBlack,
-                ),
-              ),
-              SizedBox(height: 16.h),
+          child: AnimatedBuilder(
+            animation: Listenable.merge([
+              ValueNotifier<Object?>(Appearance.of(context)),
+            ]),
+            builder: (context, _) {
+              final currentThemeMode =
+                  Appearance.of(context)?.mode ?? ThemeMode.system;
 
-              // System theme option
-              _buildThemeOption(
-                context,
-                title: 'System default',
-                subtitle: 'Follows your device settings',
-                isSelected: Appearance.of(context)?.mode == ThemeMode.system,
-                onTap: () => _setThemeMode(ThemeMode.system),
-                leadingIcon: Icons.brightness_auto,
-              ),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Choose theme',
+                    style: AppTextStyle.raleway(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.lightBlack,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
 
-              SizedBox(height: 8.h),
+                  // System theme option
+                  _buildThemeOption(
+                    context,
+                    title: 'System default',
+                    subtitle: 'Follows your device settings',
+                    isSelected: currentThemeMode == ThemeMode.system,
+                    onTap: () => _setThemeMode(ThemeMode.system),
+                    leadingIcon: Icons.brightness_auto,
+                  ),
 
-              // Light theme option
-              _buildThemeOption(
-                context,
-                title: 'Light theme',
-                subtitle: 'Standard light appearance',
-                isSelected: Appearance.of(context)?.mode == ThemeMode.light,
-                onTap: () => _setThemeMode(ThemeMode.light),
-                leadingIcon: Icons.light_mode_outlined,
-              ),
+                  SizedBox(height: 8.h),
 
-              SizedBox(height: 8.h),
+                  // Light theme option
+                  _buildThemeOption(
+                    context,
+                    title: 'Light theme',
+                    subtitle: 'Standard light appearance',
+                    isSelected: currentThemeMode == ThemeMode.light,
+                    onTap: () => _setThemeMode(ThemeMode.light),
+                    leadingIcon: Icons.light_mode_outlined,
+                  ),
 
-              // Dark theme option
-              _buildThemeOption(
-                context,
-                title: 'Dark theme',
-                subtitle: 'Easier on the eyes in low light',
-                isSelected: Appearance.of(context)?.mode == ThemeMode.dark,
-                onTap: () => _setThemeMode(ThemeMode.dark),
-                leadingIcon: Icons.dark_mode_outlined,
-              ),
-            ],
+                  SizedBox(height: 8.h),
+
+                  // Dark theme option
+                  _buildThemeOption(
+                    context,
+                    title: 'Dark theme',
+                    subtitle: 'Easier on the eyes in low light',
+                    isSelected: currentThemeMode == ThemeMode.dark,
+                    onTap: () => _setThemeMode(ThemeMode.dark),
+                    leadingIcon: Icons.dark_mode_outlined,
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -183,6 +195,10 @@ class _ThemeSettingsViewState extends State<ThemeSettingsView> {
   }
 
   void _setThemeMode(ThemeMode mode) {
+    // Apply theme change
     context.setThemeMode(mode);
+
+    // Force UI rebuild
+    setState(() {});
   }
 }
