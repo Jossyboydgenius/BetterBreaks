@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:intl/intl.dart';
 
 class AppCalendar extends StatefulWidget {
@@ -28,7 +29,8 @@ class _AppCalendarState extends State<AppCalendar> {
   @override
   void initState() {
     super.initState();
-    _currentMonth = DateTime(widget.selectedDate.year, widget.selectedDate.month);
+    _currentMonth =
+        DateTime(widget.selectedDate.year, widget.selectedDate.month);
   }
 
   void _togglePicker(String type) {
@@ -50,15 +52,16 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   Widget _buildMonthPicker() {
-    final months = List.generate(12, (index) => DateTime(_currentMonth.year, index + 1));
+    final months =
+        List.generate(12, (index) => DateTime(_currentMonth.year, index + 1));
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppThemeColors.getShadowColor(context),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -84,7 +87,9 @@ class _AppCalendarState extends State<AppCalendar> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryLight : Colors.transparent,
+                    color: isSelected
+                        ? AppColors.primaryLight
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   alignment: Alignment.center,
@@ -112,7 +117,7 @@ class _AppCalendarState extends State<AppCalendar> {
     return Container(
       height: 200.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -158,11 +163,12 @@ class _AppCalendarState extends State<AppCalendar> {
   Widget _buildCombinedPicker() {
     final currentYear = _currentMonth.year;
     final years = List.generate(100, (index) => currentYear - 50 + index);
-    final months = List.generate(12, (index) => DateTime(_currentMonth.year, index + 1));
+    final months =
+        List.generate(12, (index) => DateTime(_currentMonth.year, index + 1));
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -195,16 +201,21 @@ class _AppCalendarState extends State<AppCalendar> {
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 8.h),
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColors.primaryLight : Colors.transparent,
+                          color: isSelected
+                              ? AppColors.primaryLight
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: Text(
                           year.toString(),
                           style: AppTextStyle.satoshiRegular20.copyWith(
                             fontSize: 16.sp,
-                            color: isSelected ? Colors.white : AppColors.lightBlack,
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.lightBlack,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -232,7 +243,9 @@ class _AppCalendarState extends State<AppCalendar> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryLight : Colors.transparent,
+                    color: isSelected
+                        ? AppColors.primaryLight
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   alignment: Alignment.center,
@@ -256,7 +269,7 @@ class _AppCalendarState extends State<AppCalendar> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
       ),
@@ -331,7 +344,9 @@ class _AppCalendarState extends State<AppCalendar> {
                       style: AppTextStyle.raleway(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: isWeekend ? AppColors.orange300 : AppColors.lightBlack,
+                        color: isWeekend
+                            ? AppColors.orange300
+                            : AppColors.lightBlack,
                       ),
                     ),
                   );
@@ -348,14 +363,21 @@ class _AppCalendarState extends State<AppCalendar> {
                       final date = DateTime(
                         _currentMonth.year,
                         _currentMonth.month,
-                        1 + weekIndex * 7 + dayIndex - DateTime(_currentMonth.year, _currentMonth.month, 1).weekday + 1,
+                        1 +
+                            weekIndex * 7 +
+                            dayIndex -
+                            DateTime(_currentMonth.year, _currentMonth.month, 1)
+                                .weekday +
+                            1,
                       );
 
-                      final isSelected = date.year == widget.selectedDate.year &&
-                          date.month == widget.selectedDate.month &&
-                          date.day == widget.selectedDate.day;
+                      final isSelected =
+                          date.year == widget.selectedDate.year &&
+                              date.month == widget.selectedDate.month &&
+                              date.day == widget.selectedDate.day;
 
-                      final isWeekend = date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
+                      final isWeekend = date.weekday == DateTime.saturday ||
+                          date.weekday == DateTime.sunday;
                       final isCurrentMonth = date.month == _currentMonth.month;
 
                       return GestureDetector(
@@ -367,7 +389,9 @@ class _AppCalendarState extends State<AppCalendar> {
                           height: 32.r,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isSelected ? AppColors.orange100 : Colors.transparent,
+                            color: isSelected
+                                ? AppColors.orange100
+                                : Colors.transparent,
                           ),
                           child: Center(
                             child: Text(
@@ -381,7 +405,9 @@ class _AppCalendarState extends State<AppCalendar> {
                                         : isWeekend
                                             ? AppColors.orange300
                                             : AppColors.lightBlack,
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
                               ),
                             ),
                           ),
@@ -397,4 +423,4 @@ class _AppCalendarState extends State<AppCalendar> {
       ),
     );
   }
-} 
+}
