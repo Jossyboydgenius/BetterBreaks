@@ -53,4 +53,4 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       ),
     );
   }
-} 
+}
