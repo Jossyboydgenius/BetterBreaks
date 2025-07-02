@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_badge.dart';
 import 'package:better_breaks/ui/widgets/weather_forecast_card.dart';
 import 'package:better_breaks/ui/widgets/expanded_weather_forecast.dart';
@@ -124,7 +125,7 @@ class _SetupPlannerBottomSheetState extends State<SetupPlannerBottomSheet>
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color: AppThemeColors.getCardBackgroundColor(context),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.r),
               topRight: Radius.circular(24.r),
@@ -216,7 +217,7 @@ class DraggableIndicator extends StatelessWidget {
         width: 120.w,
         height: 5.h,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppThemeColors.getDragHandleColor(context),
           borderRadius: BorderRadius.circular(3.r),
         ),
       ),
