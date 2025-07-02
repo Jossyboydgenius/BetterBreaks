@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 
@@ -49,14 +50,14 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
     return DraggableScrollableSheet(
       initialChildSize: 0.4, // 40% of screen height
       minChildSize: 0.3, // Minimum 30% of screen height
-      maxChildSize: 0.8, // Maximum 80% of screen height
+      maxChildSize: 0.9, // Maximum 90% of screen height
       snap: true,
-      snapSizes: const [0.3, 0.4, 0.8],
+      snapSizes: const [0.3, 0.4, 0.9],
       controller: _dragController,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color: AppThemeColors.getCardBackgroundColor(context),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.r),
               topRight: Radius.circular(24.r),
@@ -65,31 +66,15 @@ class _SummaryBottomSheetState extends State<SummaryBottomSheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Draggable indicator with gesture detection
-              GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  // Calculate new size based on drag
-                  final newSize = _dragController.size -
-                      (details.delta.dy / MediaQuery.of(context).size.height);
-                  // Clamp to min/max bounds
-                  final clampedSize = newSize.clamp(0.3, 0.8);
-                  // Update controller
-                  if (_dragController.size != clampedSize &&
-                      clampedSize >= 0.3 &&
-                      clampedSize <= 0.8) {
-                    _dragController.jumpTo(clampedSize);
-                  }
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Center(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 12.h),
-                    width: 120.w,
-                    height: 5.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(3.r),
-                    ),
+              // Draggable indicator
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 12.h),
+                  width: 120.w,
+                  height: 5.h,
+                  decoration: BoxDecoration(
+                    color: AppThemeColors.getDragHandleColor(context),
+                    borderRadius: BorderRadius.circular(3.r),
                   ),
                 ),
               ),
