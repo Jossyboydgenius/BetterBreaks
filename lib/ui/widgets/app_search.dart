@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 
 class AppSearch extends StatelessWidget {
   final TextEditingController? controller;
@@ -19,11 +20,13 @@ class AppSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color textAndIconColor = AppThemeColors.getTextColor(context);
+
     return Container(
       height: 48.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.45),
+        color: AppThemeColors.getCardColor(context).withOpacity(0.45),
         borderRadius: BorderRadius.circular(24.r),
       ),
       child: Row(
@@ -32,7 +35,7 @@ class AppSearch extends StatelessWidget {
           AppIcons(
             icon: AppIconData.search,
             size: 20.r,
-            color: Colors.white,
+            color: textAndIconColor,
           ),
           SizedBox(width: 12.w),
 
@@ -44,14 +47,14 @@ class AppSearch extends StatelessWidget {
               style: AppTextStyle.satoshi(
                 fontSize: 17.sp,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: textAndIconColor,
               ),
               decoration: InputDecoration(
                 hintText: placeholder,
                 hintStyle: AppTextStyle.satoshi(
                   fontSize: 17.sp,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  color: textAndIconColor.withOpacity(0.7),
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -63,7 +66,7 @@ class AppSearch extends StatelessWidget {
           Container(
             height: 20.h,
             width: 1,
-            color: Colors.white,
+            color: textAndIconColor,
             margin: EdgeInsets.symmetric(horizontal: 12.w),
           ),
 
@@ -73,7 +76,7 @@ class AppSearch extends StatelessWidget {
             child: AppIcons(
               icon: AppIconData.filter,
               size: 20.r,
-              color: Colors.white,
+              color: textAndIconColor,
             ),
           ),
         ],
