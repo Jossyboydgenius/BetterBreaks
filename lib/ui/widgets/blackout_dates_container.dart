@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:intl/intl.dart';
 import 'package:better_breaks/ui/widgets/blackout_period_bottom_sheet.dart';
@@ -26,8 +27,8 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getCardColor(context),
       padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +48,7 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
           // Divider
           Container(
             height: 1,
-            color: Colors.white.withOpacity(0.3),
+            color: AppThemeColors.getDividerColor(context),
           ),
 
           SizedBox(height: 24.h),
@@ -106,7 +107,7 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
         rangeEnd = current;
       } else {
         // Non-consecutive, add the previous range and start a new one
-        if (_isSameDay(rangeStart!, rangeEnd!)) {
+        if (_isSameDay(rangeStart, rangeEnd)) {
           ranges.add(rangeStart);
         } else {
           ranges.add({'start': rangeStart, 'end': rangeEnd});
@@ -136,11 +137,11 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
       height: 48.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppThemeColors.getShadowColor(context),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -180,11 +181,11 @@ class _BlackoutDatesContainerState extends State<BlackoutDatesContainer> {
       height: 48.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppThemeColors.getShadowColor(context),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
