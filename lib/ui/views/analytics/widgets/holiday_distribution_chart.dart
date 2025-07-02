@@ -3,26 +3,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
 class HolidayDistributionChart extends StatefulWidget {
   final List<Map<String, dynamic>> monthData;
-  
+
   const HolidayDistributionChart({
     super.key,
     this.monthData = const [
       {
         'month': 'Jan',
         'breaks_planned': 7,
-        'weekends': 8, 
+        'weekends': 8,
         'public_holidays': 5,
       },
       {
         'month': 'Feb',
         'breaks_planned': 4,
-        'weekends': 8, 
+        'weekends': 8,
         'public_holidays': 8,
       },
       {
@@ -53,7 +54,8 @@ class HolidayDistributionChart extends StatefulWidget {
   });
 
   @override
-  State<HolidayDistributionChart> createState() => _HolidayDistributionChartState();
+  State<HolidayDistributionChart> createState() =>
+      _HolidayDistributionChartState();
 }
 
 class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
@@ -70,8 +72,8 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getDividerColor(context),
       padding: EdgeInsets.all(16.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +83,7 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
               AppIcons(
                 icon: AppIconData.analytics,
                 color: AppColors.lightPurple,
-                size: 28.r, 
+                size: 28.r,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -89,13 +91,13 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
                 style: AppTextStyle.raleway(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                 ),
               ),
             ],
           ),
           SizedBox(height: 24.h),
-          
+
           // Y-axis labels and chart
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -107,39 +109,42 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('30', style: _getAxisLabelStyle()),
+                    Text('30', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('25', style: _getAxisLabelStyle()),
+                    Text('25', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('20', style: _getAxisLabelStyle()),
+                    Text('20', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('15', style: _getAxisLabelStyle()),
+                    Text('15', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('10', style: _getAxisLabelStyle()),
+                    Text('10', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('5', style: _getAxisLabelStyle()),
+                    Text('5', style: _getAxisLabelStyle(context)),
                     SizedBox(height: 42.h),
-                    Text('0', style: _getAxisLabelStyle()),
+                    Text('0', style: _getAxisLabelStyle(context)),
                   ],
                 ),
               ),
               SizedBox(width: 8.w),
-              
+
               // Chart
               Expanded(
                 child: SizedBox(
                   height: 350.h,
                   child: Stack(
                     children: [
-                      _buildBarChart(),
-                      if (_touchedBarIndex != null && _touchedBarIndex! >= 0 && _touchedBarIndex! < widget.monthData.length)
+                      _buildBarChart(context),
+                      if (_touchedBarIndex != null &&
+                          _touchedBarIndex! >= 0 &&
+                          _touchedBarIndex! < widget.monthData.length)
                         Positioned(
                           top: 20.h,
                           left: 0,
                           right: 0,
                           child: Align(
                             alignment: Alignment.topCenter,
-                            child: _buildSelectedMonthTooltip(widget.monthData[_touchedBarIndex!]),
+                            child: _buildSelectedMonthTooltip(
+                                widget.monthData[_touchedBarIndex!], context),
                           ),
                         ),
                     ],
@@ -148,20 +153,22 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
               ),
             ],
           ),
-          
+
           SizedBox(height: 16.h),
-          
+
           // Legend
           Padding(
             padding: EdgeInsets.only(left: 24.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildLegendItem('Breaks planned', AppColors.orange100),
+                _buildLegendItem(
+                    'Breaks planned', AppColors.orange100, context),
                 SizedBox(height: 8.h),
-                _buildLegendItem('Weekends', AppColors.lightPurple),
+                _buildLegendItem('Weekends', AppColors.lightPurple, context),
                 SizedBox(height: 8.h),
-                _buildLegendItem('Public holidays', AppColors.darkAmber),
+                _buildLegendItem(
+                    'Public holidays', AppColors.darkAmber, context),
               ],
             ),
           ),
@@ -170,15 +177,15 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
     );
   }
 
-  TextStyle _getAxisLabelStyle() {
+  TextStyle _getAxisLabelStyle(BuildContext context) {
     return AppTextStyle.satoshi(
       fontSize: 14.sp,
       fontWeight: FontWeight.w500,
-      color: AppColors.lightBlack,
+      color: AppThemeColors.getSecondaryTextColor(context),
     );
   }
 
-  Widget _buildBarChart() {
+  Widget _buildBarChart(BuildContext context) {
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
@@ -215,8 +222,9 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
-                if (value < 0 || value >= widget.monthData.length) return const SizedBox();
-                
+                if (value < 0 || value >= widget.monthData.length)
+                  return const SizedBox();
+
                 return Padding(
                   padding: EdgeInsets.only(top: 8.h),
                   child: Text(
@@ -251,7 +259,7 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
     final breaks = data['breaks_planned'].toDouble();
     final weekends = data['weekends'].toDouble();
     final publicHolidays = data['public_holidays'].toDouble();
-    
+
     return BarChartGroupData(
       x: index,
       barRods: [
@@ -261,18 +269,18 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(6.r)),
           rodStackItems: [
             BarChartRodStackItem(
-              0, 
-              breaks, 
+              0,
+              breaks,
               AppColors.orange100,
             ),
             BarChartRodStackItem(
-              breaks, 
-              breaks + publicHolidays, 
+              breaks,
+              breaks + publicHolidays,
               AppColors.darkAmber,
             ),
             BarChartRodStackItem(
-              breaks + publicHolidays, 
-              breaks + publicHolidays + weekends, 
+              breaks + publicHolidays,
+              breaks + publicHolidays + weekends,
               AppColors.lightPurple,
             ),
           ],
@@ -284,13 +292,14 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
     );
   }
 
-  Widget _buildSelectedMonthTooltip(Map<String, dynamic> monthData) {
+  Widget _buildSelectedMonthTooltip(
+      Map<String, dynamic> monthData, BuildContext context) {
     final monthAbbr = monthData['month'];
     final fullMonthName = _fullMonthNames[monthAbbr] ?? monthAbbr;
     final breaks = monthData['breaks_planned'];
     final weekends = monthData['weekends'];
     final publicHolidays = monthData['public_holidays'];
-    
+
     return Container(
       constraints: BoxConstraints(
         minWidth: 135.w,
@@ -298,7 +307,7 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
       ),
       padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppThemeColors.getCardColor(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -322,17 +331,17 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
             ),
           ),
           SizedBox(height: 12.h),
-          _buildTooltipRow('Planned', ': $breaks Days'),
+          _buildTooltipRow('Planned', ': $breaks Days', context),
           SizedBox(height: 6.h),
-          _buildTooltipRow('Weekend', ': $weekends Days'),
+          _buildTooltipRow('Weekend', ': $weekends Days', context),
           SizedBox(height: 6.h),
-          _buildTooltipRow('Public', ': $publicHolidays Days'),
+          _buildTooltipRow('Public', ': $publicHolidays Days', context),
         ],
       ),
     );
   }
-  
-  Widget _buildTooltipRow(String label, String value) {
+
+  Widget _buildTooltipRow(String label, String value, BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -356,7 +365,7 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
     );
   }
 
-  Widget _buildLegendItem(String text, Color color) {
+  Widget _buildLegendItem(String text, Color color, BuildContext context) {
     return Row(
       children: [
         Container(
@@ -383,22 +392,23 @@ class _HolidayDistributionChartState extends State<HolidayDistributionChart> {
   double _calculateTooltipPosition(int index) {
     final int lastIndex = widget.monthData.length - 1;
     final double tooltipWidth = 135.w;
-    final double chartWidth = MediaQuery.of(context).size.width - 60.w; // Account for padding and Y-axis
+    final double chartWidth = MediaQuery.of(context).size.width -
+        60.w; // Account for padding and Y-axis
     final double barSpacing = chartWidth / widget.monthData.length;
     final double barPosition = barSpacing * index + (barSpacing / 2);
-    
+
     // Default position (centered above bar)
     double position = barPosition - (tooltipWidth / 2);
-    
+
     // Adjust for edges
     if (index >= lastIndex - 1) {
       // For last 2 bars, shift left to keep tooltip fully visible
       position = min(position, chartWidth - tooltipWidth - 10.w);
-    } 
-    
+    }
+
     // Ensure tooltip doesn't go off left edge
     position = max(10.w, position);
-    
+
     return position;
   }
-} 
+}
