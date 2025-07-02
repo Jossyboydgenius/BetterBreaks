@@ -43,12 +43,31 @@ class AppBadge extends StatelessWidget {
     );
   }
 
+  // New theme-aware holiday badge constructor
+  static Widget holidayThemed({
+    required String text,
+    required BuildContext context,
+  }) {
+    // Light theme: use existing colors
+    // Dark theme: use darker yellow background with brighter yellow text
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return AppBadge(
+      text: text,
+      backgroundColor:
+          isDark ? const Color(0xFF3D3A26) : const Color(0xFFFFFBE6),
+      textColor: isDark ? const Color(0xFFFFD54F) : const Color(0xFFFBB904),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Calculate constraints based on device width
     final deviceWidth = MediaQuery.of(context).size.width;
-    final maxWidth = isSmall ? deviceWidth * 0.25 : deviceWidth * 0.35; // 25% or 35% of screen width
-    
+    final maxWidth = isSmall
+        ? deviceWidth * 0.25
+        : deviceWidth * 0.35; // 25% or 35% of screen width
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isSmall ? 6.w : 10.w,
@@ -74,4 +93,4 @@ class AppBadge extends StatelessWidget {
       ),
     );
   }
-} 
+}
