@@ -5,9 +5,11 @@ import 'package:better_breaks/app/routes/navigation_service.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_images.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -19,23 +21,26 @@ class OnboardingView extends StatefulWidget {
 class _OnboardingViewState extends State<OnboardingView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  
+
   final List<OnboardingPage> _pages = [
     OnboardingPage(
       title: 'Smart Holiday Planning',
-      description: 'Maximize your time off with personalized holiday recommendations',
+      description:
+          'Maximize your time off with personalized holiday recommendations',
       image: AppImageData.onboarding1,
       backgroundColor: AppColors.primary,
     ),
     OnboardingPage(
       title: 'Analytics & Insights',
-      description: 'Track your holiday usage and understand how to reduce stress',
+      description:
+          'Track your holiday usage and understand how to reduce stress',
       image: AppImageData.onboarding2,
       backgroundColor: AppColors.primary,
     ),
     OnboardingPage(
       title: 'Seamless Integration',
-      description: 'Sync with your calendar, customize preferences, and set blackout dates',
+      description:
+          'Sync with your calendar, customize preferences, and set blackout dates',
       image: AppImageData.onboarding3,
       backgroundColor: AppColors.primary,
     ),
@@ -60,9 +65,8 @@ class _OnboardingViewState extends State<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     final bool isSmall = AppDimension.isSmall;
-    
-    return Scaffold(
-      backgroundColor: Colors.white,
+
+    return ThemedScaffold(
       body: Stack(
         children: [
           PageView.builder(
@@ -71,22 +75,29 @@ class _OnboardingViewState extends State<OnboardingView> {
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {
               return Container(
-                color: Colors.white,
+                color: AppThemeColors.getScaffoldBackgroundColor(context),
                 child: Stack(
                   children: [
                     Positioned(
                       left: 0,
                       right: 0,
-                      bottom: MediaQuery.of(context).size.height * (
-                        isSmall ? 0.15 : 0.20  // Adjust bottom position for small devices
-                      ),
+                      bottom: MediaQuery.of(context).size.height *
+                          (isSmall
+                              ? 0.15
+                              : 0.20 // Adjust bottom position for small devices
+                          ),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: isSmall ? 16.w : 24.w),
                         child: Center(
                           child: AppImages(
                             imagePath: _pages[index].image,
-                            width: isSmall ? 260.w : 280.w,  // Smaller width for small devices
-                            height: isSmall ? 700.h : 700.h,  // Smaller height for small devices
+                            width: isSmall
+                                ? 260.w
+                                : 280.w, // Smaller width for small devices
+                            height: isSmall
+                                ? 700.h
+                                : 700.h, // Smaller height for small devices
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -100,7 +111,8 @@ class _OnboardingViewState extends State<OnboardingView> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * (isSmall ? 0.41 : 0.44),  // Smaller height for small devices
+              height: MediaQuery.of(context).size.height *
+                  (isSmall ? 0.41 : 0.44), // Smaller height for small devices
               decoration: BoxDecoration(
                 color: _pages[_currentPage].backgroundColor,
                 borderRadius: BorderRadius.only(
@@ -119,26 +131,32 @@ class _OnboardingViewState extends State<OnboardingView> {
                   ),
                   SizedBox(height: isSmall ? 16.h : 10.h),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
                     child: Text(
                       _pages[_currentPage].title,
                       style: AppTextStyle.ralewayExtraBold48.copyWith(
                         color: Colors.white,
                         height: 1.1,
                         fontWeight: FontWeight.w900,
-                        fontSize: isSmall ? 32.sp : 46.sp,  // Smaller font for small devices
+                        fontSize: isSmall
+                            ? 32.sp
+                            : 46.sp, // Smaller font for small devices
                       ),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   SizedBox(height: isSmall ? 8.h : 12.h),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: isSmall ? 16.w : 24.w),
                     child: Text(
                       _pages[_currentPage].description,
                       style: AppTextStyle.satoshiRegular20.copyWith(
                         color: Colors.white,
-                        fontSize: isSmall ? 16.sp : 18.sp,  // Smaller font for small devices
+                        fontSize: isSmall
+                            ? 16.sp
+                            : 18.sp, // Smaller font for small devices
                       ),
                       textAlign: TextAlign.left,
                     ),
