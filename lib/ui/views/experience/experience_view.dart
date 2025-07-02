@@ -3,8 +3,10 @@ import 'package:better_breaks/ui/views/planner/planner_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/experience_top_bar.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
 import 'package:better_breaks/ui/widgets/event_card.dart';
 import 'package:better_breaks/data/models/break_models.dart';
@@ -75,7 +77,7 @@ class _ExperienceViewState extends State<ExperienceView> {
         return Container(
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppThemeColors.getCardColor(context),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.r),
               topRight: Radius.circular(24.r),
@@ -102,8 +104,7 @@ class _ExperienceViewState extends State<ExperienceView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Stack(
         children: [
           Column(
