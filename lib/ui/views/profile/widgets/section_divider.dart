@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 
 class SectionDivider extends StatelessWidget {
   const SectionDivider({super.key});
@@ -10,7 +11,7 @@ class SectionDivider extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Container(
         height: 1,
-        color: Colors.white.withOpacity(0.3),
+        color: AppThemeColors.getDividerColor(context),
       ),
     );
   }
