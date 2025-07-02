@@ -9,6 +9,7 @@ import 'package:better_breaks/ui/views/experience/experience_view.dart';
 import 'package:better_breaks/ui/widgets/planner_top_bar.dart';
 import 'package:better_breaks/ui/widgets/summary_bottom_sheet.dart';
 import 'package:intl/intl.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class PlannerView extends StatefulWidget {
   final bool showBottomNav;
@@ -25,7 +26,7 @@ class PlannerView extends StatefulWidget {
 class _PlannerViewState extends State<PlannerView> {
   DateTime? _startDate;
   DateTime? _endDate;
-  int _selectedNavIndex = 1; // Plan tab
+  final int _selectedNavIndex = 1; // Plan tab
   bool _showReviewScreen = false;
   final int _totalBreakDays = 12;
   final int _selectedDays = 5;
@@ -44,8 +45,7 @@ class _PlannerViewState extends State<PlannerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: Stack(
         children: [
           Column(
