@@ -5,6 +5,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:better_breaks/shared/widgets/app_circular_progress.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/ui/widgets/app_bottom_nav.dart';
 import 'package:better_breaks/ui/widgets/app_top_bar.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
@@ -24,7 +25,7 @@ class AnalyticsView extends StatefulWidget {
 }
 
 class _AnalyticsViewState extends State<AnalyticsView> {
-  int _selectedNavIndex = 3; // Analytics tab
+  final int _selectedNavIndex = 3; // Analytics tab
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -36,8 +37,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Stack(
         children: [
           Column(
