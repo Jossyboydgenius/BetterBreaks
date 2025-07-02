@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_otp_input.dart';
 import 'package:better_breaks/ui/widgets/app_toast.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class OtpVerificationView extends StatefulWidget {
   final String email;
@@ -95,8 +97,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
@@ -106,18 +107,18 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
               // Back button
               const AppBackButton(),
               SizedBox(height: 24.h),
-              
+
               // Title
               Text(
                 'OTP Verification',
                 style: AppTextStyle.ralewayExtraBold48.copyWith(
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                   height: 1.1,
                   fontSize: 24.sp,
                 ),
               ),
               SizedBox(height: 8.h),
-              
+
               // Description
               Text(
                 'Please enter the 6 digit code we sent to',
@@ -173,13 +174,16 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: _countdown == 0 ? () {
-                        setState(() {
-                          _countdown = 60; // Reset countdown
-                          startTimer(); // Restart timer
-                        });
-                        AppToast.showSuccessToast('OTP code has been resent successfully');
-                      } : null,
+                      onTap: _countdown == 0
+                          ? () {
+                              setState(() {
+                                _countdown = 60; // Reset countdown
+                                startTimer(); // Restart timer
+                              });
+                              AppToast.showSuccessToast(
+                                  'OTP code has been resent successfully');
+                            }
+                          : null,
                       child: Text(
                         _countdown > 0
                             ? 'Tap to resend in ${_countdown}s'
@@ -202,4 +206,4 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
       ),
     );
   }
-} 
+}
