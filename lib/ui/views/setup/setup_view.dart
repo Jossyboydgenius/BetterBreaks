@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:intl/intl.dart';
@@ -75,7 +77,7 @@ class _SetupViewState extends State<SetupView> {
           'Annual Leave Balance',
           style: AppTextStyle.satoshiRegular20.copyWith(
             fontSize: 16.sp,
-            color: AppColors.lightBlack,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
         SizedBox(height: 8.h),
@@ -88,7 +90,7 @@ class _SetupViewState extends State<SetupView> {
           'Pre-determined Dates',
           style: AppTextStyle.satoshiRegular20.copyWith(
             fontSize: 16.sp,
-            color: AppColors.lightBlack,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
         SizedBox(height: 8.h),
@@ -105,7 +107,7 @@ class _SetupViewState extends State<SetupView> {
           'Working Pattern',
           style: AppTextStyle.satoshiRegular20.copyWith(
             fontSize: 16.sp,
-            color: AppColors.lightBlack,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
         SizedBox(height: 8.h),
@@ -148,7 +150,7 @@ class _SetupViewState extends State<SetupView> {
           'Preferred break type',
           style: AppTextStyle.satoshiRegular20.copyWith(
             fontSize: 16.sp,
-            color: AppColors.lightBlack,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
         SizedBox(height: 8.h),
@@ -200,8 +202,7 @@ class _SetupViewState extends State<SetupView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +287,7 @@ class _SetupViewState extends State<SetupView> {
                                   : 'Better Breaks, Better You',
                           style: AppTextStyle.ralewayExtraBold48.copyWith(
                             fontSize: 24.sp,
-                            color: AppColors.lightBlack,
+                            color: AppThemeColors.getTextColor(context),
                           ),
                         ),
                         SizedBox(height: 8.h),
@@ -298,7 +299,8 @@ class _SetupViewState extends State<SetupView> {
                                   : 'Here are our optimised sugestion',
                           style: AppTextStyle.satoshiRegular20.copyWith(
                             fontSize: 16.sp,
-                            color: AppColors.lightGrey,
+                            color:
+                                AppThemeColors.getSecondaryTextColor(context),
                           ),
                         ),
                       ],
@@ -354,7 +356,7 @@ class _SetupViewState extends State<SetupView> {
                               'Back',
                               style: AppTextStyle.satoshiRegular20.copyWith(
                                 fontSize: 16.sp,
-                                color: AppColors.lightBlack,
+                                color: AppThemeColors.getTextColor(context),
                               ),
                             ),
                           ),
