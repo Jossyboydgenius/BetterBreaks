@@ -3,18 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class HolidayStressChart extends StatelessWidget {
   const HolidayStressChart({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
       padding: EdgeInsets.all(16.r),
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getDividerColor(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -23,6 +24,7 @@ class HolidayStressChart extends StatelessWidget {
               AppIcons(
                 icon: AppIconData.sidebarTop01,
                 size: 20.r,
+                color: AppColors.lightPurple, // Keep brand color
               ),
               SizedBox(width: 8.w),
               Text(
@@ -30,7 +32,7 @@ class HolidayStressChart extends StatelessWidget {
                 style: AppTextStyle.raleway(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                 ),
               ),
             ],
@@ -39,15 +41,15 @@ class HolidayStressChart extends StatelessWidget {
           SizedBox(
             height: 200.h,
             width: double.infinity,
-            child: _buildChart(),
+            child: _buildChart(context),
           ),
           SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Holiday Taken', AppColors.orange100),
+              _buildLegendItem('Holiday Taken', AppColors.orange100, context),
               SizedBox(width: 24.w),
-              _buildLegendItem('Stress Level', AppColors.lightPurple),
+              _buildLegendItem('Stress Level', AppColors.lightPurple, context),
             ],
           ),
         ],
@@ -55,7 +57,7 @@ class HolidayStressChart extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String text, Color color) {
+  Widget _buildLegendItem(String text, Color color, BuildContext context) {
     return Row(
       children: [
         Container(
@@ -72,14 +74,14 @@ class HolidayStressChart extends StatelessWidget {
           style: AppTextStyle.satoshi(
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            color: Colors.black,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildChart() {
+  Widget _buildChart(BuildContext context) {
     return LineChart(
       LineChartData(
         gridData: FlGridData(
@@ -88,7 +90,7 @@ class HolidayStressChart extends StatelessWidget {
           horizontalInterval: 5,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: AppColors.grey.withOpacity(0.3),
+              color: AppThemeColors.getDividerColor(context).withOpacity(0.3),
               strokeWidth: 1,
               dashArray: [5, 5],
             );
@@ -108,12 +110,14 @@ class HolidayStressChart extends StatelessWidget {
               reservedSize: 30,
               interval: 1,
               getTitlesWidget: (double value, TitleMeta meta) {
-                const style = TextStyle(
-                  color: AppColors.grey600,
+                final Color textColor =
+                    AppThemeColors.getSecondaryTextColor(context);
+                final style = TextStyle(
+                  color: textColor,
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
                 );
-                
+
                 String text;
                 switch (value.toInt()) {
                   case 0:
@@ -151,12 +155,14 @@ class HolidayStressChart extends StatelessWidget {
               interval: 5,
               reservedSize: 35,
               getTitlesWidget: (value, meta) {
-                const style = TextStyle(
-                  color: AppColors.grey600,
+                final Color textColor =
+                    AppThemeColors.getSecondaryTextColor(context);
+                final style = TextStyle(
+                  color: textColor,
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
                 );
-                
+
                 return Text(
                   value.toInt().toString(),
                   style: style,
@@ -272,17 +278,27 @@ class HolidayStressChart extends StatelessWidget {
             getTooltipColor: (touchedSpot) => Colors.white,
             getTooltipItems: (List<LineBarSpot> touchedSpots) {
               return touchedSpots.map((LineBarSpot touchedSpot) {
-                final monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+                final monthNames = [
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul'
+                ];
                 final monthName = monthNames[touchedSpot.x.toInt()];
                 final value = touchedSpot.y.toInt();
                 final isHolidayLine = touchedSpot.barIndex == 0;
-                
+
                 return LineTooltipItem(
-                  isHolidayLine 
-                      ? 'Holiday\n$monthName: $value Days' 
+                  isHolidayLine
+                      ? 'Holiday\n$monthName: $value Days'
                       : 'Stress\n$monthName: $value Level',
                   TextStyle(
-                    color: isHolidayLine ? AppColors.orange100 : AppColors.lightPurple,
+                    color: isHolidayLine
+                        ? AppColors.orange100
+                        : AppColors.lightPurple,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
@@ -290,10 +306,11 @@ class HolidayStressChart extends StatelessWidget {
               }).toList();
             },
           ),
-          touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {},
+          touchCallback:
+              (FlTouchEvent event, LineTouchResponse? touchResponse) {},
           handleBuiltInTouches: true,
         ),
       ),
     );
   }
-} 
+}
