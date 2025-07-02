@@ -38,7 +38,7 @@ class AppRoutes {
   static const String settingsView = '/settings-view';
   static const String themeSettingsView = '/theme-settings-view';
 
-  static const String initialRoute = dashboardView;
+  static const String initialRoute = splashScreenView;
 
   static Map<String, WidgetBuilder> routes = {
     splashScreenView: (context) => const SplashScreenView(),
