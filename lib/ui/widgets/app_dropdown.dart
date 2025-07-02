@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_input.dart';
 import 'package:better_breaks/ui/widgets/app_radio_button.dart';
 import 'package:intl/intl.dart';
@@ -269,7 +270,9 @@ class _AppDropdownState extends State<AppDropdown> {
         width: buttonWidth,
         height: 45.h,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.5),
+          color: isSelected
+              ? AppColors.primary
+              : AppThemeColors.getCardColor(context).withOpacity(0.5),
           borderRadius: BorderRadius.circular(25.r),
         ),
         child: Center(
@@ -278,7 +281,9 @@ class _AppDropdownState extends State<AppDropdown> {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
-              color: isSelected ? Colors.white : Colors.grey,
+              color: isSelected
+                  ? Colors.white
+                  : AppThemeColors.getSecondaryTextColor(context),
             ),
           ),
         ),
@@ -305,14 +310,15 @@ class _AppDropdownState extends State<AppDropdown> {
                       style: AppTextStyle.satoshi(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: AppThemeColors.getTextColor(context),
                       ),
                     ),
                     SizedBox(height: 8.h),
                     AppInput(
                       controller: _daysOnController,
                       hintText: "Enter days",
-                      fillColor: Colors.white.withOpacity(0.7),
+                      fillColor:
+                          AppThemeColors.getCardColor(context).withOpacity(0.7),
                       onTap: () {
                         // Show a number picker if needed
                       },
@@ -331,14 +337,15 @@ class _AppDropdownState extends State<AppDropdown> {
                       style: AppTextStyle.satoshi(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: AppThemeColors.getTextColor(context),
                       ),
                     ),
                     SizedBox(height: 8.h),
                     AppInput(
                       controller: _daysOffController,
                       hintText: "Enter days",
-                      fillColor: Colors.white.withOpacity(0.7),
+                      fillColor:
+                          AppThemeColors.getCardColor(context).withOpacity(0.7),
                       onTap: () {
                         // Show a number picker if needed
                       },
@@ -399,7 +406,8 @@ class _AppDropdownState extends State<AppDropdown> {
                   controller: TextEditingController(
                       text: _selectedRotation.isEmpty ? "" : _selectedRotation),
                   hintText: "Select rotation pattern",
-                  fillColor: Colors.white.withOpacity(0.7),
+                  fillColor:
+                      AppThemeColors.getCardColor(context).withOpacity(0.7),
                   isDropdown: true,
                   readOnly: true,
                 ),
@@ -410,11 +418,11 @@ class _AppDropdownState extends State<AppDropdown> {
                 SizedBox(height: 8.h),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppThemeColors.getCardColor(context),
                     borderRadius: BorderRadius.circular(16.r),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: AppThemeColors.getShadowColor(context),
                         blurRadius: 10,
                         spreadRadius: 1,
                         offset: Offset(0, 4),
