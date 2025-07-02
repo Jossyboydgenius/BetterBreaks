@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class SupportMessageView extends StatefulWidget {
   const SupportMessageView({super.key});
@@ -24,8 +26,7 @@ class _SupportMessageViewState extends State<SupportMessageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -121,8 +122,8 @@ class _SupportMessageViewState extends State<SupportMessageView> {
 
   Widget _buildMessageInput() {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getDividerColor(context),
       padding: EdgeInsets.all(16.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +152,7 @@ class _SupportMessageViewState extends State<SupportMessageView> {
                 style: AppTextStyle.raleway(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                 ),
               ),
             ],
@@ -171,7 +172,7 @@ class _SupportMessageViewState extends State<SupportMessageView> {
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.italic,
-                  color: AppColors.grey600,
+                  color: AppThemeColors.getHintTextColor(context),
                   fontFamily: 'Satoshi',
                 ),
                 border: InputBorder.none,
@@ -180,7 +181,7 @@ class _SupportMessageViewState extends State<SupportMessageView> {
               style: AppTextStyle.satoshi(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
-                color: AppColors.lightBlack,
+                color: AppThemeColors.getTextColor(context),
               ),
             ),
           ),
