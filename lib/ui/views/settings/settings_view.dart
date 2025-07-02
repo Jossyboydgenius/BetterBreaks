@@ -6,6 +6,7 @@ import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/app/theme_handler.dart';
 import 'package:better_breaks/ui/views/settings/theme_settings_view.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -14,7 +15,7 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = context.isDarkMode;
 
-    return Scaffold(
+    return ThemedScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -36,7 +37,7 @@ class SettingsView extends StatelessWidget {
             SizedBox(height: 12.h),
             _buildSettingItem(
               context,
-              icon: Icons.brightness_6_outlined,
+              icon: Icons.palette_outlined,
               title: 'Theme',
               subtitle: _getThemeModeName(context),
               onTap: () => Navigator.push(
