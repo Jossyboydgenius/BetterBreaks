@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_images.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'dart:ui';
 import 'package:better_breaks/ui/views/event_details/event_details_view.dart';
 
@@ -51,7 +52,9 @@ class EventCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: Colors.white.withOpacity(0.4),
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.white.withOpacity(0.4)
+                : AppThemeColors.getDividerColor(context),
             width: 2,
           ),
         ),
@@ -90,7 +93,7 @@ class EventCard extends StatelessWidget {
                             stops: const [0.0, 0.5, 1.0],
                           ),
                         ),
-                        child: _buildCardContent(),
+                        child: _buildCardContent(context),
                       )
                     else
                       // Glass blur effect
@@ -99,8 +102,12 @@ class EventCard extends StatelessWidget {
                           filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                           child: Container(
                             padding: EdgeInsets.all(16.r),
-                            color: Colors.white.withOpacity(0.15),
-                            child: _buildCardContent(),
+                            color: (Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.white
+                                    : Colors.black)
+                                .withOpacity(0.15),
+                            child: _buildCardContent(context),
                           ),
                         ),
                       ),
@@ -114,7 +121,10 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCardContent() {
+  Widget _buildCardContent(BuildContext context) {
+    // Always use white text on image overlays for better readability, regardless of theme
+    const Color contentColor = Colors.white;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +134,7 @@ class EventCard extends StatelessWidget {
           style: AppTextStyle.raleway(
             fontSize: 14.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: contentColor,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -142,7 +152,7 @@ class EventCard extends StatelessWidget {
                   AppIcons(
                     icon: AppIconData.location01,
                     size: 14.r,
-                    color: Colors.white,
+                    color: contentColor,
                   ),
                   SizedBox(width: 4.w),
                   Expanded(
@@ -151,7 +161,7 @@ class EventCard extends StatelessWidget {
                       style: AppTextStyle.satoshi(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: contentColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -167,7 +177,7 @@ class EventCard extends StatelessWidget {
               style: AppTextStyle.satoshi(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: contentColor,
               ),
             ),
           ],
@@ -185,7 +195,7 @@ class EventCard extends StatelessWidget {
                   AppIcons(
                     icon: AppIconData.calendar01,
                     size: 14.r,
-                    color: Colors.white,
+                    color: contentColor,
                   ),
                   SizedBox(width: 4.w),
                   Expanded(
@@ -194,7 +204,7 @@ class EventCard extends StatelessWidget {
                       style: AppTextStyle.satoshi(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: contentColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -210,7 +220,7 @@ class EventCard extends StatelessWidget {
               style: AppTextStyle.interVariable(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: contentColor,
               ),
             ),
           ],
