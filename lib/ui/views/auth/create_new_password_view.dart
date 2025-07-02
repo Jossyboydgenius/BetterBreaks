@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
@@ -8,6 +9,7 @@ import 'package:better_breaks/utils/form_validators.dart';
 import 'package:better_breaks/ui/widgets/app_toast.dart';
 import 'package:better_breaks/ui/views/auth/password_success_view.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class CreateNewPasswordView extends StatefulWidget {
   const CreateNewPasswordView({super.key});
@@ -85,8 +87,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
@@ -98,18 +99,18 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                 // Back button
                 const AppBackButton(),
                 SizedBox(height: 24.h),
-                
+
                 // Title
                 Text(
                   'Create a new password',
                   style: AppTextStyle.ralewayExtraBold48.copyWith(
-                    color: AppColors.lightBlack,
+                    color: AppThemeColors.getTextColor(context),
                     height: 1.1,
                     fontSize: 24.sp,
                   ),
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Description
                 Text(
                   'Your new password must be different from previous passwords.',
@@ -189,4 +190,4 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
       ),
     );
   }
-} 
+}
