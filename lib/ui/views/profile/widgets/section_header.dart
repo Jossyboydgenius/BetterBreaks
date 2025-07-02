@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -44,11 +45,11 @@ class SectionHeader extends StatelessWidget {
           style: AppTextStyle.raleway(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.lightBlack,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
         if (trailing != null) ...[
-          Spacer(),
+          const Spacer(),
           trailing!,
         ],
       ],
