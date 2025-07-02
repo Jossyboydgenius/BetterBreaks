@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
 import 'package:better_breaks/ui/widgets/app_dropdown.dart';
 
@@ -24,18 +24,17 @@ class WorkingWeekContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getCardColor(context),
       padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Working Week up',
-            style: AppTextStyle.satoshi(
+            'Working Week',
+            style: AppTextStyle.satoshiRegular20.copyWith(
               fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.lightBlack,
+              color: AppThemeColors.getTextColor(context),
             ),
           ),
 
