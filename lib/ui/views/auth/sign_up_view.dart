@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_combined_input.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/utils/form_validators.dart';
 import 'package:better_breaks/ui/widgets/app_toast.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -104,8 +106,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
@@ -117,18 +118,18 @@ class _SignUpViewState extends State<SignUpView> {
                 // Back button
                 const AppBackButton(),
                 SizedBox(height: 24.h),
-                
+
                 // Welcome text
                 Text(
                   'Welcome',
                   style: AppTextStyle.ralewayExtraBold48.copyWith(
-                    color: AppColors.lightBlack,
+                    color: AppThemeColors.getTextColor(context),
                     height: 1.1,
                     fontSize: 24.sp,
                   ),
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Sign in link
                 Row(
                   children: [
@@ -146,7 +147,7 @@ class _SignUpViewState extends State<SignUpView> {
                       child: Text(
                         "Sign in",
                         style: AppTextStyle.satoshiRegular20.copyWith(
-                          color: AppColors.lightBlack,
+                          color: AppThemeColors.getTextColor(context),
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w700,
                           fontSize: 16.sp,
@@ -319,4 +320,4 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
-} 
+}
