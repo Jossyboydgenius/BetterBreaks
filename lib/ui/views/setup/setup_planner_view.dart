@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_back_button.dart';
 import 'package:better_breaks/ui/widgets/calendar_widget.dart';
 import 'package:better_breaks/ui/widgets/setup_planner_bottom_sheet.dart';
 import 'package:better_breaks/ui/views/dashboard/dashboard_view.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class SetupPlannerView extends StatefulWidget {
   final VoidCallback? onBack;
@@ -25,8 +27,7 @@ class _SetupPlannerViewState extends State<SetupPlannerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: Stack(
         children: [
           SafeArea(
@@ -40,7 +41,7 @@ class _SetupPlannerViewState extends State<SetupPlannerView> {
                     height: 4.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2.r),
-                      color: AppColors.grey,
+                      color: AppThemeColors.getDividerColor(context),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(2.r),
@@ -67,7 +68,7 @@ class _SetupPlannerViewState extends State<SetupPlannerView> {
                         'Better Breaks Planner',
                         style: AppTextStyle.ralewayExtraBold48.copyWith(
                           fontSize: 24.sp,
-                          color: AppColors.lightBlack,
+                          color: AppThemeColors.getTextColor(context),
                           fontWeight: FontWeight.w800,
                         ),
                       ),
