@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/app/routes/app_routes.dart';
 import 'package:better_breaks/ui/widgets/confetti.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 
 class PasswordSuccessView extends StatelessWidget {
   const PasswordSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return ThemedScaffold(
       body: Stack(
         children: [
           // Add confetti widget
@@ -45,7 +46,7 @@ class PasswordSuccessView extends StatelessWidget {
                     "Password changed",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.ralewayExtraBold48.copyWith(
-                      color: AppColors.lightBlack,
+                      color: AppThemeColors.getTextColor(context),
                       fontSize: 24.sp,
                       fontWeight: FontWeight.w700,
                     ),
@@ -56,7 +57,9 @@ class PasswordSuccessView extends StatelessWidget {
                       "Click on the login button below to continue.",
                       textAlign: TextAlign.center,
                       style: AppTextStyle.satoshiRegular20.copyWith(
-                        color: AppColors.grey700,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white70
+                            : AppColors.grey700,
                       ),
                     ),
                   ),
