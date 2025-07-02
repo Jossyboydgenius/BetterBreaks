@@ -21,14 +21,14 @@ class AppBackButton extends StatelessWidget {
     return IconButton(
       icon: AppIcons(
         icon: AppIconData.back,
-        size: size ?? 16.r,
+        size: size ?? 14.r, // Reduced size from 16 to 14
         color:
             color ?? (context.isDarkMode ? Colors.white : AppColors.lightBlack),
       ),
       onPressed: onPressed ?? () => Navigator.pop(context),
-      iconSize: 24.r,
+      iconSize: 22.r, // Reduced size from 24 to 22
       padding: EdgeInsets.zero,
-      constraints: BoxConstraints(),
+      constraints: const BoxConstraints(),
     );
   }
 }
