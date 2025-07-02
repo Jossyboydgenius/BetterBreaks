@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/shared/widgets/shared_widgets.dart';
 import 'package:easy_pie_chart/easy_pie_chart.dart';
 
@@ -12,8 +13,8 @@ class BreakBalanceAnalysis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getDividerColor(context),
       padding: EdgeInsets.all(16.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +32,7 @@ class BreakBalanceAnalysis extends StatelessWidget {
                 style: AppTextStyle.raleway(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                 ),
               ),
             ],
@@ -42,11 +43,11 @@ class BreakBalanceAnalysis extends StatelessWidget {
               width: 200.h,
               height: 200.h,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppThemeColors.getCardColor(context),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppThemeColors.getShadowColor(context),
                     blurRadius: 10,
                     spreadRadius: 0,
                     offset: const Offset(0, 2),
@@ -58,9 +59,15 @@ class BreakBalanceAnalysis extends StatelessWidget {
                   height: 200.h,
                   child: EasyPieChart(
                     children: [
-                      PieData(value: 0.6, color: AppColors.orange100), // Breaks Remaining
-                      PieData(value: 0.2, color: AppColors.lightPurple), // Breaks Used
-                      PieData(value: 0.2, color: AppColors.lightGreen), // Breaks Planned
+                      PieData(
+                          value: 0.6,
+                          color: AppColors.orange100), // Breaks Remaining
+                      PieData(
+                          value: 0.2,
+                          color: AppColors.lightPurple), // Breaks Used
+                      PieData(
+                          value: 0.2,
+                          color: AppColors.lightGreen), // Breaks Planned
                     ],
                     pieType: PieType.crust,
                     gap: 0.08,
@@ -77,11 +84,12 @@ class BreakBalanceAnalysis extends StatelessWidget {
           // Legend
           Column(
             children: [
-              _buildLegendItem('Breaks Remaining', AppColors.orange100),
+              _buildLegendItem(
+                  'Breaks Remaining', AppColors.orange100, context),
               SizedBox(height: 8.h),
-              _buildLegendItem('Breaks Used', AppColors.lightPurple),
+              _buildLegendItem('Breaks Used', AppColors.lightPurple, context),
               SizedBox(height: 8.h),
-              _buildLegendItem('Breaks Planned', AppColors.lightGreen),
+              _buildLegendItem('Breaks Planned', AppColors.lightGreen, context),
             ],
           ),
         ],
@@ -89,7 +97,7 @@ class BreakBalanceAnalysis extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String text, Color color) {
+  Widget _buildLegendItem(String text, Color color, BuildContext context) {
     return Row(
       children: [
         Container(
@@ -106,10 +114,10 @@ class BreakBalanceAnalysis extends StatelessWidget {
           style: AppTextStyle.satoshi(
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            color: Colors.black,
+            color: AppThemeColors.getTextColor(context),
           ),
         ),
       ],
     );
   }
-} 
+}
