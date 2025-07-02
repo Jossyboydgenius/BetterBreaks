@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/glassy_container.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/ui/views/profile/widgets/break_score_widget.dart';
 
 class MilestonesView extends StatelessWidget {
@@ -11,8 +13,7 @@ class MilestonesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,14 +28,14 @@ class MilestonesView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Break Score Widget - without circular container
-                  BreakScoreWidget(
+                  const BreakScoreWidget(
                     useCircularContainer: true,
                   ),
 
                   SizedBox(height: 16.h),
 
                   // Streak Widget
-                  _buildStreakWidget(),
+                  _buildStreakWidget(context),
 
                   // Add more badge widgets or other content below
                 ],
@@ -91,10 +92,10 @@ class MilestonesView extends StatelessWidget {
     );
   }
 
-  Widget _buildStreakWidget() {
+  Widget _buildStreakWidget(BuildContext context) {
     return GlassyContainer(
-      backgroundColor: Colors.white,
-      borderColor: Colors.white,
+      backgroundColor: AppThemeColors.getCardColor(context),
+      borderColor: AppThemeColors.getDividerColor(context),
       padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +124,7 @@ class MilestonesView extends StatelessWidget {
                 style: AppTextStyle.raleway(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.lightBlack,
+                  color: AppThemeColors.getTextColor(context),
                 ),
               ),
             ],
@@ -137,7 +138,7 @@ class MilestonesView extends StatelessWidget {
             style: AppTextStyle.satoshi(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.lightBlack,
+              color: AppThemeColors.getTextColor(context),
             ),
           ),
 
@@ -147,7 +148,7 @@ class MilestonesView extends StatelessWidget {
           Container(
             height: 1,
             width: double.infinity,
-            color: Colors.white.withOpacity(0.5),
+            color: AppThemeColors.getDividerColor(context),
           ),
 
           SizedBox(height: 16.h),
@@ -190,7 +191,7 @@ class MilestonesView extends StatelessWidget {
             style: AppTextStyle.satoshi(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: Colors.black87,
+              color: AppThemeColors.getTextColor(context),
             ),
           ),
         ],
