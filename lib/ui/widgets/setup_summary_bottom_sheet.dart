@@ -4,6 +4,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/shared/app_images.dart';
+import 'package:better_breaks/shared/app_theme_colors.dart';
 import 'package:better_breaks/ui/widgets/app_buttons.dart';
 import 'package:better_breaks/ui/widgets/app_calendar.dart';
 import 'package:intl/intl.dart';
@@ -72,7 +73,7 @@ class _SetupSummaryBottomSheetState extends State<SetupSummaryBottomSheet> {
         maxHeight: MediaQuery.of(context).size.height * 0.9,
       ),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: AppThemeColors.getCardBackgroundColor(context),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),
@@ -88,7 +89,7 @@ class _SetupSummaryBottomSheetState extends State<SetupSummaryBottomSheet> {
               width: 120.w,
               height: 5.h,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppThemeColors.getDragHandleColor(context),
                 borderRadius: BorderRadius.circular(3.r),
               ),
             ),
