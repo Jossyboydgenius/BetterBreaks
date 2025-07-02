@@ -4,6 +4,7 @@ import 'package:better_breaks/shared/app_colors.dart';
 import 'package:better_breaks/shared/app_textstyle.dart';
 import 'package:better_breaks/shared/app_icons.dart';
 import 'package:better_breaks/ui/widgets/app_boolean_switch.dart';
+import 'package:better_breaks/ui/widgets/themed_scaffold.dart';
 import 'package:better_breaks/ui/views/profile/edit_profile_view.dart';
 import 'package:better_breaks/ui/views/profile/edit_schedule_view.dart';
 
@@ -40,8 +41,7 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    return ThemedScaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -693,8 +693,7 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
           // Header with section header widget
           SectionHeader(
             title: 'Appearance',
-            icon: AppIconData
-                .theme, // Using "sunny" icon which matches brightness/theme concepts
+            icon: AppIconData.theme, // Using the dedicated theme icon
           ),
 
           // Divider
