@@ -1,7 +1,7 @@
 # BetterBreaks
 
 <p align="center">
-  <img src="assets/images/logo_main.png" alt="BetterBreaks Logo" width="120"/>
+  <img src="https://raw.githubusercontent.com/Jossyboydgenius/BetterBreaks/refs/heads/main/assets/images/app_logo.png" alt="BetterBreaks Logo" width="120"/>
 </p>
 
 <p align="center">
